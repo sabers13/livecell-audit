@@ -1,0 +1,5794 @@
+[
+  {
+    "evidence": {
+      "image_ids": [
+        627203,
+        1029675
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d00h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          53,
+          57
+        ],
+        "image_ids": [
+          627203,
+          1029675
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d00h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        724219,
+        1013993
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d00h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d00h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          47,
+          50
+        ],
+        "image_ids": [
+          724219,
+          1013993
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d00h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        641150,
+        1025582
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d00h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          30,
+          35
+        ],
+        "image_ids": [
+          641150,
+          1025582
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d00h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        658739,
+        1028667
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d04h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d04h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          51,
+          57
+        ],
+        "image_ids": [
+          658739,
+          1028667
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d04h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        876543,
+        1037056
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d04h00m_2.tif",
+    "finding_id": "alternate-versions:val:Huh7_Phase_A10_2_00d04h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "val": {
+        "counts": [
+          48,
+          56
+        ],
+        "image_ids": [
+          876543,
+          1037056
+        ]
+      }
+    },
+    "splits": [
+      "val"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d04h00m_2.tif has 2 records in val",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        796609,
+        1014395
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d04h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d04h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          73,
+          88
+        ],
+        "image_ids": [
+          796609,
+          1014395
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d04h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        712511,
+        1031290
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d04h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d04h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          31,
+          39
+        ],
+        "image_ids": [
+          712511,
+          1031290
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d04h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        749375,
+        1016420
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d08h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d08h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          49,
+          56
+        ],
+        "image_ids": [
+          749375,
+          1016420
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d08h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        672481,
+        1019719
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d08h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d08h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          47,
+          57
+        ],
+        "image_ids": [
+          672481,
+          1019719
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d08h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        772941,
+        1026686
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d08h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d08h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          76,
+          73
+        ],
+        "image_ids": [
+          772941,
+          1026686
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d08h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        781168,
+        1033353
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d08h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d08h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          28,
+          30
+        ],
+        "image_ids": [
+          781168,
+          1033353
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d08h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        704129,
+        1016350
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d12h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          70,
+          64
+        ],
+        "image_ids": [
+          704129,
+          1016350
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d12h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        652541,
+        1021135
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d12h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          91,
+          85
+        ],
+        "image_ids": [
+          652541,
+          1021135
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d12h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        749820,
+        1013129
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d12h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d12h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          30,
+          30
+        ],
+        "image_ids": [
+          749820,
+          1013129
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d12h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        656984,
+        1021646
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d16h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d16h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          48,
+          52
+        ],
+        "image_ids": [
+          656984,
+          1021646
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d16h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        850872,
+        1020466
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d16h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d16h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          63,
+          64
+        ],
+        "image_ids": [
+          850872,
+          1020466
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d16h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        742297,
+        1012330
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d16h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          28,
+          35
+        ],
+        "image_ids": [
+          742297,
+          1012330
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d16h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        814719,
+        1019584
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d20h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d20h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          62,
+          68
+        ],
+        "image_ids": [
+          814719,
+          1019584
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d20h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        838294,
+        1025518
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d20h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d20h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          79,
+          62
+        ],
+        "image_ids": [
+          838294,
+          1025518
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d20h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        742103,
+        1015006
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_00d20h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_00d20h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          34,
+          31
+        ],
+        "image_ids": [
+          742103,
+          1015006
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_00d20h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        729266,
+        1029265
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A10_2_01d00h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A10_2_01d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          70,
+          75
+        ],
+        "image_ids": [
+          729266,
+          1029265
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A10_2_01d00h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        652633,
+        1027067
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d04h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d04h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          48,
+          43
+        ],
+        "image_ids": [
+          652633,
+          1027067
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d04h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        789231,
+        1020928
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d04h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d04h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          40,
+          40
+        ],
+        "image_ids": [
+          789231,
+          1020928
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d04h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        721606,
+        1016083
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d04h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d04h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          74,
+          75
+        ],
+        "image_ids": [
+          721606,
+          1016083
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d04h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        851926,
+        1023848
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d04h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d04h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          37,
+          37
+        ],
+        "image_ids": [
+          851926,
+          1023848
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d04h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        760798,
+        1021356
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d08h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d08h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          47,
+          53
+        ],
+        "image_ids": [
+          760798,
+          1021356
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d08h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        695916,
+        1024548
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d08h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d08h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          38,
+          36
+        ],
+        "image_ids": [
+          695916,
+          1024548
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d08h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        724680,
+        1027318
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d08h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d08h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          78,
+          61
+        ],
+        "image_ids": [
+          724680,
+          1027318
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d08h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        752315,
+        1021783
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d12h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d12h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          51,
+          48
+        ],
+        "image_ids": [
+          752315,
+          1021783
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d12h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        729341,
+        1026409
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d12h00m_2.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          34,
+          31
+        ],
+        "image_ids": [
+          729341,
+          1026409
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d12h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        736444,
+        1028962
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d12h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          84,
+          63
+        ],
+        "image_ids": [
+          736444,
+          1028962
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d12h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        846332,
+        1027421
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d12h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d12h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          35,
+          35
+        ],
+        "image_ids": [
+          846332,
+          1027421
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d12h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        634448,
+        1017442
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d16h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d16h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          68,
+          64
+        ],
+        "image_ids": [
+          634448,
+          1017442
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d16h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        868707,
+        1021965
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d16h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          43,
+          34
+        ],
+        "image_ids": [
+          868707,
+          1021965
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d16h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        865318,
+        1033010
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d20h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d20h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          51,
+          48
+        ],
+        "image_ids": [
+          865318,
+          1033010
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d20h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        841377,
+        1013044
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_01d20h00m_4.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_01d20h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          35,
+          40
+        ],
+        "image_ids": [
+          841377,
+          1013044
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_01d20h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        627369,
+        1017877
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_02d00h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_02d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          58,
+          56
+        ],
+        "image_ids": [
+          627369,
+          1017877
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_02d00h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        739786,
+        1021512
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_02d00h00m_3.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_02d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          59,
+          68
+        ],
+        "image_ids": [
+          739786,
+          1021512
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_02d00h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        652928,
+        1018687
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A11_2_02d04h00m_1.tif",
+    "finding_id": "alternate-versions:train:Huh7_Phase_A11_2_02d04h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          60,
+          66
+        ],
+        "image_ids": [
+          652928,
+          1018687
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A11_2_02d04h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        940824,
+        1049447
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d12h00m_1.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d12h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          72,
+          78
+        ],
+        "image_ids": [
+          940824,
+          1049447
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d12h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        942839,
+        1045154
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d12h00m_2.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          55,
+          55
+        ],
+        "image_ids": [
+          942839,
+          1045154
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d12h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        983072,
+        1048800
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d12h00m_3.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          35,
+          39
+        ],
+        "image_ids": [
+          983072,
+          1048800
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d12h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        980864,
+        1044008
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d12h00m_4.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d12h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          50,
+          49
+        ],
+        "image_ids": [
+          980864,
+          1044008
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d12h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        989701,
+        1044900
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d16h00m_1.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d16h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          111,
+          113
+        ],
+        "image_ids": [
+          989701,
+          1044900
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d16h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        918641,
+        1038567
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d16h00m_2.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d16h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          57,
+          53
+        ],
+        "image_ids": [
+          918641,
+          1038567
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d16h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        993627,
+        1038726
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d16h00m_3.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d16h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          49,
+          55
+        ],
+        "image_ids": [
+          993627,
+          1038726
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d16h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        926145,
+        1048250
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d16h00m_4.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          56,
+          49
+        ],
+        "image_ids": [
+          926145,
+          1048250
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d16h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        933656,
+        1043211
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d20h00m_1.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d20h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          117,
+          73
+        ],
+        "image_ids": [
+          933656,
+          1043211
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d20h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1001871,
+        1041846
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d20h00m_2.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d20h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          56,
+          47
+        ],
+        "image_ids": [
+          1001871,
+          1041846
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d20h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        921474,
+        1045838
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d20h00m_3.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d20h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          42,
+          43
+        ],
+        "image_ids": [
+          921474,
+          1045838
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d20h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        921415,
+        1044060
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_03d20h00m_4.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_03d20h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          57,
+          50
+        ],
+        "image_ids": [
+          921415,
+          1044060
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_03d20h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        983296,
+        1040165
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_04d00h00m_1.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_04d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          113,
+          114
+        ],
+        "image_ids": [
+          983296,
+          1040165
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_04d00h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        973163,
+        1042788
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_04d00h00m_2.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_04d00h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          61,
+          53
+        ],
+        "image_ids": [
+          973163,
+          1042788
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_04d00h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        991794,
+        1041802
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_04d00h00m_3.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_04d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          50,
+          40
+        ],
+        "image_ids": [
+          991794,
+          1041802
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_04d00h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        921623,
+        1047906
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "Huh7_Phase_A12_1_04d00h00m_4.tif",
+    "finding_id": "alternate-versions:test:Huh7_Phase_A12_1_04d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          64,
+          54
+        ],
+        "image_ids": [
+          921623,
+          1047906
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "Huh7_Phase_A12_1_04d00h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1256038,
+        1405711
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d16h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d16h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          155,
+          140
+        ],
+        "image_ids": [
+          1256038,
+          1405711
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d16h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1310723,
+        1385515
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d16h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d16h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          164,
+          135
+        ],
+        "image_ids": [
+          1310723,
+          1385515
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d16h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1301377,
+        1418523
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d16h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d16h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          141,
+          111
+        ],
+        "image_ids": [
+          1301377,
+          1418523
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d16h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1298787,
+        1412266
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d16h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          182,
+          122
+        ],
+        "image_ids": [
+          1298787,
+          1412266
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d16h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1313123,
+        1402853
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d20h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d20h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          178,
+          151
+        ],
+        "image_ids": [
+          1313123,
+          1402853
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d20h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1285056,
+        1409962
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d20h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d20h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          217,
+          154
+        ],
+        "image_ids": [
+          1285056,
+          1409962
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d20h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1274465,
+        1397578
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d20h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d20h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          156,
+          152
+        ],
+        "image_ids": [
+          1274465,
+          1397578
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d20h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1270397,
+        1383876
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_01d20h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_01d20h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          160,
+          151
+        ],
+        "image_ids": [
+          1270397,
+          1383876
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_01d20h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1253296,
+        1381348
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d00h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          194,
+          184
+        ],
+        "image_ids": [
+          1253296,
+          1381348
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d00h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1299804,
+        1414706
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d00h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d00h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          386,
+          188
+        ],
+        "image_ids": [
+          1299804,
+          1414706
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d00h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1272299,
+        1383099
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d00h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          164,
+          158
+        ],
+        "image_ids": [
+          1272299,
+          1383099
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d00h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1289650,
+        1399030
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d00h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          333,
+          165
+        ],
+        "image_ids": [
+          1289650,
+          1399030
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d00h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1326698,
+        1399796
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d04h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d04h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          399,
+          198
+        ],
+        "image_ids": [
+          1326698,
+          1399796
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d04h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1271389,
+        1377636
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d04h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d04h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          216,
+          222
+        ],
+        "image_ids": [
+          1271389,
+          1377636
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d04h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1315158,
+        1413202
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d04h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d04h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          171,
+          166
+        ],
+        "image_ids": [
+          1315158,
+          1413202
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d04h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1273342,
+        1389189
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d04h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d04h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          192,
+          185
+        ],
+        "image_ids": [
+          1273342,
+          1389189
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d04h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1261690,
+        1376035
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d08h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d08h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          236,
+          229
+        ],
+        "image_ids": [
+          1261690,
+          1376035
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d08h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1306741,
+        1412807
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d08h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d08h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          235,
+          243
+        ],
+        "image_ids": [
+          1306741,
+          1412807
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d08h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1298971,
+        1412065
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d08h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d08h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          186,
+          199
+        ],
+        "image_ids": [
+          1298971,
+          1412065
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d08h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1296305,
+        1384630
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_E4_2_02d08h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_E4_2_02d08h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          218,
+          213
+        ],
+        "image_ids": [
+          1296305,
+          1384630
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_E4_2_02d08h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1317430,
+        1372042
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d12h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d12h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          276,
+          250
+        ],
+        "image_ids": [
+          1317430,
+          1372042
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d12h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1274032,
+        1401700
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d12h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          210,
+          204
+        ],
+        "image_ids": [
+          1274032,
+          1401700
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d12h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1275261,
+        1408023
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d12h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          227,
+          229
+        ],
+        "image_ids": [
+          1275261,
+          1408023
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d12h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1278267,
+        1377860
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d12h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d12h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          202,
+          187
+        ],
+        "image_ids": [
+          1278267,
+          1377860
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d12h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1253492,
+        1374590
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d16h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d16h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          268,
+          261
+        ],
+        "image_ids": [
+          1253492,
+          1374590
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d16h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1276830,
+        1400740
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d16h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d16h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          218,
+          211
+        ],
+        "image_ids": [
+          1276830,
+          1400740
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d16h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1273771,
+        1386312
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d16h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d16h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          259,
+          244
+        ],
+        "image_ids": [
+          1273771,
+          1386312
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d16h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1322903,
+        1415863
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d16h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          212,
+          205
+        ],
+        "image_ids": [
+          1322903,
+          1415863
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d16h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1302023,
+        1375091
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d20h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d20h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          288,
+          293
+        ],
+        "image_ids": [
+          1302023,
+          1375091
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d20h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1274245,
+        1396914
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d20h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d20h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          218,
+          272
+        ],
+        "image_ids": [
+          1274245,
+          1396914
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d20h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1287160,
+        1407530
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d20h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d20h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          239,
+          286
+        ],
+        "image_ids": [
+          1287160,
+          1407530
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d20h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1291633,
+        1406930
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_02d20h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_02d20h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          201,
+          218
+        ],
+        "image_ids": [
+          1291633,
+          1406930
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_02d20h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1309765,
+        1391353
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_03d00h00m_1.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_03d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          281,
+          306
+        ],
+        "image_ids": [
+          1309765,
+          1391353
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_03d00h00m_1.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1274826,
+        1376998
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_03d00h00m_2.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_03d00h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          245,
+          268
+        ],
+        "image_ids": [
+          1274826,
+          1376998
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_03d00h00m_2.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1292182,
+        1385652
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_03d00h00m_3.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_03d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          271,
+          296
+        ],
+        "image_ids": [
+          1292182,
+          1385652
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_03d00h00m_3.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1276578,
+        1402311
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_F4_2_03d00h00m_4.tif",
+    "finding_id": "alternate-versions:test:SKOV3_Phase_F4_2_03d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "test": {
+        "counts": [
+          250,
+          273
+        ],
+        "image_ids": [
+          1276578,
+          1402311
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_F4_2_03d00h00m_4.tif has 2 records in test",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1064934,
+        1345366
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_00d20h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_00d20h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          105,
+          112
+        ],
+        "image_ids": [
+          1064934,
+          1345366
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_00d20h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1143762,
+        1344901
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_00d20h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_00d20h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          92,
+          97
+        ],
+        "image_ids": [
+          1143762,
+          1344901
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_00d20h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1074361,
+        1336972
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d00h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          126,
+          112
+        ],
+        "image_ids": [
+          1074361,
+          1336972
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d00h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1189326,
+        1356664
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d00h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d00h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          118,
+          104
+        ],
+        "image_ids": [
+          1189326,
+          1356664
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d00h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1109637,
+        1357524
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d00h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          59,
+          52
+        ],
+        "image_ids": [
+          1109637,
+          1357524
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d00h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1081917,
+        1364498
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d04h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d04h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          145,
+          133
+        ],
+        "image_ids": [
+          1081917,
+          1364498
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d04h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1161030,
+        1354744
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d04h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d04h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          146,
+          127
+        ],
+        "image_ids": [
+          1161030,
+          1354744
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d04h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1182744,
+        1358579
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d04h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d04h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          76,
+          68
+        ],
+        "image_ids": [
+          1182744,
+          1358579
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d04h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1164153,
+        1328453
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d08h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d08h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          153,
+          139
+        ],
+        "image_ids": [
+          1164153,
+          1328453
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d08h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1089743,
+        1349510
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d08h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d08h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          108,
+          114
+        ],
+        "image_ids": [
+          1089743,
+          1349510
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d08h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1151307,
+        1337945
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d08h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d08h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          83,
+          80
+        ],
+        "image_ids": [
+          1151307,
+          1337945
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d08h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1177546,
+        1343198
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d12h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d12h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          169,
+          154
+        ],
+        "image_ids": [
+          1177546,
+          1343198
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d12h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1076656,
+        1360349
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d12h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          156,
+          144
+        ],
+        "image_ids": [
+          1076656,
+          1360349
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d12h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1180678,
+        1357317
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d12h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_G4_1_01d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          123,
+          119
+        ],
+        "image_ids": [
+          1180678,
+          1357317
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_G4_1_01d12h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1179907,
+        1358532
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d00h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d00h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          47,
+          46
+        ],
+        "image_ids": [
+          1179907,
+          1358532
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d00h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1199735,
+        1347882
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d00h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d00h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          33,
+          63
+        ],
+        "image_ids": [
+          1199735,
+          1347882
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d00h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1127550,
+        1334497
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d00h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d00h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          22,
+          21
+        ],
+        "image_ids": [
+          1127550,
+          1334497
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d00h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1185349,
+        1334666
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d04h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d04h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          33,
+          72
+        ],
+        "image_ids": [
+          1185349,
+          1334666
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d04h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1059759,
+        1338111
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d04h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d04h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          31,
+          55
+        ],
+        "image_ids": [
+          1059759,
+          1338111
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d04h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1186839,
+        1339549
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d08h00m_1.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d08h00m_1.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          68,
+          64
+        ],
+        "image_ids": [
+          1186839,
+          1339549
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d08h00m_1.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1168650,
+        1333805
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d08h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d08h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          45,
+          44
+        ],
+        "image_ids": [
+          1168650,
+          1333805
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d08h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1070449,
+        1336398
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d12h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d12h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          50,
+          47
+        ],
+        "image_ids": [
+          1070449,
+          1336398
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d12h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1162274,
+        1333757
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d12h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d12h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          47,
+          47
+        ],
+        "image_ids": [
+          1162274,
+          1333757
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d12h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1161177,
+        1345619
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d12h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d12h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          36,
+          39
+        ],
+        "image_ids": [
+          1161177,
+          1345619
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d12h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1182700,
+        1363743
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d16h00m_2.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d16h00m_2.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          43,
+          52
+        ],
+        "image_ids": [
+          1182700,
+          1363743
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d16h00m_2.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1058930,
+        1364779
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d16h00m_3.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d16h00m_3.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          51,
+          54
+        ],
+        "image_ids": [
+          1058930,
+          1364779
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d16h00m_3.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "image_ids": [
+        1051423,
+        1351950
+      ],
+      "note": "Different ids for the same filename are alternate annotation versions (upstream issue #14), not automatically corrupt records."
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d16h00m_4.tif",
+    "finding_id": "alternate-versions:train:SKOV3_Phase_H4_1_00d16h00m_4.tif",
+    "recommendation": "Choose which annotation version to use and record the choice; the original records are preserved.",
+    "records": {
+      "train": {
+        "counts": [
+          44,
+          42
+        ],
+        "image_ids": [
+          1051423,
+          1351950
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Alternative annotation versions",
+    "title": "SKOV3_Phase_H4_1_00d16h00m_4.tif has 2 records in train",
+    "type": "alternate_annotation_version"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          795492
+        ]
+      },
+      "val_records": {
+        "counts": [
+          83
+        ],
+        "image_ids": [
+          1037410
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_00d00h00m_3.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_00d00h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          795492
+        ]
+      },
+      "val": {
+        "counts": [
+          83
+        ],
+        "image_ids": [
+          1037410
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_00d00h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          46
+        ],
+        "image_ids": [
+          782264
+        ]
+      },
+      "val_records": {
+        "counts": [
+          56
+        ],
+        "image_ids": [
+          1036998
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_00d12h00m_1.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_00d12h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          46
+        ],
+        "image_ids": [
+          782264
+        ]
+      },
+      "val": {
+        "counts": [
+          56
+        ],
+        "image_ids": [
+          1036998
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_00d12h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          74
+        ],
+        "image_ids": [
+          835654
+        ]
+      },
+      "val_records": {
+        "counts": [
+          79
+        ],
+        "image_ids": [
+          1036466
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_00d16h00m_3.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_00d16h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          74
+        ],
+        "image_ids": [
+          835654
+        ]
+      },
+      "val": {
+        "counts": [
+          79
+        ],
+        "image_ids": [
+          1036466
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_00d16h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          49
+        ],
+        "image_ids": [
+          1015839
+        ]
+      },
+      "val_records": {
+        "counts": [
+          42
+        ],
+        "image_ids": [
+          917744
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_00d20h00m_1.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_00d20h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          49
+        ],
+        "image_ids": [
+          1015839
+        ]
+      },
+      "val": {
+        "counts": [
+          42
+        ],
+        "image_ids": [
+          917744
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_00d20h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          50
+        ],
+        "image_ids": [
+          652370
+        ]
+      },
+      "val_records": {
+        "counts": [
+          54
+        ],
+        "image_ids": [
+          1036042
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_01d00h00m_1.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_01d00h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          50
+        ],
+        "image_ids": [
+          652370
+        ]
+      },
+      "val": {
+        "counts": [
+          54
+        ],
+        "image_ids": [
+          1036042
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_01d00h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          793514
+        ]
+      },
+      "val_records": {
+        "counts": [
+          58
+        ],
+        "image_ids": [
+          1036344
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_01d00h00m_2.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_01d00h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          793514
+        ]
+      },
+      "val": {
+        "counts": [
+          58
+        ],
+        "image_ids": [
+          1036344
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_01d00h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          34
+        ],
+        "image_ids": [
+          1019358
+        ]
+      },
+      "val_records": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          887066
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A10_2_01d00h00m_4.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A10_2_01d00h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          34
+        ],
+        "image_ids": [
+          1019358
+        ]
+      },
+      "val": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          887066
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A10_2_01d00h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          35
+        ],
+        "image_ids": [
+          1029791
+        ]
+      },
+      "val_records": {
+        "counts": [
+          45
+        ],
+        "image_ids": [
+          881105
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_01d08h00m_4.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_01d08h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          35
+        ],
+        "image_ids": [
+          1029791
+        ]
+      },
+      "val": {
+        "counts": [
+          45
+        ],
+        "image_ids": [
+          881105
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_01d08h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          57
+        ],
+        "image_ids": [
+          846273
+        ]
+      },
+      "val_records": {
+        "counts": [
+          52
+        ],
+        "image_ids": [
+          1035553
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_01d16h00m_1.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_01d16h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          57
+        ],
+        "image_ids": [
+          846273
+        ]
+      },
+      "val": {
+        "counts": [
+          52
+        ],
+        "image_ids": [
+          1035553
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_01d16h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          783079
+        ]
+      },
+      "val_records": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          1035088
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_01d16h00m_2.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_01d16h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          783079
+        ]
+      },
+      "val": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          1035088
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_01d16h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          31
+        ],
+        "image_ids": [
+          628223
+        ]
+      },
+      "val_records": {
+        "counts": [
+          34
+        ],
+        "image_ids": [
+          1035124
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_01d20h00m_2.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_01d20h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          31
+        ],
+        "image_ids": [
+          628223
+        ]
+      },
+      "val": {
+        "counts": [
+          34
+        ],
+        "image_ids": [
+          1035124
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_01d20h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          67
+        ],
+        "image_ids": [
+          1018821
+        ]
+      },
+      "val_records": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          899128
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_01d20h00m_3.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_01d20h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          67
+        ],
+        "image_ids": [
+          1018821
+        ]
+      },
+      "val": {
+        "counts": [
+          68
+        ],
+        "image_ids": [
+          899128
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_01d20h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          42
+        ],
+        "image_ids": [
+          742327
+        ]
+      },
+      "val_records": {
+        "counts": [
+          31
+        ],
+        "image_ids": [
+          1036813
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_02d00h00m_2.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_02d00h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          42
+        ],
+        "image_ids": [
+          742327
+        ]
+      },
+      "val": {
+        "counts": [
+          31
+        ],
+        "image_ids": [
+          1036813
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_02d00h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          28
+        ],
+        "image_ids": [
+          752538
+        ]
+      },
+      "val_records": {
+        "counts": [
+          44
+        ],
+        "image_ids": [
+          1035674
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_02d00h00m_4.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_02d00h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          28
+        ],
+        "image_ids": [
+          752538
+        ]
+      },
+      "val": {
+        "counts": [
+          44
+        ],
+        "image_ids": [
+          1035674
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_02d00h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          782410
+        ]
+      },
+      "val_records": {
+        "counts": [
+          41
+        ],
+        "image_ids": [
+          1037234
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_02d04h00m_2.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_02d04h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          782410
+        ]
+      },
+      "val": {
+        "counts": [
+          41
+        ],
+        "image_ids": [
+          1037234
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_02d04h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          62
+        ],
+        "image_ids": [
+          684032
+        ]
+      },
+      "val_records": {
+        "counts": [
+          53
+        ],
+        "image_ids": [
+          1036409
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_02d04h00m_3.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_02d04h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          62
+        ],
+        "image_ids": [
+          684032
+        ]
+      },
+      "val": {
+        "counts": [
+          53
+        ],
+        "image_ids": [
+          1036409
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_02d04h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          1028233
+        ]
+      },
+      "val_records": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          895938
+        ]
+      }
+    },
+    "file_name": "Huh7_Phase_A11_2_02d04h00m_4.tif",
+    "finding_id": "cross-split-overlap:Huh7_Phase_A11_2_02d04h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          32
+        ],
+        "image_ids": [
+          1028233
+        ]
+      },
+      "val": {
+        "counts": [
+          33
+        ],
+        "image_ids": [
+          895938
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "Huh7_Phase_A11_2_02d04h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          77
+        ],
+        "image_ids": [
+          1181454
+        ]
+      },
+      "val_records": {
+        "counts": [
+          75
+        ],
+        "image_ids": [
+          1369014
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_00d20h00m_3.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_00d20h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          77
+        ],
+        "image_ids": [
+          1181454
+        ]
+      },
+      "val": {
+        "counts": [
+          75
+        ],
+        "image_ids": [
+          1369014
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_00d20h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          57
+        ],
+        "image_ids": [
+          1209143
+        ]
+      },
+      "val_records": {
+        "counts": [
+          48
+        ],
+        "image_ids": [
+          1367653
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_00d20h00m_4.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_00d20h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          57
+        ],
+        "image_ids": [
+          1209143
+        ]
+      },
+      "val": {
+        "counts": [
+          48
+        ],
+        "image_ids": [
+          1367653
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_00d20h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          79
+        ],
+        "image_ids": [
+          1352959
+        ]
+      },
+      "val_records": {
+        "counts": [
+          94
+        ],
+        "image_ids": [
+          1245003
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d00h00m_3.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_01d00h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          79
+        ],
+        "image_ids": [
+          1352959
+        ]
+      },
+      "val": {
+        "counts": [
+          94
+        ],
+        "image_ids": [
+          1245003
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_01d00h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          88
+        ],
+        "image_ids": [
+          1365064
+        ]
+      },
+      "val_records": {
+        "counts": [
+          103
+        ],
+        "image_ids": [
+          1235398
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d04h00m_3.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_01d04h00m_3.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          88
+        ],
+        "image_ids": [
+          1365064
+        ]
+      },
+      "val": {
+        "counts": [
+          103
+        ],
+        "image_ids": [
+          1235398
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_01d04h00m_3.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          159
+        ],
+        "image_ids": [
+          1066478
+        ]
+      },
+      "val_records": {
+        "counts": [
+          147
+        ],
+        "image_ids": [
+          1368110
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d08h00m_1.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_01d08h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          159
+        ],
+        "image_ids": [
+          1066478
+        ]
+      },
+      "val": {
+        "counts": [
+          147
+        ],
+        "image_ids": [
+          1368110
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_01d08h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          85
+        ],
+        "image_ids": [
+          1356197
+        ]
+      },
+      "val_records": {
+        "counts": [
+          90
+        ],
+        "image_ids": [
+          1232087
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_G4_1_01d12h00m_4.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_G4_1_01d12h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          85
+        ],
+        "image_ids": [
+          1356197
+        ]
+      },
+      "val": {
+        "counts": [
+          90
+        ],
+        "image_ids": [
+          1232087
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_G4_1_01d12h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          37
+        ],
+        "image_ids": [
+          1216205
+        ]
+      },
+      "val_records": {
+        "counts": [
+          73
+        ],
+        "image_ids": [
+          1369091
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d00h00m_2.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d00h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          37
+        ],
+        "image_ids": [
+          1216205
+        ]
+      },
+      "val": {
+        "counts": [
+          73
+        ],
+        "image_ids": [
+          1369091
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d00h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          58
+        ],
+        "image_ids": [
+          1331027
+        ]
+      },
+      "val_records": {
+        "counts": [
+          59
+        ],
+        "image_ids": [
+          1232026
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d04h00m_1.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d04h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          58
+        ],
+        "image_ids": [
+          1331027
+        ]
+      },
+      "val": {
+        "counts": [
+          59
+        ],
+        "image_ids": [
+          1232026
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d04h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          41
+        ],
+        "image_ids": [
+          1359498
+        ]
+      },
+      "val_records": {
+        "counts": [
+          39
+        ],
+        "image_ids": [
+          1233344
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d04h00m_2.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d04h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          41
+        ],
+        "image_ids": [
+          1359498
+        ]
+      },
+      "val": {
+        "counts": [
+          39
+        ],
+        "image_ids": [
+          1233344
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d04h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          52
+        ],
+        "image_ids": [
+          1144231
+        ]
+      },
+      "val_records": {
+        "counts": [
+          56
+        ],
+        "image_ids": [
+          1367439
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d08h00m_2.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d08h00m_2.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          52
+        ],
+        "image_ids": [
+          1144231
+        ]
+      },
+      "val": {
+        "counts": [
+          56
+        ],
+        "image_ids": [
+          1367439
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d08h00m_2.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          36
+        ],
+        "image_ids": [
+          1197072
+        ]
+      },
+      "val_records": {
+        "counts": [
+          37
+        ],
+        "image_ids": [
+          1371170
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d08h00m_4.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d08h00m_4.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          36
+        ],
+        "image_ids": [
+          1197072
+        ]
+      },
+      "val": {
+        "counts": [
+          37
+        ],
+        "image_ids": [
+          1371170
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d08h00m_4.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          72
+        ],
+        "image_ids": [
+          1334788
+        ]
+      },
+      "val_records": {
+        "counts": [
+          71
+        ],
+        "image_ids": [
+          1233385
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d12h00m_1.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d12h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          72
+        ],
+        "image_ids": [
+          1334788
+        ]
+      },
+      "val": {
+        "counts": [
+          71
+        ],
+        "image_ids": [
+          1233385
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d12h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "train_records": {
+        "counts": [
+          61
+        ],
+        "image_ids": [
+          1189445
+        ]
+      },
+      "val_records": {
+        "counts": [
+          70
+        ],
+        "image_ids": [
+          1370805
+        ]
+      }
+    },
+    "file_name": "SKOV3_Phase_H4_1_00d16h00m_1.tif",
+    "finding_id": "cross-split-overlap:SKOV3_Phase_H4_1_00d16h00m_1.tif",
+    "recommendation": "Keep each source image in one group for this evaluation, and record how the groups were chosen.",
+    "records": {
+      "train": {
+        "counts": [
+          61
+        ],
+        "image_ids": [
+          1189445
+        ]
+      },
+      "val": {
+        "counts": [
+          70
+        ],
+        "image_ids": [
+          1370805
+        ]
+      }
+    },
+    "splits": [
+      "train",
+      "val"
+    ],
+    "status": "Confirmed overlap",
+    "title": "SKOV3_Phase_H4_1_00d16h00m_1.tif is used in both the learning and checking groups",
+    "type": "cross_split_overlap"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        150536
+      ],
+      "image_id": 150535,
+      "sample_annotation": {
+        "annotation_id": 150536,
+        "area": 312.91339999999764,
+        "bbox": [
+          187.38,
+          22.93,
+          20.180000000000007,
+          20.17
+        ],
+        "segmentation": [
+          [
+            205.72,
+            26.6,
+            200.22,
+            22.93,
+            192.88,
+            23.84,
+            189.21,
+            28.43,
+            187.38,
+            34.85,
+            192.88,
+            41.27,
+            197.47,
+            43.1,
+            202.05,
+            43.1,
+            203.89,
+            43.1,
+            207.56,
+            38.52,
+            207.56,
+            33.02
+          ]
+        ]
+      }
+    },
+    "file_name": "A172_Phase_A7_1_01d04h00m_3.tif",
+    "finding_id": "low-annotations:train:A172_Phase_A7_1_01d04h00m_3.tif:150535",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          1
+        ],
+        "image_ids": [
+          150535
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "A172_Phase_A7_1_01d04h00m_3.tif marks 1 cell",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        205799
+      ],
+      "image_id": 205798,
+      "sample_annotation": {
+        "annotation_id": 205799,
+        "area": 1165.3030500002205,
+        "bbox": [
+          276.26,
+          314.39,
+          107.23000000000002,
+          55.69999999999999
+        ],
+        "segmentation": [
+          [
+            276.26,
+            340.42,
+            280.43,
+            338.34,
+            287.2,
+            335.22,
+            293.96,
+            333.13,
+            301.77,
+            331.05,
+            307.5,
+            330.53,
+            313.22,
+            330.53,
+            319.47,
+            335.22,
+            323.11,
+            341.98,
+            326.23,
+            350.83,
+            332.48,
+            359.68,
+            338.21,
+            370.09,
+            340.29,
+            368.01,
+            340.81,
+            361.24,
+            341.33,
+            358.64,
+            341.33,
+            354.99,
+            338.21,
+            347.19,
+            335.6,
+            339.38,
+            335.6,
+            334.17,
+            338.73,
+            326.37,
+            343.41,
+            322.2,
+            348.62,
+            317.52,
+            354.86,
+            318.04,
+            362.15,
+            321.16,
+            367.88,
+            323.24,
+            375.68,
+            327.93,
+            379.33,
+            331.57,
+            383.49,
+            328.97,
+            379.85,
+            325.85,
+            377.25,
+            323.24,
+            367.88,
+            319.6,
+            361.11,
+            315.96,
+            353.3,
+            314.91,
+            346.53,
+            314.39,
+            341.33,
+            315.44,
+            336.64,
+            318.04,
+            328.32,
+            321.16,
+            315.3,
+            321.16,
+            307.5,
+            322.2,
+            300.21,
+            326.37,
+            293.44,
+            327.41,
+            283.55,
+            328.45,
+            281.47,
+            331.05
+          ]
+        ]
+      }
+    },
+    "file_name": "A172_Phase_D7_1_01d20h00m_1.tif",
+    "finding_id": "low-annotations:train:A172_Phase_D7_1_01d20h00m_1.tif:205798",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          1
+        ],
+        "image_ids": [
+          205798
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "A172_Phase_D7_1_01d20h00m_1.tif marks 1 cell",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        10518
+      ],
+      "image_id": 10517,
+      "sample_annotation": {
+        "annotation_id": 10518,
+        "area": 624.3488500000676,
+        "bbox": [
+          128.56,
+          279.1,
+          44.16,
+          53.23999999999995
+        ],
+        "segmentation": [
+          [
+            142.64,
+            314.91,
+            150.28,
+            315.86,
+            155.53,
+            318.73,
+            160.79,
+            322.31,
+            164.13,
+            325.89,
+            166.75,
+            328.99,
+            169.86,
+            332.34,
+            172.72,
+            331.86,
+            168.9,
+            327.56,
+            165.56,
+            320.64,
+            162.22,
+            314.19,
+            159.35,
+            307.27,
+            154.58,
+            301.06,
+            151.71,
+            297.0,
+            145.51,
+            291.51,
+            139.54,
+            285.31,
+            135.0,
+            280.05,
+            129.75,
+            279.1,
+            128.56,
+            282.92,
+            130.47,
+            287.69,
+            135.0,
+            292.47,
+            137.39,
+            297.72,
+            138.35,
+            302.26,
+            139.78,
+            306.32,
+            140.49,
+            309.9,
+            141.45,
+            313.48
+          ]
+        ]
+      }
+    },
+    "file_name": "BT474_Phase_B3_1_03d00h00m_3.tif",
+    "finding_id": "low-annotations:train:BT474_Phase_B3_1_03d00h00m_3.tif:10517",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          1
+        ],
+        "image_ids": [
+          10517
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "BT474_Phase_B3_1_03d00h00m_3.tif marks 1 cell",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        976049,
+        976050
+      ],
+      "image_id": 976048,
+      "sample_annotation": {
+        "annotation_id": 976049,
+        "area": 159.36780000000726,
+        "bbox": [
+          309.34,
+          254.4,
+          14.25,
+          13.98999999999998
+        ],
+        "segmentation": [
+          [
+            309.77,
+            257.56,
+            309.43,
+            259.18,
+            309.34,
+            260.54,
+            309.34,
+            261.48,
+            309.6,
+            262.42,
+            309.85,
+            263.87,
+            310.62,
+            265.4,
+            311.56,
+            266.68,
+            312.84,
+            267.54,
+            314.37,
+            268.22,
+            316.25,
+            268.39,
+            320.94,
+            267.71,
+            322.73,
+            265.57,
+            323.59,
+            261.74,
+            322.48,
+            258.49,
+            321.45,
+            256.28,
+            319.83,
+            255.17,
+            317.27,
+            254.74,
+            314.46,
+            254.4,
+            312.16,
+            255.25,
+            310.62,
+            256.28
+          ]
+        ]
+      }
+    },
+    "file_name": "BV2_Phase_A4_2_00d00h00m_1.tif",
+    "finding_id": "low-annotations:test:BV2_Phase_A4_2_00d00h00m_1.tif:976048",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "test": {
+        "counts": [
+          2
+        ],
+        "image_ids": [
+          976048
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Needs label review",
+    "title": "BV2_Phase_A4_2_00d00h00m_1.tif marks 2 cells",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        1007444,
+        1007445
+      ],
+      "image_id": 1007442,
+      "sample_annotation": {
+        "annotation_id": 1007444,
+        "area": 139.19709999999031,
+        "bbox": [
+          466.06,
+          200.01,
+          14.230000000000018,
+          11.550000000000011
+        ],
+        "segmentation": [
+          [
+            470.62,
+            200.28,
+            467.4,
+            201.89,
+            466.33,
+            205.11,
+            466.06,
+            207.8,
+            466.59,
+            209.68,
+            468.74,
+            211.02,
+            470.89,
+            211.56,
+            474.11,
+            211.56,
+            479.22,
+            209.68,
+            480.02,
+            206.46,
+            480.29,
+            203.5,
+            480.02,
+            200.82,
+            478.68,
+            200.28,
+            476.8,
+            200.01,
+            475.19,
+            200.01
+          ]
+        ]
+      }
+    },
+    "file_name": "BV2_Phase_A4_2_02d04h00m_3.tif",
+    "finding_id": "low-annotations:test:BV2_Phase_A4_2_02d04h00m_3.tif:1007442",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "test": {
+        "counts": [
+          2
+        ],
+        "image_ids": [
+          1007442
+        ]
+      }
+    },
+    "splits": [
+      "test"
+    ],
+    "status": "Needs label review",
+    "title": "BV2_Phase_A4_2_02d04h00m_3.tif marks 2 cells",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        628257,
+        628258,
+        628259,
+        628260
+      ],
+      "image_id": 628256,
+      "sample_annotation": {
+        "annotation_id": 628257,
+        "area": 208.5,
+        "bbox": [
+          312.0,
+          247.0,
+          17.0,
+          16.0
+        ],
+        "segmentation": [
+          [
+            314.0,
+            248.0,
+            313.0,
+            249.0,
+            313.0,
+            250.0,
+            312.0,
+            251.0,
+            312.0,
+            258.0,
+            316.0,
+            262.0,
+            318.0,
+            262.0,
+            319.0,
+            263.0,
+            322.0,
+            263.0,
+            323.0,
+            262.0,
+            326.0,
+            262.0,
+            328.0,
+            260.0,
+            328.0,
+            259.0,
+            329.0,
+            258.0,
+            329.0,
+            255.0,
+            328.0,
+            254.0,
+            328.0,
+            253.0,
+            324.0,
+            249.0,
+            323.0,
+            249.0,
+            322.0,
+            248.0,
+            320.0,
+            248.0,
+            319.0,
+            247.0,
+            317.0,
+            247.0,
+            316.0,
+            248.0
+          ]
+        ]
+      }
+    },
+    "file_name": "BV2_Phase_C4_1_01d16h00m_3.tif",
+    "finding_id": "low-annotations:train:BV2_Phase_C4_1_01d16h00m_3.tif:628256",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          4
+        ],
+        "image_ids": [
+          628256
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "BV2_Phase_C4_1_01d16h00m_3.tif marks 4 cells",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        718288,
+        718289,
+        718290,
+        718291,
+        718292,
+        718293,
+        718294,
+        718295,
+        718296
+      ],
+      "image_id": 718286,
+      "sample_annotation": {
+        "annotation_id": 718288,
+        "area": 164.36185000000114,
+        "bbox": [
+          73.13,
+          18.22,
+          17.570000000000007,
+          13.670000000000002
+        ],
+        "segmentation": [
+          [
+            77.43,
+            19.39,
+            81.33,
+            18.22,
+            88.36,
+            20.57,
+            90.7,
+            27.59,
+            84.46,
+            31.11,
+            80.94,
+            31.89,
+            76.65,
+            30.33,
+            73.13,
+            22.52
+          ]
+        ]
+      }
+    },
+    "file_name": "BV2_Phase_D4_1_00d12h00m_2.tif",
+    "finding_id": "low-annotations:train:BV2_Phase_D4_1_00d12h00m_2.tif:718286",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          9
+        ],
+        "image_ids": [
+          718286
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "BV2_Phase_D4_1_00d12h00m_2.tif marks 9 cells",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        1494965
+      ],
+      "image_id": 1494964,
+      "sample_annotation": {
+        "annotation_id": 1494965,
+        "area": 286.4713500000071,
+        "bbox": [
+          329.25,
+          153.36,
+          17.0,
+          30.029999999999973
+        ],
+        "segmentation": [
+          [
+            346.25,
+            158.07,
+            345.17,
+            164.22,
+            343.0,
+            167.47,
+            340.1,
+            171.09,
+            340.1,
+            183.39,
+            335.4,
+            183.39,
+            335.4,
+            171.09,
+            334.68,
+            170.37,
+            333.59,
+            170.37,
+            329.97,
+            178.33,
+            329.25,
+            175.79,
+            331.06,
+            168.56,
+            330.7,
+            166.39,
+            329.97,
+            163.49,
+            330.7,
+            160.24,
+            332.51,
+            157.7,
+            335.4,
+            155.53,
+            338.66,
+            153.72,
+            341.19,
+            153.36,
+            343.36,
+            154.45
+          ]
+        ]
+      }
+    },
+    "file_name": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+    "finding_id": "low-annotations:train:SHSY5Y_Phase_D10_1_01d16h00m_4.tif:1494964",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "train": {
+        "counts": [
+          1
+        ],
+        "image_ids": [
+          1494964
+        ]
+      }
+    },
+    "splits": [
+      "train"
+    ],
+    "status": "Needs label review",
+    "title": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif marks 1 cell",
+    "type": "low_annotation_count"
+  },
+  {
+    "evidence": {
+      "annotation_ids": [
+        1248962
+      ],
+      "image_id": 1248961,
+      "sample_annotation": {
+        "annotation_id": 1248962,
+        "area": 883.5,
+        "bbox": [
+          54.0,
+          139.0,
+          33.0,
+          34.0
+        ],
+        "segmentation": [
+          [
+            67.0,
+            139.0,
+            66.0,
+            140.0,
+            64.0,
+            140.0,
+            63.0,
+            141.0,
+            62.0,
+            141.0,
+            56.0,
+            147.0,
+            56.0,
+            148.0,
+            55.0,
+            149.0,
+            55.0,
+            156.0,
+            54.0,
+            157.0,
+            55.0,
+            158.0,
+            55.0,
+            162.0,
+            56.0,
+            163.0,
+            56.0,
+            164.0,
+            57.0,
+            165.0,
+            57.0,
+            166.0,
+            60.0,
+            169.0,
+            61.0,
+            169.0,
+            63.0,
+            171.0,
+            65.0,
+            171.0,
+            66.0,
+            172.0,
+            69.0,
+            172.0,
+            70.0,
+            173.0,
+            72.0,
+            173.0,
+            73.0,
+            172.0,
+            76.0,
+            172.0,
+            77.0,
+            171.0,
+            79.0,
+            171.0,
+            80.0,
+            170.0,
+            81.0,
+            170.0,
+            82.0,
+            169.0,
+            82.0,
+            168.0,
+            85.0,
+            165.0,
+            85.0,
+            164.0,
+            86.0,
+            163.0,
+            86.0,
+            157.0,
+            87.0,
+            156.0,
+            87.0,
+            151.0,
+            86.0,
+            150.0,
+            86.0,
+            147.0,
+            85.0,
+            146.0,
+            85.0,
+            145.0,
+            81.0,
+            141.0,
+            80.0,
+            141.0,
+            79.0,
+            140.0,
+            76.0,
+            140.0,
+            75.0,
+            139.0
+          ]
+        ]
+      }
+    },
+    "file_name": "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+    "finding_id": "low-annotations:val:SkBr3_Phase_H3_2_00d00h00m_1.tif:1248961",
+    "recommendation": "Review the annotation before using this image. A low label count alone is not proof of an error.",
+    "records": {
+      "val": {
+        "counts": [
+          1
+        ],
+        "image_ids": [
+          1248961
+        ]
+      }
+    },
+    "splits": [
+      "val"
+    ],
+    "status": "Needs label review",
+    "title": "SkBr3_Phase_H3_2_00d00h00m_1.tif marks 1 cell",
+    "type": "low_annotation_count"
+  }
+]

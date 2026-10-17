@@ -1,0 +1,49 @@
+[
+  {
+    "url": "https://api.github.com/repos/sartorius-research/LIVECell/issues/comments/909327010",
+    "html_url": "https://github.com/sartorius-research/LIVECell/issues/1#issuecomment-909327010",
+    "issue_url": "https://api.github.com/repos/sartorius-research/LIVECell/issues/1",
+    "id": 909327010,
+    "node_id": "IC_kwDOFGYly842Mzqi",
+    "user": {
+      "login": "ChristofferEdlund",
+      "id": 18189030,
+      "node_id": "MDQ6VXNlcjE4MTg5MDMw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18189030?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/ChristofferEdlund",
+      "html_url": "https://github.com/ChristofferEdlund",
+      "followers_url": "https://api.github.com/users/ChristofferEdlund/followers",
+      "following_url": "https://api.github.com/users/ChristofferEdlund/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ChristofferEdlund/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/ChristofferEdlund/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ChristofferEdlund/subscriptions",
+      "organizations_url": "https://api.github.com/users/ChristofferEdlund/orgs",
+      "repos_url": "https://api.github.com/users/ChristofferEdlund/repos",
+      "events_url": "https://api.github.com/users/ChristofferEdlund/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/ChristofferEdlund/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "created_at": "2021-08-31T15:09:50Z",
+    "updated_at": "2021-08-31T15:09:50Z",
+    "body": "Hey @sigmoidfroid. This is a miss on our end and that image has now been removed. Since it was not part of any model training \r\n(due to lack of annotation) it should not have any effect on reproducing our results.\r\n\r\nThank you for taking the time to point this out, we appreciate it!\r\n\r\n\r\n",
+    "author_association": "CONTRIBUTOR",
+    "pin": null,
+    "reactions": {
+      "url": "https://api.github.com/repos/sartorius-research/LIVECell/issues/comments/909327010/reactions",
+      "total_count": 1,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 1,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "performed_via_github_app": null,
+    "minimized": null
+  }
+]

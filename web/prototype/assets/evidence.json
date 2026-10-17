@@ -1,0 +1,124 @@
+{
+  "splits": {
+    "train": {
+      "image_records": 3253,
+      "unique_ids": 3253,
+      "unique_filenames": 3188,
+      "extra_filename_records": 65,
+      "repeated_filenames": 65,
+      "annotations": 1018576,
+      "images_at_most_10_annotations": 6
+    },
+    "val": {
+      "image_records": 570,
+      "unique_ids": 570,
+      "unique_filenames": 569,
+      "extra_filename_records": 1,
+      "repeated_filenames": 1,
+      "annotations": 181610,
+      "images_at_most_10_annotations": 1
+    },
+    "test": {
+      "image_records": 1564,
+      "unique_ids": 1564,
+      "unique_filenames": 1512,
+      "extra_filename_records": 52,
+      "repeated_filenames": 52,
+      "annotations": 462261,
+      "images_at_most_10_annotations": 2
+    }
+  },
+  "total_image_records": 5387,
+  "unique_filenames": 5239,
+  "total_annotations": 1662447,
+  "local_image_files": 5239,
+  "missing_image_filenames": [],
+  "cross_split_filename_overlap": {
+    "train_val": {
+      "filenames": 30,
+      "examples": [
+        "Huh7_Phase_A10_2_00d00h00m_3.tif",
+        "Huh7_Phase_A10_2_00d12h00m_1.tif",
+        "Huh7_Phase_A10_2_00d16h00m_3.tif",
+        "Huh7_Phase_A10_2_00d20h00m_1.tif",
+        "Huh7_Phase_A10_2_01d00h00m_1.tif"
+      ]
+    },
+    "train_test": {
+      "filenames": 0,
+      "examples": []
+    },
+    "val_test": {
+      "filenames": 0,
+      "examples": []
+    }
+  },
+  "low_annotation_records": [
+    {
+      "file": "BT474_Phase_B3_1_03d00h00m_3.tif",
+      "split": "train",
+      "image_id": 10517,
+      "count": 1,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "A172_Phase_A7_1_01d04h00m_3.tif",
+      "split": "train",
+      "image_id": 150535,
+      "count": 1,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "A172_Phase_D7_1_01d20h00m_1.tif",
+      "split": "train",
+      "image_id": 205798,
+      "count": 1,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "BV2_Phase_C4_1_01d16h00m_3.tif",
+      "split": "train",
+      "image_id": 628256,
+      "count": 4,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "BV2_Phase_D4_1_00d12h00m_2.tif",
+      "split": "train",
+      "image_id": 718286,
+      "count": 9,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+      "split": "train",
+      "image_id": 1494964,
+      "count": 1,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+      "split": "val",
+      "image_id": 1248961,
+      "count": 1,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "BV2_Phase_A4_2_00d00h00m_1.tif",
+      "split": "test",
+      "image_id": 976048,
+      "count": 2,
+      "alternate_annotation_counts": []
+    },
+    {
+      "file": "BV2_Phase_A4_2_02d04h00m_3.tif",
+      "split": "test",
+      "image_id": 1007442,
+      "count": 2,
+      "alternate_annotation_counts": []
+    }
+  ],
+  "pixel_duplicate_groups": [],
+  "shared_train_val_wells": 22,
+  "shared_train_val_field_crops": 168
+}
