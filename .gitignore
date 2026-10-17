@@ -3,6 +3,7 @@ data/raw/
 data/interim/
 data/curated/
 data/scratch/
+data/workbench/
 data/*.log
 *.zip
 *.pth
@@ -13,7 +14,9 @@ __pycache__/
 *$py.class
 *.so
 .Python
+.venv/
 env/
+venv/
 build/
 develop-eggs/
 dist/

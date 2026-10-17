@@ -1,0 +1,9 @@
+# Exact runtime pins for the LIVECell workbench (milestones 2 and 3).
+# Python 3.12. Installed and tested in a project-local .venv; see
+# docs/08_data_analysis_completion.md for the recorded environment.
+#
+# Install:  python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
+duckdb==1.5.6
+numpy==1.26.4
+pandas==3.0.3
+Pillow==12.3.0

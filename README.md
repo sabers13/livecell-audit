@@ -4,7 +4,7 @@
 
 Researchers mark cells in microscope images so an AI model can learn to recognise them. This project checks those images and their labels before they are used in an experiment — and explains what it found in plain language.
 
-**Status: MVP implemented.** The repeatable audit runs, the report page shows real generated data, and the full dataset reproduces every snapshot number below. There is no model training, no model-score comparison, no health score, and no upstream contribution yet.
+**Status: audit + warehouse + feature analysis implemented.** The repeatable audit runs, a DuckDB/Parquet warehouse and a documented pandas feature table are built from it, and the report page shows real generated data. The full dataset reproduces every snapshot number below. There is no model training, no model-score comparison, no health score, and no upstream contribution yet.
 
 ---
 
@@ -25,7 +25,12 @@ Researchers mark cells in microscope images so an AI model can learn to recognis
 
 ## Quickstart
 
-Requirements: Python 3.10+ and Pillow (`pip install pillow`). No other installation — the audit is standard library plus Pillow, run from the repository root:
+Requirements: Python 3.12. Create the pinned project-local environment once:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+```
 
 ```bash
 # 1. Run the audit (streams the ~909 MB of COCO JSON, never fully in memory)
@@ -37,26 +42,38 @@ PYTHONPATH=src python3 -m livecell_audit audit \
 `--data-root` must contain `annotations/livecell_coco_{train,val,test}.json` and `images/` (see `scripts/download_data.sh` for how the data was obtained). The source tree is only read, never modified.
 
 ```bash
-# 2. Rebuild the connected report page from the audit outputs
+# 2. Load the completed audit into DuckDB + typed Parquet
+PYTHONPATH=src python3 -m livecell_audit warehouse \
+    --audit-dir /path/to/outputs \
+    --out-dir data/workbench/warehouse \
+    --data-root /path/to/data/raw
+
+# 3. Build the pandas feature table + cell-line summaries
+PYTHONPATH=src python3 -m livecell_audit features \
+    --warehouse-dir data/workbench/warehouse \
+    --data-root /path/to/data/raw \
+    --out-dir data/workbench/features
+
+# 4. Rebuild the connected report page from the audit outputs
 PYTHONPATH=src python3 scripts/build_report.py \
     --audit-dir /path/to/outputs \
     --data-root /path/to/data/raw \
     --report-dir web/report
 
-# 3. View it (no build step; file:// works too)
+# 5. View it (no build step; file:// works too)
 python3 -m http.server --directory web/report 8321
 ```
 
-`--audit-dir` must be a *completed* run: the builder refuses a directory without a valid `COMPLETED` marker (see below) and never overwrites an existing report from incomplete or stale evidence. To reuse an older snapshot, rerun the audit into it first — the builder does not fabricate markers for pre-marker snapshots such as the committed `data/derived/`.
+`--audit-dir` must be a *completed* run: the builder refuses a directory without a valid `COMPLETED` marker (see below) and never overwrites an existing report from incomplete or stale evidence. To reuse an older snapshot, rerun the audit into it first — the builder does not fabricate markers for pre-marker snapshots such as the committed `data/derived/`. The `warehouse` and `features` stages enforce the same completion contract.
 
 ```bash
-# 4. Run the checks
-PYTHONPATH=src python3 -m pytest tests/ -q          # fast fixture suite
+# 6. Run the checks
+PYTHONPATH=src python3 -m pytest tests/ -q          # full suite (fixtures + integration)
 LIVECELL_DATA_ROOT=/path/to/data/raw \
-  PYTHONPATH=src python3 -m pytest tests/test_integration.py -q   # full-dataset check
+  PYTHONPATH=src python3 -m pytest tests/test_integration.py -q   # full-dataset check only
 ```
 
-Measured on the full dataset (repaired two-pass audit): **~47 s runtime, ~118 MB peak memory** (peak resident set size via `resource.getrusage`; see `run.json` and `docs/07_audit_foundation.md`). The audit reads each split in two bounded-memory passes so counts do not depend on whether `images` or `annotations` appears first; that roughly doubles file-read time versus the single-pass MVP while lowering peak memory.
+Measured on the full dataset: the repaired two-pass audit takes **~47 s, ~118 MB peak**; the warehouse **~13–27 s**; the feature stage **~65–71 s** (5,239 TIFF reads dominate). See `docs/08_data_analysis_completion.md` for exact commands, sizes and limitations.
 
 ---
 
@@ -65,18 +82,25 @@ Measured on the full dataset (repaired two-pass audit): **~47 s runtime, ~118 MB
 ```text
 src/livecell_audit/   # audit package: streaming COCO reader, filename parser,
                       # analysis + deterministic exports, CLI
+                      # + warehouse.py (DuckDB/Parquet) and features.py (pandas)
+                      # + completion.py (staged promotion / completion marker)
 tests/                # fixture tests (overlap, versions, missing/malformed files,
                       # parsing, determinism, section-order/dimension/known-case
-                      # regressions, completion contract, report-builder validation)
+                      # regressions, completion contract, report-builder validation,
+                      # warehouse reconciliation/ambiguity, feature formulas)
                       # + full-dataset integration check
 scripts/              # download_data.sh (provenance), build_report.py (report builder)
 data/derived/         # committed small outputs: report.json, findings.json,
                       # run.json, manifests/sources.json + val_membership.json
                       # (a pre-marker MVP snapshot; rerun the audit to regenerate)
+data/workbench/       # gitignored local outputs: warehouse/ (DuckDB + Parquet),
+                      # features/ (feature table + summaries)
 web/prototype/        # reference interface mock (verified snapshot, no engine)
 web/report/           # connected static report built from real generated data
-docs/                 # design + interface spec + findings + completion report
-                      # + audit-foundation evidence (docs/07)
+docs/                 # design + interface spec + findings + completion reports
+                      # (docs/07 audit, docs/08 warehouse+features, docs/09 contract)
+requirements.txt      # exact runtime pins
+requirements-dev.txt  # runtime + test runner
 ```
 
 ## Output definitions
@@ -94,6 +118,26 @@ docs/                 # design + interface spec + findings + completion report
 
 All JSON outputs use sorted keys and sorted records, so reruns over the same inputs are byte-identical (tested, excluding run metadata paths/timings and the marker's completion timestamp).
 
+## Warehouse and feature outputs
+
+`python3 -m livecell_audit warehouse --audit-dir AUDIT --out-dir WH` consumes a *completed* audit run (marker, source checksums and summary counts are validated first) and writes:
+
+- `audit.duckdb` — DuckDB database, schema `lc`. Tables: `images`, `annotations`, `findings`, `sources`, `runs`, `val_membership`. Versioned views: `v1_image_annotation_stats`, `v1_split_membership`, `v1_split_overlap`, `v1_annotation_versions`, `v1_alternate_versions`, `v1_cell_line_summary`, `v1_finding_lookup`, `v1_image_join_ambiguity`, `v1_orphan_annotations`.
+- `parquet/` — typed Parquet exports of the base tables plus the annotation-stats and cell-line-summary views (~34 MB for annotations vs ~249 MB JSONL).
+- `integrity.json` — deterministic reconciliation (expected/loaded/delta per table and split), join integrity (ambiguous ids, orphans, duplicate annotation keys) and export sizes.
+- `run.json`, `COMPLETED` — run metadata and the completion marker.
+
+Image records are keyed by `(split, record_position)`; the original `id` is a field, not a global key. Ambiguous `(split, image_id)` joins and orphan annotations are detected and reported, never guessed or multiplied.
+
+`python3 -m livecell_audit features --warehouse-dir WH --out-dir FEAT` consumes a *completed* warehouse and writes one feature row per annotation-version image record:
+
+- `features.parquet` / `features.jsonl` — annotation aggregates (count, area and bbox summaries, polygon-point summaries), acquisition metadata, image dimensions, once-per-filename TIFF statistics (`pixel_mean`, `pixel_std`, `gradient_mean`, …) and missingness/quality flags.
+- `cell_line_summary.json`/`.csv`/`.parquet` and `feature_distributions.json` — grouped summaries and quantiles.
+- `feature_dictionary.json` — per-feature source, formula, unit, `depends_on_annotations`, missing-value behaviour, plus a schema version and source-manifest linkage.
+- `run.json`, `COMPLETED`.
+
+Zero annotations are a measured zero (with undefined area/bbox summaries left null); missing or unreadable TIFFs keep null statistics and an explicit status; ambiguous annotation joins are quarantined with `annotation_join_status = "ambiguous_image_id"`. Alternate annotation versions are all retained and reuse image-only features by filename. See `docs/09_data_contract.md` for the full contract.
+
 ### Dimension states
 
 `dimensions_status` (and the report's `dimension_status_counts`) separates five mutually exclusive states, most importantly reporting *not checked* distinctly from a mismatch: `matching`, `mismatching`, `missing` (no local file), `unreadable` (file present but its size could not be read), and `not_checked` (`--no-check-dimensions`). Only `mismatching` records appear in `dimension_mismatches`. The row-level `dimensions_match` boolean is kept for compatibility and is true only for `matching`.
@@ -102,6 +146,7 @@ All JSON outputs use sorted keys and sorted records, so reruns over the same inp
 
 - Filename identity is physical identity: matches are by filename, not pixels. Near-duplicates are out of scope.
 - The low-count rule flags review candidates; a low count alone is not proof of an error, and recovering the nine known cases is a regression check, not ML generalisation (no IsolationForest, no growth modelling in this MVP).
+- Warehouse/feature stages: the feature table keys rows by `(split, record_position)` and keeps `image_id` as a field; the real dataset has no ambiguous ids or orphan annotations, so those paths are fixture-verified only. Image statistics are texture proxies, not cell counts; annotation area is not true confluence. The measured JSONL-vs-DuckDB query difference is a single warm-cache query shape, not a speedup guarantee.
 - No model is trained and no accuracy effect is measured or claimed.
 - Desktop/mobile layout and keyboard behaviour were checked in Chromium; a real recruiter comprehension check has not been performed.
 

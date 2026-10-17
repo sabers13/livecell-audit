@@ -1,11 +1,14 @@
 [project]
 name = "livecell-audit"
 version = "0.1.0"
-description = "A reproducible data-quality pipeline, benchmark audit, and reporting dashboard for Sartorius LIVECell dataset"
+description = "A reproducible data-quality pipeline, DuckDB warehouse, and feature analysis for the Sartorius LIVECell dataset"
 authors = [{ name = "Saber Sojudi", email = "contact@sabersojudi.com" }]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "pillow>=10.0.0",
+    "duckdb>=1.5.0",
+    "numpy>=1.26.0",
+    "pandas>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -15,7 +18,7 @@ dev = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py312"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
