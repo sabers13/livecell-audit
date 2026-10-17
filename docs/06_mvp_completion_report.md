@@ -19,9 +19,11 @@ PYTHONPATH=src python3 -m livecell_audit audit \
 #    (time.perf_counter; resource.getrusage ru_maxrss peak RSS)
 
 # fixture suite + full-dataset integration check
-PYTHONPATH=src python3 -m pytest tests/ -q            # 21 passed
+PYTHONPATH=src python3 -m pytest tests/ -q            # 22 passed
+#   = 21 lightweight fixtures + the integration check, which runs because the
+#     data root is present; it is skipped when data/raw is absent (then 21 passed)
 LIVECELL_DATA_ROOT=.../data/raw PYTHONPATH=src \
-  python3 -m pytest tests/test_integration.py -q       # 1 passed
+  python3 -m pytest tests/test_integration.py -q       # 1 passed (isolated rerun)
 
 # connected report
 PYTHONPATH=src python3 scripts/build_report.py \

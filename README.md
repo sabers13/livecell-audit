@@ -54,7 +54,7 @@ LIVECELL_DATA_ROOT=/path/to/data/raw \
   PYTHONPATH=src python3 -m pytest tests/test_integration.py -q   # full-dataset check
 ```
 
-Measured on the full dataset: **~32–39 s runtime, ~197–201 MB peak memory** (peak resident set size via `resource.getrusage`; see `run.json` and `docs/06_mvp_completion_report.md`).
+Measured on the full dataset: **~30–39 s runtime, ~197–201 MB peak memory** (peak resident set size via `resource.getrusage`; see `run.json` and `docs/06_mvp_completion_report.md`).
 
 ---
 
