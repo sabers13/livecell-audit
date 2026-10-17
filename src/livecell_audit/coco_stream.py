@@ -2,8 +2,20 @@
 
 The LIVECell annotation files are large (up to ~551 MB). This module parses
 them incrementally from disk in fixed-size chunks and yields one record at a
-time, so memory use stays flat regardless of file size. Only the Python
-standard library is used.
+time, so memory use stays flat regardless of file size.
+
+Only the Python standard library is used. JSON *values* are decoded with
+:class:`json.JSONDecoder` (a maintained, well-tested parser); this module
+supplies the surrounding grammar (top-level object, arrays, separators) and
+the required-structure checks. Three details make the streaming reader strict
+where a naive ``raw_decode`` loop is not:
+
+- an incremental UTF-8 decoder, so a multi-byte character split across a
+  chunk boundary is never a decode error;
+- a chunk-boundary guard, so a scalar token cut by a chunk boundary (for
+  example ``-1.25e-2`` truncated to ``-1``) is never accepted early;
+- a non-standard-constant rejection, so ``NaN`` / ``Infinity`` / ``-Infinity``
+  (which :mod:`json` accepts by default) are treated as malformed.
 
 Required structure (anything else raises :class:`AuditError` naming the file
 and location):
@@ -17,6 +29,7 @@ and location):
 
 from __future__ import annotations
 
+import codecs
 import json
 from typing import Any, BinaryIO, Dict, Iterator, Tuple
 
@@ -24,6 +37,17 @@ from .errors import AuditError
 
 _CHUNK_SIZE = 1 << 20  # 1 MiB text chunks
 _COMPACT_AFTER = 1 << 22  # drop consumed buffer prefix past 4 MiB
+_VALUE_DELIMITERS = " \t\n\r,]}:"
+_NUMBER_CONTINUATION = ".eE+-"
+_NUMBER_CHARS = frozenset("0123456789.eE+-")
+
+
+class _NonStandardConstant(ValueError):
+    """Raised for JSON constants ``json`` accepts but strict JSON forbids."""
+
+
+def _reject_constant(token: str) -> Any:
+    raise _NonStandardConstant(f"invalid JSON constant {token!r}")
 
 
 class _ChunkReader:
@@ -36,15 +60,37 @@ class _ChunkReader:
         self._buf = ""
         self._pos = 0
         self._eof = False
-        self._decoder = json.JSONDecoder()
+        self._decoder = json.JSONDecoder(parse_constant=_reject_constant)
+        self._utf8 = codecs.getincrementaldecoder("utf-8")()
 
     def _fill(self) -> bool:
-        chunk = self._handle.read(self._chunk_size)
-        if not chunk:
-            self._eof = True
-            return False
-        self._buf += chunk.decode("utf-8")
-        return True
+        """Read more text. Returns False only at end of input.
+
+        Uses an incremental UTF-8 decoder so multi-byte characters split
+        across chunk boundaries decode correctly. Reads past chunks that only
+        complete a partial character, so callers always see forward progress.
+        """
+        while True:
+            chunk = self._handle.read(self._chunk_size)
+            if not chunk:
+                self._eof = True
+                try:
+                    tail = self._utf8.decode(b"", final=True)
+                except UnicodeDecodeError as exc:
+                    raise AuditError(
+                        f"{self._path}: invalid UTF-8 near the end of the file: {exc}"
+                    ) from exc
+                if tail:
+                    self._buf += tail
+                return False
+            try:
+                text = self._utf8.decode(chunk)
+            except UnicodeDecodeError as exc:
+                raise AuditError(f"{self._path}: invalid UTF-8: {exc}") from exc
+            if text:
+                self._buf += text
+                return True
+            # Partial multi-byte character at the chunk edge: read on.
 
     def _compact(self) -> None:
         if self._pos >= _COMPACT_AFTER:
@@ -76,24 +122,70 @@ class _ChunkReader:
         self._pos += 1
 
     def read_value(self, where: str) -> Any:
-        """Parse one JSON value starting at the current position."""
+        """Parse one JSON value, never accepting a chunk-truncated scalar.
+
+        ``raw_decode`` will happily parse a valid *prefix* of a scalar token
+        that a chunk boundary cut in half (``-1`` from ``-1.25e-2``). A decoded
+        value is therefore only accepted once a legal JSON delimiter (or end of
+        input) follows it; a trailing number-continuation character is only
+        tolerated while the numeric token can still grow into the next chunk.
+        """
         self._compact()
-        start = self._pos
-        last_error: json.JSONDecodeError | None = None
         while True:
             self.skip_whitespace()
+            start = self._pos
             try:
                 value, end = self._decoder.raw_decode(self._buf, self._pos)
-                self._pos = end
-                return value
+            except _NonStandardConstant as exc:
+                raise AuditError(
+                    f"{self._path}: malformed JSON {where}: {exc}"
+                ) from exc
             except json.JSONDecodeError as exc:
-                last_error = exc
                 if self._eof:
                     raise AuditError(
                         f"{self._path}: malformed JSON {where}: {exc.msg}"
                     ) from exc
                 self._pos = start
                 self._fill()
+                continue
+            if end < len(self._buf):
+                nxt = self._buf[end]
+                if nxt in _VALUE_DELIMITERS:
+                    self._pos = end
+                    return value
+                is_number = isinstance(value, (int, float)) and not isinstance(value, bool)
+                if (
+                    is_number
+                    and nxt in _NUMBER_CONTINUATION
+                    and not self._eof
+                    and self._number_run_reaches_buffer_end(start)
+                ):
+                    # A number cut mid-token (for example ``-1`` from
+                    # ``-1.25e-2``): pull more data and re-parse.
+                    self._pos = start
+                    if self._fill():
+                        continue
+                raise AuditError(
+                    f"{self._path}: malformed JSON {where}: "
+                    f"unexpected {nxt!r} after value"
+                )
+            # The value ends exactly at the chunk boundary: it may be truncated.
+            if self._eof:
+                self._pos = end
+                return value
+            self._pos = start
+            if not self._fill():
+                self._pos = end  # no more data: the value was complete
+                return value
+            continue
+
+    def _number_run_reaches_buffer_end(self, start: int) -> bool:
+        """True if the number-character run from ``start`` reaches the buffer end."""
+        index = start
+        length = len(self._buf)
+        while index < length and self._buf[index] in _NUMBER_CHARS:
+            index += 1
+        return index == length
 
 
 def _check_image(path: str, split: str, index: int, record: Any) -> Dict[str, Any]:
@@ -130,20 +222,28 @@ def _check_annotation(path: str, split: str, index: int, record: Any) -> Dict[st
 def iter_split(
     path: str, split: str, chunk_size: int = _CHUNK_SIZE
 ) -> Iterator[Tuple[str, int, Dict[str, Any]]]:
-    """Yield ``(array, index, record)`` for ``images`` then ``annotations``.
+    """Yield ``(array, index, record)`` in file order.
 
     ``array`` is ``"images"`` or ``"annotations"``. Records are validated
     against the required structure as they stream past; malformed input
-    raises :class:`AuditError`.
+    (including bad separators, trailing commas, trailing content and
+    non-standard constants) raises :class:`AuditError`.
     """
     with open(path, "rb") as handle:
         reader = _ChunkReader(handle, path, chunk_size)
         reader.expect("{", "at the top level")
         seen = set()
+        after_separator = False
         while True:
-            if reader.peek(f"in {split} header") == "}":
+            char = reader.peek(f"in {split} header")
+            if char == "}":
+                if after_separator:
+                    raise AuditError(
+                        f"{path}: trailing comma in {split} header before '}}'"
+                    )
                 reader.expect("}", f"in {split} header")
                 break
+            after_separator = False
             key = reader.read_value(f"in {split} header")
             if not isinstance(key, str):
                 raise AuditError(f"{path}: {split} header keys must be strings")
@@ -181,6 +281,7 @@ def iter_split(
             char = reader.peek(f"in {split} header")
             if char == ",":
                 reader.expect(",", f"in {split} header")
+                after_separator = True
                 continue
             if char == "}":
                 reader.expect("}", f"in {split} header")

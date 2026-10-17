@@ -6,7 +6,7 @@ import hashlib
 import json
 import os
 
-from livecell_audit.audit import AuditConfig, run_audit
+from livecell_audit.audit import COMPLETION_MARKER, AuditConfig, run_audit
 from livecell_audit.errors import AuditError
 
 
@@ -153,8 +153,10 @@ def _hash_tree(out):
     digests = {}
     for dirpath, _dirnames, filenames in os.walk(out):
         for name in filenames:
-            if name in ("run.json", "report.json"):
-                continue  # run metadata (paths, timings) differs between runs
+            # run metadata (paths, timings) and the completion marker
+            # (completion timestamp) differ between otherwise-identical runs
+            if name in ("run.json", "report.json", COMPLETION_MARKER):
+                continue
             path = os.path.join(dirpath, name)
             with open(path, "rb") as handle:
                 digests[os.path.relpath(path, out)] = hashlib.sha256(handle.read()).hexdigest()

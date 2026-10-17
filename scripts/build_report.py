@@ -25,10 +25,63 @@ import json
 import os
 import sys
 
+try:  # single source of truth for the marker name when run with PYTHONPATH=src
+    from livecell_audit.audit import COMPLETION_MARKER
+except ImportError:  # pragma: no cover - fallback for a bare script run
+    COMPLETION_MARKER = "COMPLETED"
+
+#: Summary fields the completion marker must agree with ``report.json`` on.
+_MARKER_SUMMARY_FIELDS = (
+    "total_image_records",
+    "total_annotations",
+    "unique_filenames",
+)
+
 
 def _load(path):
     with open(path, encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _require_completed_run(audit_dir, report, sources):
+    """Reject an audit directory that is not a validated completed run.
+
+    Completion is not file existence alone: the ``COMPLETED`` marker must be
+    present, parse as JSON, declare ``status == "completed"``, and link to the
+    other outputs (source checksums and summary counts). Returns the parsed
+    marker. Raises ``ValueError`` with an actionable message otherwise.
+    """
+    marker_path = os.path.join(audit_dir, COMPLETION_MARKER)
+    if not os.path.isfile(marker_path):
+        raise ValueError(
+            f"no completion marker ({COMPLETION_MARKER}) in {audit_dir}: this is "
+            "not a completed audit run. Rerun the audit to regenerate it "
+            "rather than fabricating a marker."
+        )
+    try:
+        marker = _load(marker_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"unreadable or truncated completion marker {marker_path}: {exc}")
+    if not isinstance(marker, dict) or marker.get("status") != "completed":
+        raise ValueError(f"completion marker {marker_path} does not declare a completed run")
+
+    marker_sha = marker.get("source_sha256") or {}
+    source_sha = {
+        split: entry.get("sha256")
+        for split, entry in (sources.get("coco_files") or {}).items()
+    }
+    if marker_sha != source_sha:
+        raise ValueError(
+            "completion marker source checksums do not match "
+            "manifests/sources.json (mixed or stale outputs)"
+        )
+    for field in _MARKER_SUMMARY_FIELDS:
+        if marker.get(field) != report.get(field):
+            raise ValueError(
+                f"completion marker {field!r} does not match report.json "
+                "(mixed or stale outputs)"
+            )
+    return marker
 
 
 def _write_js(path, global_name, payload):
@@ -74,9 +127,16 @@ def main(argv=None):
     parser.add_argument("--report-dir", required=True)
     args = parser.parse_args(argv)
 
-    report = _load(os.path.join(args.audit_dir, "report.json"))
-    findings = _load(os.path.join(args.audit_dir, "findings.json"))
-    sources = _load(os.path.join(args.audit_dir, "manifests", "sources.json"))
+    audit_dir = args.audit_dir
+    try:
+        report = _load(os.path.join(audit_dir, "report.json"))
+        findings = _load(os.path.join(audit_dir, "findings.json"))
+        sources = _load(os.path.join(audit_dir, "manifests", "sources.json"))
+        _require_completed_run(audit_dir, report, sources)
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        # Reject incomplete/invalid evidence before touching any report output.
+        print(f"build_report: error: {exc}", file=sys.stderr)
+        return 2
 
     data_dir = os.path.join(args.report_dir, "data")
     assets_dir = os.path.join(args.report_dir, "assets")
