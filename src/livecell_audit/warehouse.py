@@ -47,7 +47,9 @@ import duckdb
 from . import __version__
 from .completion import (
     COMPLETION_MARKER,
+    MANIFEST_NAME,
     STAGING_DIRNAME,
+    build_manifest,
     clear_stale,
     count_lines,
     dump_json,
@@ -155,9 +157,13 @@ VIEWS: Dict[str, str] = {
     """,
     "v1_split_overlap": """
         -- Filenames referenced by more than one split (per-filename view).
+        -- annotation_count_sum_records is a per-record snapshot sum: with
+        -- ambiguous duplicate image ids it can over-count, so use
+        -- v1_annotation_totals / v1_cell_line_summary.annotations_attributed
+        -- for reliable annotation totals.
         WITH per_file AS (
             SELECT file_name, split, COUNT(*) AS record_count,
-                   SUM(annotation_count) AS annotation_count
+                   SUM(annotation_count) AS annotation_count_sum_records
             FROM lc.images
             GROUP BY file_name, split
         )
@@ -166,7 +172,7 @@ VIEWS: Dict[str, str] = {
             list_sort(list(DISTINCT split))                        AS splits,
             COUNT(DISTINCT split)                                  AS n_splits,
             SUM(record_count)                                      AS record_count,
-            SUM(annotation_count)                                  AS annotation_count,
+            SUM(annotation_count_sum_records)                      AS annotation_count_sum_records,
             SUM(CASE WHEN split = 'train' THEN record_count ELSE 0 END) AS train_records,
             SUM(CASE WHEN split = 'val'   THEN record_count ELSE 0 END) AS val_records,
             SUM(CASE WHEN split = 'test'  THEN record_count ELSE 0 END) AS test_records
@@ -202,21 +208,81 @@ VIEWS: Dict[str, str] = {
     """,
     "v1_cell_line_summary": """
         -- Cell-line aggregates (metadata context, not biological growth).
+        -- Two annotation columns are published on purpose:
+        --   * annotations_attributed   -- reliable: each source annotation
+        --     counted once, only where its (split, image_id) is unambiguous.
+        --   * annotation_count_sum_records -- a per-record snapshot sum that
+        --     can over-count when duplicate image ids are ambiguous; it is
+        --     labelled explicitly and must not be used as a source total.
+        -- Annotations whose (split, image_id) is ambiguous cannot be assigned
+        -- to a cell line and are excluded from annotations_attributed; see
+        -- v1_annotation_totals for the reconciliation.
+        WITH unambiguous AS (
+            SELECT split, id FROM lc.images GROUP BY split, id HAVING COUNT(*) = 1
+        ),
+        per_record AS (
+            SELECT
+                cell_line,
+                COUNT(*)                                    AS image_records,
+                COUNT(DISTINCT file_name)                   AS unique_filenames,
+                SUM(annotation_count)                       AS annotation_count_sum_records,
+                AVG(annotation_count)                       AS mean_annotation_count_records,
+                median(annotation_count)                    AS median_annotation_count_records,
+                MIN(annotation_count)                       AS min_annotation_count_records,
+                MAX(annotation_count)                       AS max_annotation_count_records,
+                SUM(CASE WHEN annotation_count = 0 THEN 1 ELSE 0 END) AS zero_annotation_records
+            FROM lc.images
+            GROUP BY cell_line
+        ),
+        attributed AS (
+            SELECT i.cell_line, COUNT(*) AS annotations_attributed
+            FROM lc.annotations a
+            JOIN unambiguous u ON u.split = a.split AND u.id = a.image_id
+            JOIN lc.images i ON i.split = a.split AND i.id = a.image_id
+            GROUP BY i.cell_line
+        )
         SELECT
-            cell_line,
-            COUNT(*)                                    AS image_records,
-            COUNT(DISTINCT file_name)                   AS unique_filenames,
-            SUM(annotation_count)                       AS annotations,
-            AVG(annotation_count)                       AS mean_annotations,
-            median(annotation_count)                    AS median_annotations,
-            MIN(annotation_count)                       AS min_annotations,
-            MAX(annotation_count)                       AS max_annotations,
-            SUM(CASE WHEN annotation_count = 0 THEN 1 ELSE 0 END) AS zero_annotation_records
-        FROM lc.images
-        GROUP BY cell_line
+            p.cell_line,
+            p.image_records,
+            p.unique_filenames,
+            COALESCE(att.annotations_attributed, 0) AS annotations_attributed,
+            p.annotation_count_sum_records,
+            p.mean_annotation_count_records,
+            p.median_annotation_count_records,
+            p.min_annotation_count_records,
+            p.max_annotation_count_records,
+            p.zero_annotation_records
+        FROM per_record p
+        LEFT JOIN attributed att ON att.cell_line IS NOT DISTINCT FROM p.cell_line
+    """,
+    "v1_annotation_totals": """
+        -- Global annotation reconciliation: every source annotation is counted
+        -- exactly once as attributed, ambiguous or orphan. With no ambiguity or
+        -- orphans, annotations_attributed == annotations_total.
+        WITH unambiguous AS (
+            SELECT split, id FROM lc.images GROUP BY split, id HAVING COUNT(*) = 1
+        ),
+        ambiguous AS (
+            SELECT split, id FROM lc.images GROUP BY split, id HAVING COUNT(*) > 1
+        )
+        SELECT
+            (SELECT COUNT(*) FROM lc.annotations) AS annotations_total,
+            (SELECT COUNT(*) FROM lc.annotations a
+                JOIN unambiguous u ON u.split = a.split AND u.id = a.image_id) AS annotations_attributed,
+            (SELECT COUNT(*) FROM lc.annotations a
+                JOIN ambiguous m ON m.split = a.split AND m.id = a.image_id) AS annotations_ambiguous,
+            (SELECT COUNT(*) FROM lc.annotations a
+                LEFT JOIN lc.images i ON i.split = a.split AND i.id = a.image_id
+                WHERE i.id IS NULL) AS annotations_orphan,
+            (SELECT COUNT(*) FROM lc.images) AS image_records,
+            (SELECT COUNT(DISTINCT file_name) FROM lc.images) AS unique_filenames
     """,
     "v1_finding_lookup": """
-        -- Retrieve a finding's original image/annotation evidence.
+        -- A finding's exact original image evidence, keyed by the finding's own
+        -- recorded identities (lc.finding_evidence), so a version-specific
+        -- finding maps only to the implicated image record(s). Ambiguous
+        -- references are surfaced via evidence_match_status and never joined to
+        -- a guessed record; use v1_finding_context for filename/split context.
         SELECT
             f.record_position        AS finding_position,
             f.finding_id,
@@ -224,15 +290,36 @@ VIEWS: Dict[str, str] = {
             f.status                 AS finding_status,
             f.file_name,
             f.splits                 AS finding_splits,
-            i.split,
-            i.record_position        AS image_record_position,
+            e.split                  AS evidence_split,
+            e.image_id               AS evidence_image_id,
+            e.source                 AS evidence_source,
+            e.match_status           AS evidence_match_status,
             i.record_key             AS image_record_key,
+            i.record_position        AS image_record_position,
             i.id                     AS image_id,
             i.annotation_count,
             i.cell_line,
             i.dimensions_status
         FROM lc.findings f
-        LEFT JOIN lc.images i
+        LEFT JOIN lc.finding_evidence e ON e.finding_position = f.record_position
+        LEFT JOIN lc.images i ON i.record_key = e.record_key
+    """,
+    "v1_finding_context": """
+        -- Filename/split context for a finding: every image version that shares
+        -- the finding's filename in its splits. This is context, not evidence;
+        -- context_kind labels it as such.
+        SELECT
+            f.record_position        AS finding_position,
+            f.finding_id,
+            f.type                   AS finding_type,
+            f.file_name,
+            i.split                  AS context_split,
+            i.record_key             AS context_record_key,
+            i.id                     AS context_image_id,
+            i.annotation_count,
+            'filename_split_context' AS context_kind
+        FROM lc.findings f
+        JOIN lc.images i
             ON i.file_name = f.file_name AND list_contains(f.splits, i.split)
     """,
     "v1_image_join_ambiguity": """
@@ -612,6 +699,19 @@ def _create_schema_and_tables(con: duckdb.DuckDBPyConnection) -> None:
         )
         """
     )
+    con.execute(
+        f"""
+        CREATE TABLE {SCHEMA_NAME}.finding_evidence (
+            finding_position BIGINT NOT NULL,
+            finding_id VARCHAR NOT NULL,
+            split VARCHAR NOT NULL,
+            image_id BIGINT NOT NULL,
+            source VARCHAR,
+            record_key VARCHAR,
+            match_status VARCHAR
+        )
+        """
+    )
 
 
 def _load_tables(con: duckdb.DuckDBPyConnection, inputs: AuditInputs) -> None:
@@ -706,6 +806,71 @@ def _load_tables(con: duckdb.DuckDBPyConnection, inputs: AuditInputs) -> None:
             ],
         )
 
+    _load_finding_evidence(con, inputs.findings_path)
+
+
+def _load_finding_evidence(con: duckdb.DuckDBPyConnection, findings_path: str) -> None:
+    """Normalize each finding's own recorded image identities into a typed table.
+
+    The audit records the exact image ids a finding implicates under
+    ``records.<split>.image_ids``; for findings without a records payload
+    (dimension mismatch, unparseable filename) the single ``evidence.image_id``
+    is used. Each row is then resolved to the unique image-record key only when
+    ``(split, image_id)`` is unambiguous; ambiguous references keep a null key
+    and an explicit ``ambiguous_image_id`` status so evidence is never guessed.
+    """
+    findings = read_json(findings_path)
+    seen = set()
+    rows: List[Tuple[int, str, str, int, str]] = []
+    for position, finding in enumerate(findings):
+        finding_id = finding.get("finding_id")
+        added = False
+        records = finding.get("records") or {}
+        if isinstance(records, dict):
+            for split, payload in records.items():
+                for image_id in (payload or {}).get("image_ids") or []:
+                    key = (position, split, int(image_id))
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    rows.append((position, finding_id, split, int(image_id), "records"))
+                    added = True
+        if not added:
+            evidence = finding.get("evidence") or {}
+            split = evidence.get("split")
+            image_id = evidence.get("image_id")
+            if split is not None and image_id is not None:
+                key = (position, split, int(image_id))
+                if key not in seen:
+                    seen.add(key)
+                    rows.append((position, finding_id, split, int(image_id), "evidence"))
+    for row in rows:
+        con.execute(
+            f"INSERT INTO {SCHEMA_NAME}.finding_evidence "
+            "VALUES (?, ?, ?, ?, ?, NULL, NULL)",
+            list(row),
+        )
+    con.execute(
+        f"""
+        UPDATE {SCHEMA_NAME}.finding_evidence AS e
+        SET record_key = CASE WHEN m.n = 1 THEN m.record_key ELSE NULL END,
+            match_status = CASE
+                WHEN m.n = 1 THEN 'exact'
+                WHEN m.n > 1 THEN 'ambiguous_image_id'
+                ELSE 'unresolved'
+            END
+        FROM (
+            SELECT split, id AS image_id, COUNT(*) AS n, min(record_key) AS record_key
+            FROM {SCHEMA_NAME}.images GROUP BY split, id
+        ) AS m
+        WHERE e.split = m.split AND e.image_id = m.image_id
+        """
+    )
+    con.execute(
+        f"UPDATE {SCHEMA_NAME}.finding_evidence "
+        "SET match_status = 'unresolved' WHERE match_status IS NULL"
+    )
+
 
 def _short_hash(text: str) -> str:
     import hashlib
@@ -719,7 +884,24 @@ def _create_views(con: duckdb.DuckDBPyConnection) -> None:
 
 
 #: Base tables exported to Parquet (typed, insertion-ordered).
-PARQUET_TABLES = ("images", "annotations", "findings", "sources", "runs", "val_membership")
+PARQUET_TABLES = (
+    "images",
+    "annotations",
+    "findings",
+    "finding_evidence",
+    "sources",
+    "runs",
+    "val_membership",
+)
+
+#: Aggregate/derived views exported to Parquet with an explicit row order.
+PARQUET_ORDERED_VIEWS = (
+    ("v1_image_annotation_stats", "split, image_id"),
+    ("v1_cell_line_summary", "cell_line"),
+    ("v1_annotation_totals", "annotations_total"),
+    ("v1_finding_lookup", "finding_position, evidence_split, evidence_image_id"),
+    ("v1_finding_context", "finding_position, context_record_key"),
+)
 
 
 def _export_parquet(
@@ -730,18 +912,10 @@ def _export_parquet(
     targets = [(name, f"SELECT * FROM {SCHEMA_NAME}.{name}") for name in PARQUET_TABLES]
     # Aggregate views are ordered explicitly so their Parquet row order does not
     # depend on hash-group order.
-    targets.append(
-        (
-            "v1_image_annotation_stats",
-            f"SELECT * FROM {SCHEMA_NAME}.v1_image_annotation_stats ORDER BY split, image_id",
+    for name, order_by in PARQUET_ORDERED_VIEWS:
+        targets.append(
+            (name, f"SELECT * FROM {SCHEMA_NAME}.{name} ORDER BY {order_by}")
         )
-    )
-    targets.append(
-        (
-            "v1_cell_line_summary",
-            f"SELECT * FROM {SCHEMA_NAME}.v1_cell_line_summary ORDER BY cell_line",
-        )
-    )
     for name, relation in targets:
         path = os.path.join(parquet_dir, f"{name}.parquet")
         con.execute(
@@ -961,6 +1135,18 @@ def run_warehouse(config: WarehouseConfig) -> Dict[str, Any]:
             "images": os.path.getsize(inputs.images_path),
             "annotations": os.path.getsize(inputs.annotations_path),
         }
+        # Exact-version evidence: hash the audit exports actually consumed so a
+        # downstream stage can confirm which input bytes produced this database.
+        input_files: Dict[str, Any] = {}
+        for label, path in (
+            ("images_jsonl", inputs.images_path),
+            ("annotations_jsonl", inputs.annotations_path),
+            ("findings_json", inputs.findings_path),
+            ("sources_json", inputs.expected["sources_path"]),
+            ("val_membership_json", inputs.membership_path),
+        ):
+            digest, size = sha256_file(path)
+            input_files[label] = {"sha256": digest, "bytes": size}
 
         integrity = {
             "schema_version": SCHEMA_VERSION,
@@ -972,6 +1158,7 @@ def run_warehouse(config: WarehouseConfig) -> Dict[str, Any]:
                 "source_sha256": inputs.marker.get("source_sha256", {}),
                 "splits": inputs.marker.get("splits"),
             },
+            "input_files": input_files,
             "validation": {"checks": inputs.checks},
             "reconciliation": {
                 "images": {
@@ -1032,12 +1219,30 @@ def run_warehouse(config: WarehouseConfig) -> Dict[str, Any]:
         }
         dump_json(os.path.join(staging_dir, "run.json"), run_record)
 
+        # Content manifest: size + SHA-256 for every required output, including
+        # the database and the Parquet exports. A downstream stage verifies this
+        # rather than trusting a JSON marker alone.
+        manifest_relatives = ["audit.duckdb", "integrity.json", "run.json"]
+        manifest_relatives += [f"parquet/{name}.parquet" for name in sorted(parquet_sizes)]
+        manifest = build_manifest(
+            "warehouse",
+            SCHEMA_VERSION,
+            staging_dir,
+            manifest_relatives,
+            extra={"view_version": VIEW_VERSION},
+        )
+        dump_json(os.path.join(staging_dir, MANIFEST_NAME), manifest)
+        manifest_digest, manifest_bytes = sha256_file(
+            os.path.join(staging_dir, MANIFEST_NAME)
+        )
+
         promote_staged(staging_dir, out_dir)
         write_completion_marker(
             marker_path,
             {
                 "status": "completed",
                 "stage": "warehouse",
+                "partial": False,
                 "tool": {"name": "livecell-audit", "version": __version__},
                 "schema_version": SCHEMA_VERSION,
                 "view_version": VIEW_VERSION,
@@ -1047,11 +1252,17 @@ def run_warehouse(config: WarehouseConfig) -> Dict[str, Any]:
                 "total_annotations": annotations_count,
                 "unique_filenames": distinct_filenames,
                 "source_sha256": inputs.marker.get("source_sha256", {}),
+                "manifest": {
+                    "file": MANIFEST_NAME,
+                    "sha256": manifest_digest,
+                    "bytes": manifest_bytes,
+                },
                 "outputs": {
                     "database": "audit.duckdb",
                     "parquet": "parquet/",
                     "integrity": "integrity.json",
                     "run": "run.json",
+                    "manifest": MANIFEST_NAME,
                 },
             },
         )

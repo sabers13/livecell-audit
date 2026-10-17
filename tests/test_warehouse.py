@@ -219,6 +219,120 @@ def test_warehouse_alternate_versions_preserved(mini_dataset, tmp_path):
         con.close()
 
 
+def _attribution_dataset(root):
+    """Cell-line A has one unambiguous record; cell line B has an ambiguous pair."""
+    root = Path(root)
+    (root / "annotations").mkdir(parents=True)
+    (root / "images").mkdir(parents=True)
+    a = "A172_Phase_A7_1_00d00h00m_1.tif"
+    b1 = "BV2_Phase_C4_1_01d16h00m_3.tif"
+    b2 = "BV2_Phase_C4_1_01d16h00m_4.tif"
+    images = [image_record(1, a), image_record(5, b1), image_record(5, b2)]
+    annotations = [
+        annotation_record(101, 1),
+        annotation_record(102, 1),
+        annotation_record(201, 5),  # ambiguous: id 5 has two records
+    ]
+    write_coco(root / "annotations" / "livecell_coco_train.json", images, annotations)
+    write_coco(root / "annotations" / "livecell_coco_val.json", [], [])
+    write_coco(root / "annotations" / "livecell_coco_test.json", [], [])
+    for name in (a, b1, b2):
+        write_tif(root / "images" / name)
+    return str(root)
+
+
+def test_finding_lookup_is_version_specific(mini_dataset, tmp_path):
+    audit_out = tmp_path / "audit"
+    _audit(mini_dataset["data_root"], audit_out)
+    _warehouse(audit_out, tmp_path / "wh")
+    con = _connect(tmp_path / "wh")
+    try:
+        low = con.execute(
+            "SELECT finding_id, evidence_image_id, image_record_key, evidence_match_status "
+            "FROM lc.v1_finding_lookup WHERE finding_type = 'low_annotation_count' "
+            "AND file_name = ? ORDER BY finding_id",
+            [mini_dataset["dup"]],
+        ).fetchall()
+        by_finding = {}
+        for finding_id, image_id, record_key, status in low:
+            by_finding.setdefault(finding_id, []).append((image_id, record_key, status))
+        # each version-specific low-count finding implicates exactly its own id
+        only_one = [f for f in by_finding if f.endswith(":1")]
+        only_two = [f for f in by_finding if f.endswith(":2")]
+        assert len(only_one) == 1 and len(only_two) == 1
+        assert by_finding[only_one[0]] == [(1, "train:0", "exact")]
+        assert by_finding[only_two[0]] == [(2, "train:1", "exact")]
+
+        # the alternate-version finding is intentionally about both versions
+        alt = con.execute(
+            "SELECT evidence_image_id, image_record_key FROM lc.v1_finding_lookup "
+            "WHERE finding_type = 'alternate_annotation_version' ORDER BY evidence_image_id"
+        ).fetchall()
+        assert alt == [(1, "train:0"), (2, "train:1")]
+
+        # context is available but labelled as context, not evidence
+        context = con.execute(
+            "SELECT finding_id, context_record_key, context_kind FROM lc.v1_finding_context "
+            "WHERE finding_type = 'low_annotation_count' AND file_name = ? "
+            "AND finding_id LIKE '%:1' ORDER BY context_record_key",
+            [mini_dataset["dup"]],
+        ).fetchall()
+        expected_id = f"low-annotations:train:{mini_dataset['dup']}:1"
+        assert context == [
+            (expected_id, "train:0", "filename_split_context"),
+            (expected_id, "train:1", "filename_split_context"),
+        ]
+    finally:
+        con.close()
+
+
+def test_cell_line_summary_reconciles_annotation_totals(tmp_path):
+    data = _attribution_dataset(tmp_path / "data")
+    audit_out = tmp_path / "audit"
+    _audit(data, audit_out)
+    _warehouse(audit_out, tmp_path / "wh")
+    con = _connect(tmp_path / "wh")
+    try:
+        totals = con.execute(
+            "SELECT annotations_total, annotations_attributed, annotations_ambiguous, "
+            "annotations_orphan FROM lc.v1_annotation_totals"
+        ).fetchone()
+        total, attributed, ambiguous, orphan = totals
+        assert (total, attributed, ambiguous, orphan) == (3, 2, 1, 0)
+        assert total == attributed + ambiguous + orphan
+
+        summary = {
+            row[0]: row
+            for row in con.execute(
+                "SELECT cell_line, annotations_attributed, annotation_count_sum_records "
+                "FROM lc.v1_cell_line_summary"
+            ).fetchall()
+        }
+        # reliable per-cell-line total counts each annotation once
+        assert summary["A172"][1] == 2
+        assert summary["BV2"][1] == 0  # ambiguous annotations are unattributed
+        # the per-record snapshot sum is labelled and can over-count
+        assert summary["BV2"][2] == 2
+    finally:
+        con.close()
+
+
+def test_annotation_totals_count_orphans_without_multiplication(tmp_path):
+    data = _ambiguity_dataset(tmp_path / "data")
+    audit_out = tmp_path / "audit"
+    _audit(data, audit_out)
+    _warehouse(audit_out, tmp_path / "wh")
+    con = _connect(tmp_path / "wh")
+    try:
+        totals = con.execute(
+            "SELECT annotations_total, annotations_attributed, annotations_ambiguous, "
+            "annotations_orphan FROM lc.v1_annotation_totals"
+        ).fetchone()
+        assert totals == (2, 0, 1, 1)
+    finally:
+        con.close()
+
+
 # --------------------------------------------------------------------------- #
 # failed build safety + determinism
 

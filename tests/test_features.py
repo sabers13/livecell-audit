@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import shutil
 from pathlib import Path
 
 import numpy as np
@@ -297,7 +298,7 @@ def test_failed_features_rerun_clears_marker(feature_dataset, tmp_path):
 
     # Remove the warehouse database so the rerun fails after invalidating.
     os.remove(wh / "audit.duckdb")
-    with pytest.raises(FeatureError, match="missing warehouse database"):
+    with pytest.raises(FeatureError, match="warehouse manifest verification failed"):
         run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
 
     assert not (fe_out / "COMPLETED").exists()
@@ -312,3 +313,123 @@ def test_features_derive_data_root_from_warehouse(feature_dataset, tmp_path):
     rows = _rows(fe_out)
     assert rows["train:0"]["image_features_status"] == "ok"
     assert rows["train:0"]["pixel_mean"] == pytest.approx(3.0)
+
+
+# --------------------------------------------------------------------------- #
+# provenance: marker/manifest/DB verification (review item 1)
+
+
+def test_features_rejects_tampered_marker_source_hashes(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    marker = json.loads((wh / "COMPLETED").read_text(encoding="utf-8"))
+    marker["source_sha256"] = {"train": "wrong-source"}
+    (wh / "COMPLETED").write_text(json.dumps(marker), encoding="utf-8")
+    with pytest.raises(FeatureError, match="provenance verification failed"):
+        run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+
+def test_features_rejects_modified_database(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    with open(wh / "audit.duckdb", "ab") as handle:
+        handle.write(b"tampered")
+    with pytest.raises(FeatureError, match="manifest verification failed"):
+        run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+
+def test_features_rejects_mixed_database_and_marker(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    # a second warehouse built from different source data
+    other_root = _ambiguous_dataset(tmp_path / "other")
+    _a2, wh2, _f2 = _pipeline(other_root, tmp_path, name="other")
+    shutil.copyfile(wh2 / "audit.duckdb", wh / "audit.duckdb")
+    with pytest.raises(FeatureError, match="manifest verification failed"):
+        run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+
+def test_features_rejects_marker_schema_mismatch(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    marker = json.loads((wh / "COMPLETED").read_text(encoding="utf-8"))
+    marker["schema_version"] = "999"
+    (wh / "COMPLETED").write_text(json.dumps(marker), encoding="utf-8")
+    with pytest.raises(FeatureError, match="schema_version mismatch"):
+        run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+
+def test_features_rejects_missing_manifest(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    os.remove(wh / "manifest.json")
+    with pytest.raises(FeatureError, match="manifest"):
+        run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+
+def test_release_ready_rejects_modified_feature_outputs(feature_dataset, tmp_path):
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+    assert_release_ready(str(fe_out))  # a full run is release-ready
+    assert verify_features_outputs(str(fe_out))["ok"] is True
+
+    with open(fe_out / "features.parquet", "ab") as handle:
+        handle.write(b"tampered")
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    assert any("features.parquet" in problem for problem in result["problems"])
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))
+
+
+# --------------------------------------------------------------------------- #
+# partial mode (review item 1)
+
+
+def test_partial_mode_marks_not_attempted_and_is_not_release_ready(feature_dataset, tmp_path):
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    result = run_features(
+        FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out), max_filenames=1)
+    )
+    assert result["run"]["partial"] is True
+    assert result["run"]["mode"] == "partial"
+    marker = json.loads((fe_out / "COMPLETED").read_text(encoding="utf-8"))
+    assert marker["partial"] is True and marker["mode"] == "partial"
+
+    rows = _rows(fe_out)
+    assert rows["train:0"]["image_features_status"] == "ok"
+    # every unread record has an explicit status, never a silent null
+    for key in ("train:1", "train:2", "train:3", "train:4", "train:5"):
+        assert rows[key]["image_features_status"] == "not_attempted"
+        assert rows[key]["image_features_available"] is False
+
+    assert verify_features_outputs(str(fe_out))["ok"] is False
+    with pytest.raises(FeatureError, match="partial"):
+        assert_release_ready(str(fe_out))
+
+
+# --------------------------------------------------------------------------- #
+# item 4: intensity contract and apostrophe-safe paths
+
+
+def test_feature_dictionary_states_intensity_contract(feature_dataset, tmp_path):
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+    dictionary = json.loads((fe_out / "feature_dictionary.json").read_text(encoding="utf-8"))
+    contract = dictionary["image_statistics"]
+    assert "none" in contract["normalization"]
+    assert "8-bit" in contract["units"] or "0-255" in contract["units"]
+    assert "not rescaled" in contract["bit_depth"]
+    by_name = {entry["name"]: entry for entry in dictionary["features"]}
+    assert "no normalization" in by_name["pixel_mean"]["description"]
+
+
+def test_apostrophe_in_output_paths_is_supported(feature_dataset, tmp_path):
+    audit_out = tmp_path / "audit"
+    run_audit(AuditConfig(data_root=feature_dataset["data_root"], out_dir=str(audit_out)))
+    wh = tmp_path / "wh'out"
+    fe_out = tmp_path / "fe'out"
+    run_warehouse(WarehouseConfig(audit_dir=str(audit_out), out_dir=str(wh)))
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+    assert (fe_out / "features.parquet").is_file()
+    assert (fe_out / "manifest.json").is_file()
+    assert _rows(fe_out)["train:0"]["image_features_status"] == "ok"

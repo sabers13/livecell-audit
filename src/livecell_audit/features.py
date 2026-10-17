@@ -55,18 +55,55 @@ import pandas as pd
 from . import __version__
 from .completion import (
     COMPLETION_MARKER,
+    MANIFEST_NAME,
     STAGING_DIRNAME,
+    build_manifest,
     clear_stale,
     dump_json,
     load_completion_marker,
     promote_staged,
     read_json,
+    sha256_file,
+    verify_manifest,
     write_completion_marker,
 )
 from .errors import FeatureError
+from .warehouse import SCHEMA_VERSION as WAREHOUSE_SCHEMA_VERSION
+from .warehouse import VIEW_VERSION as WAREHOUSE_VIEW_VERSION
 
 FEATURE_SCHEMA_VERSION = "1"
 SPLIT_ORDER = {"train": 0, "val": 1, "test": 2}
+
+#: Required feature outputs listed in the feature manifest.
+FEATURE_OUTPUT_PATHS = (
+    "features.parquet",
+    "features.jsonl",
+    "cell_line_summary.json",
+    "cell_line_summary.csv",
+    "cell_line_summary.parquet",
+    "feature_distributions.json",
+    "feature_dictionary.json",
+    "run.json",
+)
+
+#: TIFF intensity contract published in ``feature_dictionary.json``.
+IMAGE_STATISTICS_CONTRACT = {
+    "source": "raw TIFF pixel values as stored on disk",
+    "normalization": "none (no rescaling, no per-image contrast stretch)",
+    "units": "stored integer intensity levels; 0-255 for 8-bit unsigned data",
+    "bit_depth": (
+        "LIVECell TIFFs are 8-bit unsigned. A 16-bit or otherwise different bit "
+        "depth is read as stored and is not rescaled to 0-255, so pixel_mean, "
+        "pixel_std, gradient_mean, pixel_min and pixel_max are not comparable "
+        "across bit depths; a mixed-bit-depth input is a documented limitation."
+    ),
+    "channel_policy": "a multi-channel TIFF is reduced to its first channel",
+    "uniform_images": "a valid uniform image has pixel_std = 0 and gradient_mean = 0",
+    "unreadable_or_missing": (
+        "pixel statistics are null and image_features_status records "
+        "missing_file / unreadable / not_attempted"
+    ),
+}
 
 # --------------------------------------------------------------------------- #
 # Feature dictionary (single source of truth for column order and types)
@@ -256,24 +293,24 @@ FEATURE_DICTIONARY: List[Dict[str, Any]] = [
     {"name": "pixel_mean", "dtype": "DOUBLE", "source": "TIFF read once per filename",
      "formula": "mean of stored pixel values", "unit": "intensity (0-255)",
      "depends_on_annotations": False, "missing_behavior": "null when missing/unreadable",
-     "description": "Mean grayscale intensity; texture proxy only."},
+     "description": "Mean raw stored grayscale intensity (no normalization); texture proxy only."},
     {"name": "pixel_std", "dtype": "DOUBLE", "source": "TIFF read once per filename",
      "formula": "population standard deviation of pixel values", "unit": "intensity (0-255)",
      "depends_on_annotations": False, "missing_behavior": "null when missing/unreadable",
-     "description": "Contrast proxy; 0 for a valid uniform image."},
+     "description": "Contrast proxy on raw stored intensities (no normalization); 0 for a valid uniform image."},
     {"name": "gradient_mean", "dtype": "DOUBLE", "source": "TIFF read once per filename",
      "formula": "mean magnitude of numpy.gradient central differences",
      "unit": "intensity/pixel", "depends_on_annotations": False,
      "missing_behavior": "null when missing/unreadable",
-     "description": "Edge/texture proxy; 0 for a valid uniform image."},
+     "description": "Edge/texture proxy on raw stored intensities (no normalization); 0 for a valid uniform image."},
     {"name": "pixel_min", "dtype": "DOUBLE", "source": "TIFF read once per filename",
      "formula": "minimum pixel value", "unit": "intensity (0-255)",
      "depends_on_annotations": False, "missing_behavior": "null when missing/unreadable",
-     "description": "Darkest stored pixel value."},
+     "description": "Darkest raw stored pixel value."},
     {"name": "pixel_max", "dtype": "DOUBLE", "source": "TIFF read once per filename",
      "formula": "maximum pixel value", "unit": "intensity (0-255)",
      "depends_on_annotations": False, "missing_behavior": "null when missing/unreadable",
-     "description": "Brightest stored pixel value."},
+     "description": "Brightest raw stored pixel value."},
     {"name": "image_features_status", "dtype": "VARCHAR", "source": "derived",
      "formula": "'ok' | 'missing_file' | 'unreadable'", "unit": "category",
      "depends_on_annotations": False, "missing_behavior": "never missing",
@@ -473,6 +510,11 @@ def build_feature_frame(
         image_feature_frame, left_on="file_name", right_index=True, how="left",
         validate="many_to_one",
     )
+    # Records whose filename was not read (development max_filenames limit) get
+    # an explicit status rather than a silent null.
+    read_filenames = set(filenames)
+    not_attempted_mask = ~merged["file_name"].isin(read_filenames)
+    merged.loc[not_attempted_mask, "image_features_status"] = "not_attempted"
 
     # --- derived version context -------------------------------------------
     merged["versions_in_split"] = merged.groupby(["split", "file_name"])["record_position"].transform("size").astype("Int64")
@@ -504,8 +546,10 @@ def build_feature_frame(
 
     diagnostics = {
         "records": int(len(frame)),
-        "distinct_filenames_total": int(len(filenames)) if config.max_filenames is None else int(images["file_name"].nunique()),
+        "distinct_filenames_total": int(images["file_name"].nunique()),
         "filenames_read": int(len(filenames)),
+        "partial": bool(len(filenames) < int(images["file_name"].nunique())),
+        "max_filenames": config.max_filenames,
         "ambiguous_records": int(ambiguous_mask.sum()),
         "ambiguous_keys": [
             {"split": r[0], "image_id": int(r[1])} for r in ambiguous.itertuples(index=False)
@@ -517,6 +561,7 @@ def build_feature_frame(
         "image_features_ok": int((frame["image_features_status"] == "ok").sum()),
         "image_features_missing_file": int((frame["image_features_status"] == "missing_file").sum()),
         "image_features_unreadable": int((frame["image_features_status"] == "unreadable").sum()),
+        "image_features_not_attempted": int((frame["image_features_status"] == "not_attempted").sum()),
         "zero_annotation_records": int(frame["zero_annotation"].fillna(False).sum()),
         "alternate_version_records": int(frame["is_alternate_version"].fillna(False).sum()),
         "cross_split_overlap_records": int(frame["is_cross_split_overlap"].fillna(False).sum()),
@@ -596,6 +641,11 @@ def build_summaries(frame: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     return summary, distributions
 
 
+def _sql_str(value: str) -> str:
+    """Quote a filesystem path as a DuckDB string literal (apostrophe-safe)."""
+    return "'" + value.replace("'", "''") + "'"
+
+
 def _write_frame_outputs(
     frame: pd.DataFrame,
     summary: pd.DataFrame,
@@ -619,23 +669,136 @@ def _write_frame_outputs(
     try:
         features_parquet = os.path.join(staging_dir, "features.parquet")
         con.execute(
-            f"COPY (SELECT {projection} FROM read_json('{features_jsonl}', "
+            f"COPY (SELECT {projection} FROM read_json({_sql_str(features_jsonl)}, "
             f"columns={{{columns_sql}}}, format='newline_delimited')) "
-            f"TO '{features_parquet}' (FORMAT PARQUET, COMPRESSION zstd)"
+            f"TO {_sql_str(features_parquet)} (FORMAT PARQUET, COMPRESSION zstd)"
         )
         sizes["features_parquet"] = os.path.getsize(features_parquet)
 
         summary_parquet = os.path.join(staging_dir, "cell_line_summary.parquet")
         con.execute(
-            f"COPY (SELECT * FROM read_json('{summary_jsonl}', "
+            f"COPY (SELECT * FROM read_json({_sql_str(summary_jsonl)}, "
             "format='newline_delimited')) "
-            f"TO '{summary_parquet}' (FORMAT PARQUET, COMPRESSION zstd)"
+            f"TO {_sql_str(summary_parquet)} (FORMAT PARQUET, COMPRESSION zstd)"
         )
         sizes["cell_line_summary_parquet"] = os.path.getsize(summary_parquet)
     finally:
         con.close()
     os.remove(summary_jsonl)
     return sizes
+
+
+def _require_completed_warehouse(warehouse_dir: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Validate a completed warehouse marker, manifest and exact stage/schema.
+
+    A valid JSON marker is not sufficient: the marker must declare the expected
+    stage and schema/view versions, carry a manifest checksum, and every file the
+    manifest lists (database, Parquet, integrity, run) must match its size and
+    SHA-256. This rejects a mixed database/marker pair and a modified database.
+    """
+    marker = load_completion_marker(warehouse_dir)
+    if marker is None:
+        raise FeatureError(
+            f"not a completed warehouse run (missing or invalid {COMPLETION_MARKER}): "
+            f"{warehouse_dir}"
+        )
+    if marker.get("stage") != "warehouse":
+        raise FeatureError(
+            f"expected a 'warehouse' stage marker, got {marker.get('stage')!r}"
+        )
+    if str(marker.get("schema_version")) != WAREHOUSE_SCHEMA_VERSION:
+        raise FeatureError(
+            f"warehouse schema_version mismatch: {marker.get('schema_version')!r} "
+            f"!= {WAREHOUSE_SCHEMA_VERSION!r}"
+        )
+    if marker.get("view_version") != WAREHOUSE_VIEW_VERSION:
+        raise FeatureError(
+            f"warehouse view_version mismatch: {marker.get('view_version')!r} "
+            f"!= {WAREHOUSE_VIEW_VERSION!r}"
+        )
+    if marker.get("partial"):
+        raise FeatureError("warehouse run is marked partial; not usable for features")
+    manifest_info = marker.get("manifest") or {}
+    if not manifest_info.get("sha256"):
+        raise FeatureError("warehouse marker has no manifest checksum")
+    result = verify_manifest(
+        warehouse_dir,
+        stage="warehouse",
+        expected_sha256=manifest_info.get("sha256"),
+        required_paths=("audit.duckdb", "integrity.json", "run.json"),
+    )
+    if not result["ok"]:
+        raise FeatureError(
+            "warehouse manifest verification failed: " + "; ".join(result["problems"])
+        )
+    return marker, result["manifest"]
+
+
+def _verify_warehouse_provenance(
+    con: duckdb.DuckDBPyConnection,
+    marker: Dict[str, Any],
+    integrity: Optional[Dict[str, Any]],
+) -> List[str]:
+    """Cross-check the database, its marker and integrity.json provenance.
+
+    Verifies the DB's own ``runs``/``sources`` source checksums and counts, the
+    live table counts, and the integrity reconciliation all agree with the
+    marker, so a tampered marker (or a database from a different run) is
+    rejected instead of propagating false source provenance.
+    """
+    problems: List[str] = []
+    expected_hashes = marker.get("source_sha256") or {}
+    rows = con.execute(
+        "SELECT run_id, source_sha256_train, source_sha256_val, source_sha256_test, "
+        "total_image_records, total_annotations, unique_filenames FROM lc.runs"
+    ).fetchall()
+    if len(rows) != 1:
+        problems.append(f"expected exactly one runs row, found {len(rows)}")
+    else:
+        _run_id, h_train, h_val, h_test, n_img, n_ann, n_fn = rows[0]
+        for split, value in (("train", h_train), ("val", h_val), ("test", h_test)):
+            if expected_hashes.get(split) != value:
+                problems.append(
+                    f"runs.source_sha256_{split}={value!r} != marker "
+                    f"{expected_hashes.get(split)!r}"
+                )
+        for label, value, expected in (
+            ("total_image_records", n_img, marker.get("total_image_records")),
+            ("total_annotations", n_ann, marker.get("total_annotations")),
+            ("unique_filenames", n_fn, marker.get("unique_filenames")),
+        ):
+            if value != expected:
+                problems.append(f"runs.{label}={value!r} != marker {expected!r}")
+    for split, sha in con.execute("SELECT split, sha256 FROM lc.sources").fetchall():
+        if expected_hashes.get(split) != sha:
+            problems.append(
+                f"sources.sha256[{split}]={sha!r} != marker {expected_hashes.get(split)!r}"
+            )
+    images = con.execute("SELECT COUNT(*) FROM lc.images").fetchone()[0]
+    annotations = con.execute("SELECT COUNT(*) FROM lc.annotations").fetchone()[0]
+    filenames = con.execute("SELECT COUNT(DISTINCT file_name) FROM lc.images").fetchone()[0]
+    for label, value, expected in (
+        ("images", images, marker.get("total_image_records")),
+        ("annotations", annotations, marker.get("total_annotations")),
+        ("unique_filenames", filenames, marker.get("unique_filenames")),
+    ):
+        if value != expected:
+            problems.append(f"database {label} count={value!r} != marker {expected!r}")
+    if integrity is not None:
+        if (integrity.get("input") or {}).get("source_sha256") != expected_hashes:
+            problems.append("integrity.input.source_sha256 != marker.source_sha256")
+        reconciliation = integrity.get("reconciliation") or {}
+        for key, name in (
+            ("images", "total_image_records"),
+            ("annotations", "total_annotations"),
+            ("unique_filenames", "unique_filenames"),
+        ):
+            loaded = (reconciliation.get(key) or {}).get("loaded")
+            if loaded != marker.get(name):
+                problems.append(
+                    f"integrity.reconciliation.{key}.loaded={loaded!r} != marker {name}"
+                )
+    return problems
 
 
 def run_features(config: FeatureConfig) -> Dict[str, Any]:
@@ -653,22 +816,19 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
         # including warehouse validation, so a failed rerun into a reused
         # directory can never keep looking like a completed run.
         clear_stale(out_dir)
-        marker = load_completion_marker(warehouse_dir)
-        if marker is None:
-            raise FeatureError(
-                f"not a completed warehouse run (missing or invalid {COMPLETION_MARKER}): "
-                f"{warehouse_dir}"
-            )
-        if marker.get("stage") not in (None, "warehouse"):
-            raise FeatureError(f"unexpected completion stage {marker.get('stage')!r}")
+        marker, warehouse_manifest = _require_completed_warehouse(warehouse_dir)
         db_path = os.path.join(warehouse_dir, "audit.duckdb")
-        if not os.path.isfile(db_path):
-            raise FeatureError(f"missing warehouse database: {db_path}")
+        integrity = read_json(os.path.join(warehouse_dir, "integrity.json"))
 
         os.makedirs(staging_dir)
 
         con = duckdb.connect(db_path, read_only=True)
         try:
+            problems = _verify_warehouse_provenance(con, marker, integrity)
+            if problems:
+                raise FeatureError(
+                    "warehouse provenance verification failed: " + "; ".join(problems)
+                )
             run_row = con.execute("SELECT run_id FROM lc.runs LIMIT 1").fetchone()
             run_id = run_row[0] if run_row else None
             build_started = time.perf_counter()
@@ -678,14 +838,19 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
         finally:
             con.close()
 
+        partial = bool(diagnostics.get("partial"))
+        mode = "partial" if partial else "full"
+
         sizes = _write_frame_outputs(frame, summary, staging_dir)
         dump_json(
             os.path.join(staging_dir, "cell_line_summary.json"),
             {
                 "grouping": "cell_line",
+                "mode": mode,
                 "note": (
                     "Acquisition metadata is context, not proof of biological "
-                    "growth; annotation counts are label evidence, not cell counts."
+                    "growth; annotation counts are label evidence, not cell counts. "
+                    "Ambiguous annotation joins are excluded (null), not doubled."
                 ),
                 "summary": jsonable_records(summary),
             },
@@ -695,6 +860,8 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
             os.path.join(staging_dir, "feature_dictionary.json"),
             {
                 "feature_schema_version": FEATURE_SCHEMA_VERSION,
+                "mode": mode,
+                "image_statistics": IMAGE_STATISTICS_CONTRACT,
                 "source_manifest": {
                     "audit_run_id": run_id,
                     "source_sha256": marker.get("source_sha256", {}),
@@ -709,11 +876,15 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
         run_record = {
             "tool": {"name": "livecell-audit", "version": __version__},
             "stage": "features",
+            "mode": mode,
+            "partial": partial,
             "feature_schema_version": FEATURE_SCHEMA_VERSION,
             "warehouse_dir": warehouse_dir,
             "out_dir": out_dir,
             "data_root": os.path.abspath(config.data_root) if config.data_root else None,
             "max_filenames": config.max_filenames,
+            "warehouse_schema_version": marker.get("schema_version"),
+            "warehouse_view_version": marker.get("view_version"),
             "duckdb_version": duckdb.__version__,
             "pandas_version": pd.__version__,
             "numpy_version": np.__version__,
@@ -725,12 +896,26 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
         }
         dump_json(os.path.join(staging_dir, "run.json"), run_record)
 
+        manifest = build_manifest(
+            "features",
+            FEATURE_SCHEMA_VERSION,
+            staging_dir,
+            FEATURE_OUTPUT_PATHS,
+            extra={"mode": mode, "partial": partial},
+        )
+        dump_json(os.path.join(staging_dir, MANIFEST_NAME), manifest)
+        manifest_digest, manifest_bytes = sha256_file(
+            os.path.join(staging_dir, MANIFEST_NAME)
+        )
+
         promote_staged(staging_dir, out_dir)
         write_completion_marker(
             marker_path,
             {
                 "status": "completed",
                 "stage": "features",
+                "mode": mode,
+                "partial": partial,
                 "tool": {"name": "livecell-audit", "version": __version__},
                 "feature_schema_version": FEATURE_SCHEMA_VERSION,
                 "completed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -739,12 +924,19 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
                 "distinct_filenames": diagnostics["filenames_read"],
                 "annotations_attached": diagnostics["annotation_total_attached"],
                 "source_sha256": marker.get("source_sha256", {}),
+                "warehouse_manifest_sha256": (marker.get("manifest") or {}).get("sha256"),
+                "manifest": {
+                    "file": MANIFEST_NAME,
+                    "sha256": manifest_digest,
+                    "bytes": manifest_bytes,
+                },
                 "outputs": {
                     "features_parquet": "features.parquet",
                     "features_jsonl": "features.jsonl",
                     "cell_line_summary": "cell_line_summary.json",
                     "feature_dictionary": "feature_dictionary.json",
                     "run": "run.json",
+                    "manifest": MANIFEST_NAME,
                 },
             },
         )
@@ -765,6 +957,60 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
         "marker": read_json(marker_path),
         "out_dir": out_dir,
     }
+
+
+def verify_features_outputs(out_dir: str) -> Dict[str, Any]:
+    """Verify a completed feature run's marker and content manifest.
+
+    Returns ``{"ok": bool, "problems": [...], "marker": ..., "manifest": ...}``
+    for a consumer that wants to inspect rather than raise. A partial run is
+    reported via ``problems`` so it cannot be published as a release dataset.
+    """
+    out_dir = os.path.abspath(out_dir)
+    marker = load_completion_marker(out_dir)
+    if marker is None:
+        return {"ok": False, "problems": [f"not a completed feature run: {out_dir}"], "marker": None, "manifest": None}
+    problems: List[str] = []
+    if marker.get("stage") != "features":
+        problems.append(f"unexpected stage {marker.get('stage')!r}")
+    if str(marker.get("feature_schema_version")) != FEATURE_SCHEMA_VERSION:
+        problems.append(
+            f"feature_schema_version {marker.get('feature_schema_version')!r} "
+            f"!= {FEATURE_SCHEMA_VERSION!r}"
+        )
+    if marker.get("partial"):
+        problems.append("feature run is partial (development max_filenames); not release-ready")
+    manifest_info = marker.get("manifest") or {}
+    if not manifest_info.get("sha256"):
+        problems.append("marker has no manifest checksum")
+        return {"ok": False, "problems": problems, "marker": marker, "manifest": None}
+    result = verify_manifest(
+        out_dir,
+        stage="features",
+        expected_sha256=manifest_info.get("sha256"),
+        required_paths=("features.parquet", "feature_dictionary.json"),
+    )
+    problems.extend(result["problems"])
+    return {
+        "ok": not problems,
+        "problems": problems,
+        "marker": marker,
+        "manifest": result["manifest"],
+    }
+
+
+def assert_release_ready(out_dir: str) -> Dict[str, Any]:
+    """Return the marker of a verified, full feature run or raise FeatureError.
+
+    Consumers (for example the later scikit-learn stage) call this to reject a
+    partial or tampered feature directory before using it.
+    """
+    result = verify_features_outputs(out_dir)
+    if not result["ok"]:
+        raise FeatureError(
+            "feature outputs are not release-ready: " + "; ".join(result["problems"])
+        )
+    return result["marker"]
 
 
 def jsonable_records(frame: pd.DataFrame) -> List[Dict[str, Any]]:

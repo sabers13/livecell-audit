@@ -22,6 +22,7 @@ from typing import Any, Dict, Optional, Tuple
 
 COMPLETION_MARKER = "COMPLETED"
 STAGING_DIRNAME = ".staging"
+MANIFEST_NAME = "manifest.json"
 
 
 def sha256_file(path: str) -> Tuple[str, int]:
@@ -33,6 +34,89 @@ def sha256_file(path: str) -> Tuple[str, int]:
             digest.update(chunk)
             size += len(chunk)
     return digest.hexdigest(), size
+
+
+def build_manifest(
+    stage: str,
+    schema_version: str,
+    base_dir: str,
+    relative_paths,
+    extra: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Build a size+SHA-256 manifest for a stage's required output files.
+
+    A valid JSON completion marker is not enough on its own: a downstream stage
+    hashes every listed file and compares it against this manifest, so a
+    modified or swapped artifact (database, Parquet, JSON export) is rejected.
+    """
+    files = []
+    for relative in sorted({p.replace(os.sep, "/") for p in relative_paths}):
+        digest, size = sha256_file(os.path.join(base_dir, relative))
+        files.append({"path": relative, "bytes": size, "sha256": digest})
+    payload: Dict[str, Any] = {
+        "stage": stage,
+        "schema_version": schema_version,
+        "files": files,
+    }
+    if extra:
+        payload.update(extra)
+    return payload
+
+
+def verify_manifest(
+    base_dir: str,
+    stage: Optional[str] = None,
+    expected_sha256: Optional[str] = None,
+    required_paths=(),
+) -> Dict[str, Any]:
+    """Verify a stage manifest and every file it lists.
+
+    Returns ``{"ok": bool, "problems": [...], "manifest": ...}``. Callers raise
+    their own stage-specific error when ``ok`` is false. Problems cover a
+    missing/unparsable manifest, a manifest whose own SHA-256 does not match the
+    marker, a listed file that is missing or whose size/SHA-256 changed, and a
+    required path absent from the manifest.
+    """
+    problems = []
+    manifest_path = os.path.join(base_dir, MANIFEST_NAME)
+    if not os.path.isfile(manifest_path):
+        return {"ok": False, "problems": [f"missing manifest: {manifest_path}"], "manifest": None}
+    if expected_sha256 is not None:
+        digest, _size = sha256_file(manifest_path)
+        if digest != expected_sha256:
+            problems.append(
+                f"manifest SHA-256 mismatch: file={digest} marker={expected_sha256}"
+            )
+    try:
+        manifest = read_json(manifest_path)
+    except (OSError, ValueError) as exc:
+        return {"ok": False, "problems": [f"unparsable manifest: {exc}"], "manifest": None}
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("files"), list):
+        return {"ok": False, "problems": ["manifest has no files list"], "manifest": manifest}
+    if stage is not None and manifest.get("stage") != stage:
+        problems.append(f"manifest stage mismatch: {manifest.get('stage')!r} != {stage!r}")
+    listed = set()
+    for entry in manifest["files"]:
+        relative = entry.get("path")
+        listed.add(relative)
+        path = os.path.join(base_dir, relative) if relative else None
+        if not path or not os.path.isfile(path):
+            problems.append(f"manifest file missing: {relative}")
+            continue
+        digest, size = sha256_file(path)
+        if digest != entry.get("sha256"):
+            problems.append(
+                f"content SHA-256 mismatch for {relative}: file={digest} manifest={entry.get('sha256')}"
+            )
+        if entry.get("bytes") is not None and size != entry["bytes"]:
+            problems.append(
+                f"content size mismatch for {relative}: file={size} manifest={entry['bytes']}"
+            )
+    for required in required_paths:
+        if required not in listed:
+            problems.append(f"required path not in manifest: {required}")
+    return {"ok": not problems, "problems": problems, "manifest": manifest}
+
 
 
 def count_lines(path: str) -> int:

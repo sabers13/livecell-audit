@@ -64,10 +64,12 @@ build (`WarehouseError`) and the output directory is left without a marker.
   audit.duckdb          # DuckDB database, schema `lc`
   parquet/              # typed Parquet exports (deterministic)
     images.parquet  annotations.parquet  findings.parquet
-    sources.parquet  runs.parquet  val_membership.parquet
+    finding_evidence.parquet  sources.parquet  runs.parquet  val_membership.parquet
     v1_image_annotation_stats.parquet  v1_cell_line_summary.parquet
-  integrity.json        # reconciliation, join integrity, sizes, timings
+    v1_annotation_totals.parquet  v1_finding_lookup.parquet  v1_finding_context.parquet
+  integrity.json        # reconciliation, join integrity, input hashes, sizes, timings
   run.json              # paths, environment, timings, database size
+  manifest.json         # size + SHA-256 for every required output (incl. database)
   COMPLETED             # written last, atomically
 ```
 
@@ -81,6 +83,7 @@ so queries read `SELECT * FROM lc.images`.
 | `images` | `(split, record_position)` | `record_key`, `id`, `file_name`, `original_filename`, acquisition fields, `dimensions_status`, `annotation_count` |
 | `annotations` | `(split, id)` | `record_position`, `image_id`, `area`, `bbox DOUBLE[4]`, `n_points` |
 | `findings` | `(record_position)` | `finding_id`, `type`, `status`, `file_name`, `splits`, `records JSON`, `evidence JSON` |
+| `finding_evidence` | `(finding_position, split, image_id)` | `source` (`records`/`evidence`), `record_key`, `match_status` (`exact`/`ambiguous_image_id`/`unresolved`) |
 | `sources` | `(split)` | `path`, `sha256`, `bytes`, `images_root`, `local_image_files` |
 | `runs` | `(run_id)` | tool version, `completed_at`, splits, source hashes, marker counts |
 | `val_membership` | `(record_position)` | `image_id`, `file_name`, `decision`, `reason` |
@@ -91,22 +94,42 @@ so queries read `SELECT * FROM lc.images`.
 | --- | --- |
 | `v1_image_annotation_stats` | SQL aggregation of annotations by `(split, image_id)`: `n_annotations`, area sum/mean/median/min/max/std, bbox width/height mean+median, polygon-point mean/median/min/max/sum |
 | `v1_split_membership` | every image record's split membership with its record key |
-| `v1_split_overlap` | per filename: `splits`, `n_splits`, record/annotation counts per split |
+| `v1_split_overlap` | per filename: `splits`, `n_splits`, record counts, and `annotation_count_sum_records` (a per-record snapshot sum, not a source total) |
 | `v1_annotation_versions` | every annotation-version record with `versions_in_split`, `records_for_filename`, `splits_for_filename` |
 | `v1_alternate_versions` | filenames with more than one version in a split, with ids/positions/counts |
-| `v1_cell_line_summary` | cell-line aggregates (records, filenames, annotation counts, zeros) |
-| `v1_finding_lookup` | a finding joined to its original image record(s) for evidence retrieval |
+| `v1_cell_line_summary` | per cell line: `image_records`, `unique_filenames`, reliable `annotations_attributed`, and the labelled `annotation_count_sum_records` |
+| `v1_annotation_totals` | global reconciliation: `annotations_total = annotations_attributed + annotations_ambiguous + annotations_orphan` |
+| `v1_finding_lookup` | a finding's **exact** original image evidence via `finding_evidence` (version-specific; `evidence_match_status` marks ambiguity) |
+| `v1_finding_context` | filename/split context for a finding, labelled `filename_split_context` (context, not evidence) |
 | `v1_image_join_ambiguity` | `(split, image_id)` keys shared by several records |
 | `v1_orphan_annotations` | annotation `(split, image_id)` groups with no image record |
 
 ### `integrity.json`
 
 Deterministic apart from its `timings` block. Contains: input identity
-(marker status, `completed_at`, source hashes), validation checks, per-table and
-per-split reconciliation (expected/loaded/delta), join integrity (ambiguity,
-orphans, duplicate annotation keys), and deterministic export sizes. The
-DuckDB file's own byte size is run metadata (recorded in `run.json`), because
-DuckDB's on-disk page allocation is not byte-stable; the Parquet exports are.
+(marker status, `completed_at`, source hashes), `input_files` (size + SHA-256 of
+the audit exports actually consumed), validation checks, per-table and per-split
+reconciliation (expected/loaded/delta), join integrity (ambiguity, orphans,
+duplicate annotation keys), and deterministic export sizes. The DuckDB file's
+own byte size is run metadata (recorded in `run.json`), because DuckDB's on-disk
+page allocation is not byte-stable; the Parquet exports are.
+
+### `manifest.json` and marker verification
+
+Each stage publishes a `manifest.json` listing `{path, bytes, sha256}` for every
+required output, including the database. The `COMPLETED` marker records the
+manifest's own SHA-256 under `manifest`. A consumer must:
+
+1. check the marker's `stage`, `schema_version`/`view_version` (warehouse) or
+   `feature_schema_version` (features), and `partial`;
+2. verify the manifest SHA-256 and every listed file's size/SHA-256;
+3. for the feature stage, additionally cross-check the database's `runs`/
+   `sources` source checksums, live table counts and `integrity.json` against the
+   marker (done internally by `run_features`).
+
+A tampered marker, a modified database, or a database swapped in from a
+different run is rejected. The warehouse marker also sets `partial: false`;
+the feature marker sets `partial`/`mode`.
 
 ## 4. Feature outputs
 
@@ -118,8 +141,9 @@ DuckDB's on-disk page allocation is not byte-stable; the Parquet exports are.
   cell_line_summary.csv     # same summary (CSV)
   cell_line_summary.parquet # same summary (Parquet)
   feature_distributions.json# quantiles overall and by cell line
-  feature_dictionary.json   # schema version, source manifest, per-feature metadata
-  run.json                  # paths, environment, diagnostics, timings
+  feature_dictionary.json   # schema version, intensity contract, source manifest, features
+  run.json                  # paths, environment, diagnostics, mode, timings
+  manifest.json             # size + SHA-256 for every required output
   COMPLETED                 # written last, atomically
 ```
 
@@ -128,8 +152,14 @@ DuckDB's on-disk page allocation is not byte-stable; the Parquet exports are.
   computed once per distinct `file_name` and reused across versions.
 - `feature_dictionary.json` is the authoritative column list: each entry has
   `name`, `dtype`, `source`, `formula`, `unit`, `depends_on_annotations`,
-  `missing_behavior`, `description`, plus `feature_schema_version` and a
-  `source_manifest` linking back to the audit run id and source hashes.
+  `missing_behavior`, `description`, plus `feature_schema_version`, `mode`, an
+  `image_statistics` contract block, and a `source_manifest` linking back to the
+  audit run id and source hashes.
+- `run_features` refuses a warehouse whose marker/manifest/database provenance
+  do not agree (see §3). Consumers verify the feature run with
+  `features.verify_features_outputs(dir)` or reject it with
+  `features.assert_release_ready(dir)`, which fails on a partial or tampered
+  directory.
 
 Missing-value semantics:
 
@@ -139,13 +169,16 @@ Missing-value semantics:
 | ambiguous `(split, image_id)` | all annotation features `null`; `annotation_join_status = "ambiguous_image_id"`; `has_annotations`/`zero_annotation` `null` |
 | missing local TIFF | pixel statistics `null`; `image_features_status = "missing_file"` |
 | unreadable TIFF | pixel statistics `null`; `image_features_status = "unreadable"` |
+| filename not read (partial run) | pixel statistics `null`; `image_features_status = "not_attempted"`; marker `partial = true` |
 | valid uniform TIFF | `pixel_std = 0`, `gradient_mean = 0` (a measurement, not missing data) |
 
 TIFF pixel intensities are used as stored (8-bit unsigned, 0-255 for this
-dataset), no rescaling. `pixel_mean`/`pixel_std` are the mean and population
-standard deviation over all pixels; `gradient_mean` is the mean magnitude of
-the central-difference gradient (`numpy.gradient`). These are texture proxies,
-not cell counts; annotation counts are label evidence, not true confluence.
+dataset), with **no normalization or rescaling**. `pixel_mean`/`pixel_std` are
+the mean and population standard deviation over all pixels; `gradient_mean` is
+the mean magnitude of the central-difference gradient (`numpy.gradient`). These
+are texture proxies, not cell counts; annotation counts are label evidence, not
+true confluence. Because values are not rescaled, they are not comparable across
+bit depths (a documented limitation).
 
 ## 5. CLI contract
 
@@ -170,15 +203,18 @@ PYTHONPATH=src python3 -m livecell_audit features \
 
 Python API: `WarehouseConfig` + `run_warehouse`, and `FeatureConfig` +
 `run_features`, both returning a dict with `run`, `integrity`/`diagnostics`,
-`marker` and `out_dir`.
+`marker` and `out_dir`. Consumer helpers: `completion.verify_manifest(dir, ...)`,
+`features.verify_features_outputs(dir)` and `features.assert_release_ready(dir)`.
 
 ## 6. Determinism contract
 
 Byte-identical across reruns with the same inputs: all Parquet exports,
 `integrity.json` (minus `timings`), `features.jsonl`, `features.parquet`,
 `cell_line_summary.*`, `feature_dictionary.json`, `feature_distributions.json`.
-Variable (run metadata): `run.json`, the marker's `completed_at`, the
-`timings` block, and the DuckDB file's byte size.
+Variable (run metadata): `run.json`, `manifest.json`, the marker's
+`completed_at`, the `timings` block, and the DuckDB file's byte size. The
+feature marker's `source_sha256` is copied from the verified warehouse marker,
+so it is data-derived, not run-derived.
 
 ## 7. Limitations
 
@@ -189,5 +225,7 @@ Variable (run metadata): `run.json`, the marker's `completed_at`, the
   first and last rows line up before trusting it.
 - The full dataset has no ambiguous ids, no orphan annotations and no duplicate
   annotation ids; those paths are exercised by fixtures, not by the real data.
+- Content manifests are integrity evidence, not a defence against an attacker
+  who rewrites both the marker and the manifest.
 - Feature distributions summarise observed label/image statistics. Cell-line
   differences are acquisition context, not proof of biological growth.

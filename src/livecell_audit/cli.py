@@ -220,6 +220,8 @@ def _run_features_command(args: argparse.Namespace) -> int:
         json.dumps(
             {
                 "out_dir": result["out_dir"],
+                "mode": result["run"]["mode"],
+                "partial": result["run"]["partial"],
                 "feature_records": diagnostics["records"],
                 "distinct_filenames": diagnostics["distinct_filenames_total"],
                 "filenames_read": diagnostics["filenames_read"],

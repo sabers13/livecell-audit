@@ -122,21 +122,23 @@ All JSON outputs use sorted keys and sorted records, so reruns over the same inp
 
 `python3 -m livecell_audit warehouse --audit-dir AUDIT --out-dir WH` consumes a *completed* audit run (marker, source checksums and summary counts are validated first) and writes:
 
-- `audit.duckdb` — DuckDB database, schema `lc`. Tables: `images`, `annotations`, `findings`, `sources`, `runs`, `val_membership`. Versioned views: `v1_image_annotation_stats`, `v1_split_membership`, `v1_split_overlap`, `v1_annotation_versions`, `v1_alternate_versions`, `v1_cell_line_summary`, `v1_finding_lookup`, `v1_image_join_ambiguity`, `v1_orphan_annotations`.
-- `parquet/` — typed Parquet exports of the base tables plus the annotation-stats and cell-line-summary views (~34 MB for annotations vs ~249 MB JSONL).
-- `integrity.json` — deterministic reconciliation (expected/loaded/delta per table and split), join integrity (ambiguous ids, orphans, duplicate annotation keys) and export sizes.
+- `audit.duckdb` — DuckDB database, schema `lc`. Tables: `images`, `annotations`, `findings`, `finding_evidence`, `sources`, `runs`, `val_membership`. Versioned views: `v1_image_annotation_stats`, `v1_split_membership`, `v1_split_overlap`, `v1_annotation_versions`, `v1_alternate_versions`, `v1_cell_line_summary`, `v1_annotation_totals`, `v1_finding_lookup`, `v1_finding_context`, `v1_image_join_ambiguity`, `v1_orphan_annotations`.
+- `parquet/` — typed Parquet exports of the base tables plus the annotation-stats, cell-line-summary, annotation-totals and finding evidence/context views (~34 MB for annotations vs ~249 MB JSONL).
+- `integrity.json` — deterministic reconciliation (expected/loaded/delta per table and split), join integrity (ambiguous ids, orphans, duplicate annotation keys), input-file hashes and export sizes.
+- `manifest.json` — size + SHA-256 for every required output, including the database. The marker records the manifest's SHA-256, so a modified or swapped database is rejected by a consumer.
 - `run.json`, `COMPLETED` — run metadata and the completion marker.
 
-Image records are keyed by `(split, record_position)`; the original `id` is a field, not a global key. Ambiguous `(split, image_id)` joins and orphan annotations are detected and reported, never guessed or multiplied.
+Image records are keyed by `(split, record_position)`; the original `id` is a field, not a global key. Ambiguous `(split, image_id)` joins and orphan annotations are detected and reported, never guessed or multiplied. `v1_finding_lookup` returns a finding's *exact* implicated version via `finding_evidence`; filename/split context is separate and labelled in `v1_finding_context`. `v1_cell_line_summary` publishes a reliable `annotations_attributed` alongside the explicitly labelled per-record `annotation_count_sum_records`, and `v1_annotation_totals` reconciles `total = attributed + ambiguous + orphan`.
 
-`python3 -m livecell_audit features --warehouse-dir WH --out-dir FEAT` consumes a *completed* warehouse and writes one feature row per annotation-version image record:
+`python3 -m livecell_audit features --warehouse-dir WH --out-dir FEAT` verifies the warehouse marker, manifest and database provenance, then writes one feature row per annotation-version image record:
 
 - `features.parquet` / `features.jsonl` — annotation aggregates (count, area and bbox summaries, polygon-point summaries), acquisition metadata, image dimensions, once-per-filename TIFF statistics (`pixel_mean`, `pixel_std`, `gradient_mean`, …) and missingness/quality flags.
 - `cell_line_summary.json`/`.csv`/`.parquet` and `feature_distributions.json` — grouped summaries and quantiles.
-- `feature_dictionary.json` — per-feature source, formula, unit, `depends_on_annotations`, missing-value behaviour, plus a schema version and source-manifest linkage.
-- `run.json`, `COMPLETED`.
+- `feature_dictionary.json` — per-feature source, formula, unit, `depends_on_annotations`, missing-value behaviour, a raw-TIFF intensity contract, plus a schema version and source-manifest linkage.
+- `manifest.json` — size + SHA-256 for every required feature output.
+- `run.json`, `COMPLETED` — run metadata, `mode` (`full`/`partial`) and the completion marker.
 
-Zero annotations are a measured zero (with undefined area/bbox summaries left null); missing or unreadable TIFFs keep null statistics and an explicit status; ambiguous annotation joins are quarantined with `annotation_join_status = "ambiguous_image_id"`. Alternate annotation versions are all retained and reuse image-only features by filename. See `docs/09_data_contract.md` for the full contract.
+Zero annotations are a measured zero (with undefined area/bbox summaries left null); missing or unreadable TIFFs keep null statistics and an explicit status; ambiguous annotation joins are quarantined with `annotation_join_status = "ambiguous_image_id"`. A development `--max-filenames` limit marks the run `partial` and leaves unread records `not_attempted`; `features.assert_release_ready` rejects a partial or tampered feature directory. Alternate annotation versions are all retained and reuse image-only features by filename. See `docs/09_data_contract.md` for the full contract.
 
 ### Dimension states
 
