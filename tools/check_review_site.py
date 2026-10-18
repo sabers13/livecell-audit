@@ -540,6 +540,29 @@ def main(argv=None):
                           f"{example['id']}: the site displays the recorded label layer")
             elif entry is not None:
                 skip_check(f"{example['id']}: render manifest predates label layers")
+        overlap_file = data["guided"]["overlap_file"]
+        manifest_guided = [g for g in manifest.get("guided", []) if g["file_name"] == overlap_file]
+        site_layers = data["guided"].get("overlap_layers", [])
+        if "guided" in manifest:
+            check(len(site_layers) == len(manifest_guided) == 2,
+                  "the overlap example shows both groups' label versions from the render manifest")
+        else:
+            skip_check("render manifest predates the overlap label layers")
+        overlap_finding = next(
+            (f for f in findings if f["type"] == "cross_split_overlap" and f["file_name"] == overlap_file), None
+        )
+        for layer in site_layers:
+            source = next((g for g in manifest_guided
+                           if g["split"] == layer["split"] and g["image_id"] == layer["image_id"]), None)
+            path = os.path.join(site, layer["src"])
+            digest = sha256_file(path) if os.path.isfile(path) else None
+            check(source is not None and digest == source.get("png_sha256") == layer["png_sha256"],
+                  f"overlap layer {layer['split']} {layer['image_id']}: file matches the render manifest SHA-256")
+            record = ((overlap_finding or {}).get("records") or {}).get(layer["split"]) or {}
+            counts = dict(zip(record.get("image_ids") or [], record.get("counts") or []))
+            check(counts.get(layer["image_id"]) == layer["labels"],
+                  f"overlap layer {layer['split']} {layer['image_id']}: draws the finding's "
+                  f"{layer['labels']} labels for that record")
         check(len(examples) <= 40, "delivered preview count respects the 40-image bound")
         check(len(png_provenance) == len(examples),
               "every illustrated example has a preview PNG recorded in provenance")

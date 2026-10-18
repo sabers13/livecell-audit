@@ -80,3 +80,45 @@ def test_dense_image_gets_a_full_label_layer(tmp_path):
     assert sparse["polygons_total"] == sparse["polygons_drawn"] == 1
     assert sparse["labels_layer"] is None
     assert not (out / "train_2.labels.png").exists()
+
+
+def test_guided_records_get_full_label_layers_at_source_size(tmp_path):
+    from PIL import Image
+
+    data_root, curated = _dataset(tmp_path)
+    payload = json.loads(curated.read_text())
+    payload["guided"] = [
+        {"split": "train", "image_id": DENSE_ID, "file_name": f"A172_Phase_A7_1_00d00h00m_{DENSE_ID}.tif"},
+        {"split": "train", "image_id": 2, "file_name": "A172_Phase_A7_1_00d00h00m_2.tif"},
+    ]
+    curated.write_text(json.dumps(payload))
+    out = tmp_path / "previews"
+    assert make_previews.main([
+        "--curated", str(curated), "--data-root", str(data_root), "--out", str(out),
+        "--outline-cap", str(CAP),
+    ]) == 0
+    guided = json.loads((out / "manifest.json").read_text())["guided"]
+    assert [(g["image_id"], g["outlines_drawn"]) for g in guided] == [(DENSE_ID, DENSE_POLYGONS), (2, 1)]
+    for entry in guided:
+        path = out / entry["file"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["png_sha256"]
+        with Image.open(path) as image:
+            assert image.size == (entry["width"], entry["height"]) == (16, 12)
+    # guided layers are drawn in addition to, not instead of, the capped preview data
+    dense = next(p for p in json.loads((out / "manifest.json").read_text())["previews"]
+                 if p["preview_id"] == f"train_{DENSE_ID}")
+    assert dense["labels_layer"]["outlines_drawn"] == DENSE_POLYGONS
+
+
+def test_guided_list_is_bounded(tmp_path, capsys):
+    data_root, curated = _dataset(tmp_path)
+    payload = json.loads(curated.read_text())
+    payload["guided"] = [
+        {"split": "train", "image_id": i, "file_name": f"A172_Phase_A7_1_00d00h00m_{i}.tif"}
+        for i in range(1, make_previews.MAX_GUIDED + 2)
+    ]
+    curated.write_text(json.dumps(payload))
+    assert make_previews.main([
+        "--curated", str(curated), "--data-root", str(data_root), "--out", str(tmp_path / "out"),
+    ]) == 2
+    assert "at most" in capsys.readouterr().err

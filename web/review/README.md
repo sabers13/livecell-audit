@@ -1,7 +1,7 @@
 # LIVECell review website
 
 A static, offline review website built from one completed release run of the
-audit, ranking and evaluation (currently `20261018T181405Z-0e359b9bf088`). Open
+audit, ranking and evaluation (currently `20261018T220218Z-0e359b9bf088`). Open
 `index.html` directly (`file://`) or serve the directory:
 
 ```bash
@@ -21,7 +21,7 @@ There is no build step, no framework, no network call and no backend.
   `file://`.
 - `data/curated-examples.json` — the 39 illustrated examples; the input of the preview
   render.
-- `previews/` — 39 server-rendered PNG previews (≤ 640 px) and, for the 30 dense images,
+- `previews/` — 39 server-rendered PNG previews (native 704 × 520 px) and, for the 30 dense images,
   `*.labels.png` layers with every supplied outline.
 - `downloads/` — the run's verified documents, copied unchanged, plus `ranking-pool.csv`.
 - `THIRD_PARTY_NOTICES.txt` — licence, change notice and upstream credits.

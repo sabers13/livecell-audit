@@ -25,34 +25,36 @@
 <section id="start" class="recruiter-overview" aria-labelledby="page-title">
   <div id="examples" class="recruiter-hero">
     <div class="recruiter-story">
-      <h1 id="page-title">Checking the data used to train AI.</h1>
+      <h1 id="page-title">Checking the data used to train AI</h1>
       <p class="recruiter-intro">I built a Python tool that checks cell images and their labels, then gives scientists a clear list of examples to review.</p>
       <p class="project-coverage">Checked on <span id="intro-coverage">5,239</span> images from Sartorius’ public LIVECell dataset.</p>
       <dl class="key-findings" aria-label="What the checks found">
         <div>
-          <dt><strong id="intro-overlap">30</strong> reused images</dt>
+          <dt><strong id="intro-overlap">30</strong> <span class="finding-name">reused images</span></dt>
           <dd>The same photo sits in the learning and the checking group, which can make validation scores look better than they are.</dd>
         </div>
         <div>
-          <dt><strong id="intro-sparse">9</strong> images flagged for review</dt>
-          <dd>Very few cells are marked. A scientist should review these examples.</dd>
+          <dt><strong id="intro-sparse">9</strong> <span class="finding-name">images flagged for review</span></dt>
+          <dd>Very few cells are labelled. A scientist should review these examples.</dd>
         </div>
       </dl>
       <p class="project-coverage">Both issues were first reported on GitHub (<a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">#26</a>, <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">#21</a>). My tool reproduces them from the raw files and tracks them with evidence.</p>
     </div>
     <figure class="first-example">
-      <div class="image-overlay">
-        <img src="assets/guided-sparse.png" alt="A real LIVECell microscope image with many visible cells. Only one cell has a supplied annotation, highlighted in yellow." width="704" height="520">
-        <svg id="intro-overlay" viewBox="0 0 704 520" role="img" aria-label="The one supplied cell label, with a circle and pointer to help locate it.">
-          <title>The one supplied cell marking</title>
-          <polygon points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="2.4"/>
-          <circle cx="198" cy="33" r="28" fill="none" stroke="#0f172a" stroke-width="2" stroke-dasharray="7 5"/>
-          <path d="M226 33H275" stroke="#0f172a" stroke-width="2"/>
-          <rect x="275" y="10" width="214" height="44" rx="4" fill="#0f172a"/>
-          <text x="287" y="40" fill="#ffed00" font-size="24" font-family="system-ui,sans-serif">Only marked cell</text>
-        </svg>
+      <div class="specimen" id="intro-specimen">
+        <div class="image-overlay">
+          <img src="assets/guided-sparse.png" alt="A real LIVECell microscope image with many visible cells. Only one cell has a supplied label, outlined in yellow." width="704" height="520">
+          <svg id="intro-overlay" viewBox="0 0 704 520" role="img" aria-label="The one supplied cell label, with a ring and pointer to help locate it.">
+            <title>The one supplied cell label</title>
+            <polygon class="mark" points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="2.4"/>
+            <circle class="locator-ring" cx="198" cy="33" r="28" fill="none" stroke="#0f172a" stroke-opacity=".55" stroke-width="3" stroke-dasharray="7 5"/>
+            <path class="locator-line" d="M226 33H275" stroke="#0f172a" stroke-width="2"/>
+            <g class="locator-callout"><rect x="275" y="10" width="236" height="44" rx="6" fill="#0f172a"/><text x="289" y="40" fill="#ffed00" font-size="24">Only labelled cell</text></g>
+          </svg>
+        </div>
+        <p class="readout"><span id="intro-readout-file">A172_Phase_A7_1_01d04h00m_3.tif</span><span class="readout-muted"><span class="legend-swatch" aria-hidden="true"></span><span id="intro-readout-count">1 supplied label</span> · 704 × 520 px</span></p>
       </div>
-      <figcaption><strong>A real example: many cells, just one label.</strong><span>The yellow mark is the supplied label. The circle and pointer help you find it.</span></figcaption>
+      <figcaption><strong>A real example: many cells, just one label</strong><span>The yellow outline is the supplied label. The ring and pointer help you find it.</span></figcaption>
     </figure>
   </div>
 </section>
@@ -65,7 +67,7 @@
   </ul>
   <p class="project-skills">Python · pandas · DuckDB · scikit-learn · automated testing</p>
 </section>
-<p class="overview-action"><a class="button primary" href="#try-it">Try the image review <span aria-hidden="true">→</span></a></p>
+<p class="overview-action"><a class="button primary" href="#try-it">Try the image review <span class="arrow" aria-hidden="true">→</span></a></p>
 </div>
 <div id="try-it" class="project-panel" data-tab-panel="try-it">
 <section id="browse" class="section try-review" aria-labelledby="browse-title">
@@ -76,8 +78,8 @@
       <label for="try-example">Choose an image</label>
       <select id="try-example"></select>
     </div>
-    <button id="try-next" class="button primary" type="button">Next image <span aria-hidden="true">→</span></button>
-    <label class="check-label"><input id="browse-overlay" type="checkbox" checked> Show cell labels</label>
+    <button id="try-next" class="button primary" type="button">Next image <span class="arrow" aria-hidden="true">→</span></button>
+    <label class="check-label"><input id="browse-overlay" class="switch" type="checkbox" role="switch" checked> Show cell labels</label>
   </div>
   <p id="try-progress" class="count" role="status" aria-live="polite"></p>
   <article id="detail" class="detail" aria-live="polite" aria-labelledby="detail-title">
@@ -143,23 +145,29 @@
   <p class="section-intro">Choose one of two real findings. Each one shows what was found, why it matters, what is uncertain, and what a person should do next.</p>
   <div class="switcher" role="group" aria-label="Choose a finding to explore">
     <button id="guided-shared-button" class="button" type="button" aria-pressed="true" aria-controls="guided-shared-panel">Same image in two groups<span id="guided-shared-selected" class="viewing-marker" aria-hidden="true">Viewing</span></button>
-    <button id="guided-sparse-button" class="button" type="button" aria-pressed="false" aria-controls="guided-sparse-panel">Very few marked cells<span id="guided-sparse-selected" class="viewing-marker" aria-hidden="true" hidden>Viewing</span></button>
+    <button id="guided-sparse-button" class="button" type="button" aria-pressed="false" aria-controls="guided-sparse-panel">Very few labelled cells<span id="guided-sparse-selected" class="viewing-marker" aria-hidden="true" hidden>Viewing</span></button>
   </div>
   <p id="guided-status" class="boundary" role="status" aria-live="polite">Viewing example 1 of 2 below: the same image appears in both the learning and the checking groups. Choose the other example to switch findings.</p>
 
   <article id="guided-shared-panel" aria-labelledby="guided-shared-title">
     <div class="finding-head">
       <span class="tag">Confirmed overlap</span>
-      <h3 id="guided-shared-title">30 image filenames appear in both the learning and the checking groups.</h3>
+      <h3 id="guided-shared-title">30 image filenames appear in both the learning and the checking groups</h3>
       <p>A fair check should use images the model has not already learned from.</p>
     </div>
     <div class="photo-pair">
       <figure class="photo-panel">
-        <img src="assets/guided-shared.png" alt="A Huh7 cell image from the learning group." width="704" height="520">
+        <div class="specimen"><div class="image-overlay">
+          <img src="assets/guided-shared.png" alt="A Huh7 cell image from the learning group." width="704" height="520">
+          <img id="guided-train-labels" class="label-layer" alt="" width="704" height="520" hidden>
+        </div><p class="readout"><span>Learning group</span><span class="readout-muted" id="guided-train-readout">training split</span></p></div>
         <figcaption class="caption"><strong>Images the model learns from</strong><span>Researchers call this the training split.</span></figcaption>
       </figure>
       <figure class="photo-panel">
-        <img src="assets/guided-shared.png" alt="The same Huh7 cell image, from the checking group." width="704" height="520">
+        <div class="specimen"><div class="image-overlay">
+          <img src="assets/guided-shared.png" alt="The same Huh7 cell image, from the checking group." width="704" height="520">
+          <img id="guided-val-labels" class="label-layer" alt="" width="704" height="520" hidden>
+        </div><p class="readout"><span>Checking group</span><span class="readout-muted" id="guided-val-readout">validation split</span></p></div>
         <figcaption class="caption"><strong>Images used to check its progress</strong><span>Researchers call this the validation split.</span></figcaption>
       </figure>
     </div>
@@ -182,37 +190,37 @@
   <article id="guided-sparse-panel" aria-labelledby="guided-sparse-title" hidden>
     <div class="finding-head">
       <span class="tag">Needs label review</span>
-      <h3 id="guided-sparse-title">Many cells are visible. The file marks just one.</h3>
-      <p>The photo and its labels should tell the same story. Here, most visible cells have no supplied marking.</p>
+      <h3 id="guided-sparse-title">Many cells are visible, but the file labels just one</h3>
+      <p>The photo and its labels should tell the same story. Here, most visible cells have no supplied label.</p>
     </div>
     <div class="annotation-layout">
       <div>
         <figure>
-          <div class="image-overlay">
-            <img src="assets/guided-sparse.png" alt="A microscope image of an A172 culture with many visible cells. The supplied annotation marks only one small cell near the top left." width="704" height="520">
-            <svg id="sparse-overlay" viewBox="0 0 704 520" role="img" aria-label="The supplied cell outline is highlighted in yellow. A larger circle and pointer are viewing aids that help locate it.">
-              <title>The one supplied cell marking</title>
+          <div class="specimen"><div class="image-overlay">
+            <img src="assets/guided-sparse.png" alt="A microscope image of an A172 culture with many visible cells. The supplied label outlines only one small cell near the top left." width="704" height="520">
+            <svg id="sparse-overlay" viewBox="0 0 704 520" role="img" aria-label="The supplied cell label is outlined in yellow. A ring and pointer are viewing aids that help locate it.">
+              <title>The one supplied cell label</title>
             </svg>
-          </div>
-          <figcaption>The yellow outline is the actual supplied cell label. The larger circle, line and label are viewing aids added for this page; nothing here is a cell boundary detected by this project.</figcaption>
+          </div></div>
+          <figcaption>The yellow outline is the actual supplied cell label. The ring, line and tag are viewing aids added for this page; nothing here is a cell boundary detected by this project.</figcaption>
         </figure>
         <div class="image-controls">
-          <label class="check-label"><input id="show-sparse-label" type="checkbox" checked aria-controls="sparse-overlay" aria-describedby="sparse-overlay-status">Show the existing cell label</label>
-          <p id="sparse-overlay-status" class="control-status" role="status" aria-live="polite">Showing the one cell marked in the label file.</p>
+          <label class="check-label"><input id="show-sparse-label" class="switch" type="checkbox" role="switch" checked aria-controls="sparse-overlay" aria-describedby="sparse-overlay-status">Show the existing cell label</label>
+          <p id="sparse-overlay-status" class="control-status" role="status" aria-live="polite">Showing the one labelled cell.</p>
         </div>
       </div>
       <aside class="meaning" aria-label="What this finding means">
-        <div class="callout-number" id="sparse-count-callout">1 marked cell</div>
+        <div class="callout-number" id="sparse-count-callout">1 labelled cell</div>
         <p id="sparse-meaning">In this image, the label file gives the model only one cell example.</p>
         <hr>
         <h4>Why it matters</h4>
         <p>Incomplete labels can give a model unreliable examples of what is and is not a cell.</p>
         <hr>
         <h4>What needs attention</h4>
-        <p id="sparse-action">Review the annotation before using this image.</p>
+        <p id="sparse-action">Review the labels before using this image.</p>
       </aside>
     </div>
-    <p class="boundary">Nine previously reported images have ten or fewer marked cells. Each needs review; a low count alone does not prove an error.</p>
+    <p class="boundary">Nine previously reported images have ten or fewer labelled cells. Each needs review; a low count alone does not prove an error.</p>
     <details class="details">
       <summary>View the evidence behind this example</summary>
       <div class="content">
@@ -227,7 +235,7 @@
 </div>
 <div id="results" class="project-panel" data-tab-panel="results">
 <section id="compare" class="section" aria-labelledby="compare-title">
-  <h2 id="compare-title">Does machine learning help? An honest comparison.</h2>
+  <h2 id="compare-title">Does machine learning help? An honest comparison</h2>
   <p class="section-intro">Four ordering methods are compared at the same review budget. The simple low-count check is the default because it is transparent and, on these measurements, it performed best. Both measurements are defined by label count, though, so they favour it by design.</p>
   <p class="headline" id="compare-headline">Loading the measured comparison&hellip;</p>
 
@@ -282,7 +290,7 @@
 <details class="details">
   <summary>Explore the full rankings</summary>
   <div class="content"><section id="rankings" class="section" aria-labelledby="rankings-title">
-  <h2 id="rankings-title">Full rankings: every review-pool candidate.</h2>
+  <h2 id="rankings-title">Full rankings: every review-pool candidate</h2>
   <p class="section-intro" id="rankings-intro">Loading the complete ranking table&hellip;</p>
 
   <div class="controls" role="group" aria-label="Filter and order the full ranking table">
@@ -346,7 +354,7 @@
 <summary>Technical details and sources</summary>
 <div class="content">
 <section id="technical" class="section" aria-labelledby="technical-title">
-  <h2 id="technical-title">Technical details.</h2>
+  <h2 id="technical-title">Technical details</h2>
   <p class="section-intro">Sources, checks and limitations for readers who want more detail.</p>
 
   <div class="source-summary" aria-labelledby="sources-title">

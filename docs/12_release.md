@@ -29,7 +29,7 @@ Stages, in order (each one writes into this run's directory only):
 | 4 | `ranking` | `python -m livecell_audit rank --seed 42 --budgets 10 25 50` | `ranking/` |
 | 5 | `evaluation` | `python -m livecell_audit evaluate --budgets 10 25 50` | `evaluation/` |
 | 6 | `site-seed` (only with previews) | `python tools/build_review_site.py` (provisional) | `site-seed/` |
-| 7 | `previews` (optional) | `python tools/make_previews.py` (bounded: ≤ 40 PNGs, ≤ 640 px) | `site-inputs/previews/` |
+| 7 | `previews` (optional) | `python tools/make_previews.py` (bounded: ≤ 40 PNGs, ≤ 704 px) | `site-inputs/previews/` |
 | 8 | `site` | `python tools/build_review_site.py` (final, with previews when rendered) | `site/` |
 | 9 | `site-check` | `python tools/check_review_site.py` | (log only) |
 
@@ -153,15 +153,15 @@ packaged archive. Those verified facts are:
 
 | Fact | Value |
 | --- | --- |
-| Release run ID | `20261018T181405Z-0e359b9bf088` (18 October 2026) |
-| Chain verification | 91 checks, 0 failures |
+| Release run ID | `20261018T220218Z-0e359b9bf088` (18 October 2026) |
+| Chain verification | 92 checks, 0 failures |
 | Input fingerprint | the three raw COCO files' SHA-256, plus all 5,239 raw images fingerprinted |
 | Audit counts | 5,387 image records, 1,662,447 annotations, 5,239 distinct filenames |
 | Warehouse | schema v1, views v1, all reconciliations clean |
-| Evaluation ↔ ranking | consumed ranking manifest `f6a7d2b174e11cb873de68b107052ca1cf34467284a13f905f761cc44921242e`; exact match against the ranking stage's manifest |
-| Review-site check | 1,111 checks, 0 failures, 1 skipped (JavaScript syntax: node is not installed on the server; checked with `node --check` on the development machine) |
-| Rendered previews | 39 of 39 previews written and hash-verified, plus 30 full label layers for the dense images |
-| Release ZIP | `livecell-audit-release-20261018T181405Z-0e359b9bf088.zip`, 9,380,669 bytes, SHA-256 `d78cf5861f59ffc337cdac8c5e41b110a8415e4b1f1ba4fdb7f48efff85f61d2`, `verified: true` |
+| Evaluation ↔ ranking | consumed ranking manifest `1289e9499402de2d9c33641409d6e6be34eadba6f0eda517e2d234c32ff04e61`; exact match against the ranking stage's manifest |
+| Review-site check | 1,120 checks, 0 failures, 1 skipped (JavaScript syntax: node is not installed on the server; checked with `node --check` on the development machine) |
+| Rendered previews | 39 of 39 previews (native 704 × 520 px) written and hash-verified, plus 30 full label layers for the dense images and the two label versions of the overlap example |
+| Release ZIP | `livecell-audit-release-20261018T220218Z-0e359b9bf088.zip`, 10,925,730 bytes, SHA-256 `dbe585c491b8d428804115f311a2521ad849a3baa56648101cda7afb8f83a582`, `verified: true` |
 
 Rerunning on the same inputs reproduces the ranking candidates, partition, synthetic
 experiment, review sample and audit findings byte for byte.
@@ -171,11 +171,11 @@ Per-stage peak memory for that run (MB, process peak RSS of each stage command v
 
 | audit | warehouse | features | ranking | evaluation | previews | site |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 195 | 340 | 275 | 340 | 350 | 60 | 110 |
+| 199 | 323 | 275 | 340 | 350 | 60 | 111 |
 
 The launcher's cgroup `memory.peak` is higher because it also counts page cache: it reached
 about 1 GiB (the throttle) in the audit, warehouse and features stages, and the features
-stage used up to 243 MB of job swap. No stage reached the 1536 MiB limit.
+stage used up to 240 MB of job swap. No stage reached the 1536 MiB limit.
 
 The receipt carries the same facts as a machine-readable `reference_run` block (see §4),
 so a later package still names the run that proved this tooling.
@@ -205,10 +205,10 @@ Verified for this tooling on the development machine (dataset-free):
 ## 6. Resource envelope and limits
 
 Every stage stayed inside the launcher's 1536 MiB limit. The process peaks of the
-completed release run (`20261018T181405Z-0e359b9bf088`, peak RSS, one job at a time) are:
-audit 195 MB, warehouse 340 MB, features 275 MB, ranking 340 MB, evaluation 350 MB,
-previews 60 MB, site 110 MB. Counting page cache, the cgroup reached about 1 GiB in the
-audit, warehouse and features stages, and the features stage used up to 243 MB of swap. Peak memory per stage is recorded in each stage record, so a regression is
+completed release run (`20261018T220218Z-0e359b9bf088`, peak RSS, one job at a time) are:
+audit 199 MB, warehouse 323 MB, features 275 MB, ranking 340 MB, evaluation 350 MB,
+previews 60 MB, site 111 MB. Counting page cache, the cgroup reached about 1 GiB in the
+audit, warehouse and features stages, and the features stage used up to 240 MB of swap. Peak memory per stage is recorded in each stage record, so a regression is
 visible rather than assumed.
 Limits are never raised automatically after a failure, and stages are not run in parallel.
 

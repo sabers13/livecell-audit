@@ -3,8 +3,9 @@
 
 BOUNDED BY DESIGN: at most ``--max-previews`` (default and maximum 40) PNG
 images, each with its longest side at most ``--longest-side`` pixels (default
-and maximum 640), and at most ``--outline-cap`` (default and maximum 20)
-supplied annotation polygons per dense image in ``polygons.json``. The COCO
+and maximum 704, the native LIVECell width, so a preview keeps every source
+pixel), and at most ``--outline-cap`` (default and maximum 20) supplied
+annotation polygons per dense image in ``polygons.json``. The COCO
 annotation files are up to ~551 MB and are read once per split with the
 project's streaming reader, so memory stays proportional to the curated set;
 one TIFF is open at a time.
@@ -20,9 +21,12 @@ instead of inventing images.
 
 It writes, into ``--out`` (the release run passes ``RUN/site-inputs/previews``):
 
-- ``<preview_id>.png``          one downsample per curated example;
+- ``<preview_id>.png``          one PNG per curated example (native size by default);
 - ``<preview_id>.labels.png``   dense images only: a transparent layer with
                                 every supplied outline, at the preview size;
+- ``guided_<split>_<id>.labels.png``  one full label layer per optional
+                                ``guided`` record of the curated file (at most
+                                four), drawn at the source image size;
 - ``polygons.json``             the supplied annotation polygons, in original
                                 TIFF coordinates, capped in source order;
 - ``manifest.json``             source file, TIFF SHA-256, PNG SHA-256 and the
@@ -52,9 +56,9 @@ import sys
 #: Hard bounds. They are the contract of this script; do not raise them.
 MAX_PREVIEWS = 40
 MIN_PREVIEWS = 25
-MAX_LONGEST_SIDE = 640
+MAX_LONGEST_SIDE = 704
 MAX_OUTLINE_CAP = 20
-DEFAULT_LONGEST_SIDE = 640
+DEFAULT_LONGEST_SIDE = 704
 DEFAULT_OUTLINE_CAP = 20
 SPLITS = ("train", "val", "test")
 ANNOTATION_FILES = {
@@ -63,6 +67,8 @@ ANNOTATION_FILES = {
     "test": "annotations/livecell_coco_test.json",
 }
 REQUIRED_ENTRY_KEYS = ("preview_id", "split", "image_id", "file_name")
+MAX_GUIDED = 4
+GUIDED_KEYS = ("split", "image_id", "file_name")
 
 
 class PreviewError(Exception):
@@ -112,6 +118,16 @@ def load_curated(path, max_previews):
         if entry["preview_id"] in seen:
             raise PreviewError(f"{path}: duplicate preview_id {entry['preview_id']!r}")
         seen.add(entry["preview_id"])
+    guided = data.get("guided") or []
+    if not isinstance(guided, list) or len(guided) > MAX_GUIDED:
+        raise PreviewError(f"{path}: 'guided' must be a list of at most {MAX_GUIDED} records")
+    for position, entry in enumerate(guided):
+        if not isinstance(entry, dict) or any(key not in entry for key in GUIDED_KEYS):
+            raise PreviewError(f"{path}: guided[{position}] needs {', '.join(GUIDED_KEYS)}")
+        if entry["split"] not in SPLITS:
+            raise PreviewError(f"{path}: guided[{position}] has unknown split {entry['split']!r}")
+        if isinstance(entry["image_id"], bool) or not isinstance(entry["image_id"], int):
+            raise PreviewError(f"{path}: guided[{position}] image_id must be an integer")
     return data
 
 
@@ -312,8 +328,9 @@ def main(argv=None):
     os.makedirs(out_dir, exist_ok=True)
     images = index_images(images_root)
 
+    guided = curated.get("guided") or []
     wanted_by_split = {}
-    for entry in entries:
+    for entry in list(entries) + list(guided):
         wanted_by_split.setdefault(entry["split"], set()).add(entry["image_id"])
 
     annotations = {}
@@ -325,6 +342,33 @@ def main(argv=None):
         annotations[split] = stream_split(
             annotation_path, split, wanted_by_split[split], args.outline_cap
         )
+
+    # Guided records first: each gets one full label layer at its source size,
+    # drawn before the preview loop releases the per-image polygon lists.
+    manifest_guided = []
+    for entry in guided:
+        record = annotations.get(entry["split"], {}).get(entry["image_id"])
+        if record is None:
+            print(f"make_previews: error: guided image id {entry['image_id']} not found in "
+                  f"{entry['split']}", file=sys.stderr)
+            return 2
+        width, height = record["width"], record["height"]
+        name = f"guided_{entry['split']}_{entry['image_id']}.labels.png"
+        path = os.path.join(out_dir, name)
+        drawn = render_label_layer(path, width, height, width, height, record["all_polygons"])
+        manifest_guided.append({
+            "split": entry["split"],
+            "image_id": entry["image_id"],
+            "file_name": entry["file_name"],
+            "file": name,
+            "width": width,
+            "height": height,
+            "polygons_total": record["total"],
+            "outlines_drawn": drawn,
+            "png_bytes": os.path.getsize(path),
+            "png_sha256": sha256_file(path),
+        })
+        print(f"make_previews: {name} {width}x{height}, outlines {drawn}/{record['total']}")
 
     manifest_previews = []
     polygons_out = {}
@@ -455,6 +499,7 @@ def main(argv=None):
             "overlay_mode": args.overlay_mode,
         },
         "previews": manifest_previews,
+        "guided": manifest_guided,
     }
     manifest_path = os.path.join(out_dir, "manifest.json")
     temporary = manifest_path + ".partial"

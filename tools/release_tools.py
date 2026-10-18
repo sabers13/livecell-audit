@@ -137,7 +137,16 @@ DOC_REDACTIONS = (
 
 #: Files copied into every site build directory before the builder runs: the
 #: hand-written shell of the review website (HTML + CSS + JS).
-SITE_SHELL_FILES = ("index.html", os.path.join("assets", "review.css"), os.path.join("assets", "review.js"))
+SITE_SHELL_FILES = (
+    "index.html",
+    os.path.join("assets", "review.css"),
+    os.path.join("assets", "review.js"),
+    os.path.join("assets", "fonts", "atkinson-hyperlegible-next-latin-wght-normal.woff2"),
+    os.path.join("assets", "fonts", "atkinson-hyperlegible-next-latin-wght-italic.woff2"),
+    os.path.join("assets", "fonts", "atkinson-hyperlegible-mono-latin-wght-normal.woff2"),
+    os.path.join("assets", "fonts", "OFL-atkinson-hyperlegible-next.txt"),
+    os.path.join("assets", "fonts", "OFL-atkinson-hyperlegible-mono.txt"),
+)
 
 ATTRIBUTION = (
     "LIVECell dataset and annotations: Sartorius Corporate Research "
@@ -181,9 +190,9 @@ DEFERRED = (
 #: facts of that run (ids, counts, hashes, byte sizes), never machine paths, host
 #: names, account names or SSH targets.
 REFERENCE_RUN = {
-    "run_id": "20261018T181405Z-0e359b9bf088",
+    "run_id": "20261018T220218Z-0e359b9bf088",
     "verified_by": "check of the run records, chain verification and packaged archive",
-    "chain_verification": {"checks": 91, "failures": 0},
+    "chain_verification": {"checks": 92, "failures": 0},
     "inputs": {
         "coco_files_fingerprinted": 3,
         "images_fingerprinted": 5239,
@@ -192,25 +201,25 @@ REFERENCE_RUN = {
     "warehouse": {"schema_version": 1, "view_version": 1},
     "evaluation": {
         "ranking_manifest_sha256": (
-            "f6a7d2b174e11cb873de68b107052ca1cf34467284a13f905f761cc44921242e"
+            "1289e9499402de2d9c33641409d6e6be34eadba6f0eda517e2d234c32ff04e61"
         ),
         "match": "exact match against the ranking stage's manifest",
     },
     "site_check": {
-        "checks": 1111,
+        "checks": 1120,
         "failures": 0,
         "skipped": 1,
         "skipped_reason": "JavaScript syntax check: node is not installed on the data server",
     },
-    "previews": {"rendered": 39, "hash_verified": 39, "label_layers": 30},
+    "previews": {"rendered": 39, "hash_verified": 39, "label_layers": 30, "guided_layers": 2},
     "stage_peak_memory_mb": {
-        "audit": 195,
-        "warehouse": 340,
+        "audit": 199,
+        "warehouse": 323,
         "features": 275,
         "ranking": 340,
         "evaluation": 350,
         "previews": 60,
-        "site": 110,
+        "site": 111,
     },
     "peak_memory_method": (
         "process peak RSS of each stage command (getrusage RUSAGE_CHILDREN ru_maxrss), "
@@ -219,12 +228,12 @@ REFERENCE_RUN = {
     "launcher_cgroup": (
         "the launcher's cgroup memory.peak also counts page cache: it reached the 1 GiB "
         "throttle in the audit, warehouse and features stages, and the features stage used "
-        "up to 243 MB of job swap; no stage reached the 1536 MiB limit"
+        "up to 240 MB of job swap; no stage reached the 1536 MiB limit"
     ),
     "package": {
-        "file": "livecell-audit-release-20261018T181405Z-0e359b9bf088.zip",
-        "bytes": 9380669,
-        "sha256": "d78cf5861f59ffc337cdac8c5e41b110a8415e4b1f1ba4fdb7f48efff85f61d2",
+        "file": "livecell-audit-release-20261018T220218Z-0e359b9bf088.zip",
+        "bytes": 10925730,
+        "sha256": "dbe585c491b8d428804115f311a2521ad849a3baa56648101cda7afb8f83a582",
         "verified": True,
     },
 }
@@ -638,7 +647,7 @@ SPEC = {
         ("site-seed",),
         ("manifest.json", "polygons.json"),
         False,
-        {"max_previews": 40, "longest_side": 640, "outline_cap": 20, "overlay_mode": "plain"},
+        {"max_previews": 40, "longest_side": 704, "outline_cap": 20, "overlay_mode": "plain"},
     ),
     "site": StageSpec(
         "site",
@@ -1051,7 +1060,7 @@ def check_previews_outputs(ctx, checker: Checker) -> None:
     render = manifest.get("render") or {}
     longest = render.get("longest_side") or (manifest.get("render_parameters") or {}).get("longest_side")
     if longest is not None:
-        checker.require("preview longest side is within the 640 px bound", int(longest) <= 640, str(longest))
+        checker.require("preview longest side is within the 704 px bound", int(longest) <= 704, str(longest))
     problems = []
     layer_problems = []
     for entry in entries:
@@ -1077,6 +1086,20 @@ def check_previews_outputs(ctx, checker: Checker) -> None:
         "every capped preview has a full label layer that matches its manifest hash",
         not layer_problems,
         "; ".join(layer_problems[:3]),
+    )
+    guided_problems = []
+    for entry in manifest.get("guided") or []:
+        path = os.path.join(previews, str(entry.get("file")))
+        if not os.path.isfile(path):
+            guided_problems.append(f"missing {entry.get('file')}")
+        elif sha256_file(path) != entry.get("png_sha256"):
+            guided_problems.append(f"{entry.get('file')} sha256 mismatch")
+        elif entry.get("outlines_drawn") != entry.get("polygons_total"):
+            guided_problems.append(f"{entry.get('file')} does not draw every supplied outline")
+    checker.require(
+        "every guided label layer matches its manifest hash and draws every outline",
+        not guided_problems,
+        "; ".join(guided_problems[:3]),
     )
 
 

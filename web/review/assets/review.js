@@ -24,7 +24,33 @@
     panel.setAttribute('role', 'tabpanel');
     panel.setAttribute('aria-labelledby', 'tab-' + panel.id);
     panel.tabIndex = 0;
+    panel.addEventListener('animationend', function (event) {
+      if (event.target === panel) { panel.classList.remove('is-entering'); }
+    });
   });
+
+  /* One selection bar slides between tabs; without JavaScript each selected tab
+     draws its own underline. */
+  var tabNav = $('project-tabs');
+  var tabIndicator = document.createElement('span');
+  tabIndicator.className = 'tab-indicator';
+  tabIndicator.setAttribute('aria-hidden', 'true');
+  tabNav.appendChild(tabIndicator);
+  tabNav.classList.add('has-indicator');
+  function placeTabIndicator() {
+    var selected = tabLinks.filter(function (link) { return link.getAttribute('aria-selected') === 'true'; })[0];
+    if (!selected) { return; }
+    tabNav.style.setProperty('--indicator-x', selected.offsetLeft + 'px');
+    tabNav.style.setProperty('--indicator-w', selected.offsetWidth + 'px');
+  }
+  window.addEventListener('resize', placeTabIndicator);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(placeTabIndicator); }
+  window.requestAnimationFrame(function () {
+    window.requestAnimationFrame(function () { tabNav.classList.add('is-ready'); });
+  });
+
+  var tabShownHooks = [];
+  var shownPanelId = null;
   function syncTabs(scrollToTarget) {
     var targetId;
     try { targetId = decodeURIComponent(window.location.hash.slice(1)); }
@@ -42,6 +68,12 @@
       link.setAttribute('aria-selected', String(selected));
       link.tabIndex = selected ? 0 : -1;
     });
+    placeTabIndicator();
+    if (shownPanelId !== null && shownPanelId !== activeId) {
+      $(activeId).classList.add('is-entering');
+    }
+    shownPanelId = activeId;
+    tabShownHooks.forEach(function (hook) { hook(activeId); });
     if (target && activePanel && target !== activePanel) {
       for (var parent = target.parentElement; parent && parent !== activePanel; parent = parent.parentElement) {
         if (parent.tagName === 'DETAILS') { parent.open = true; }
@@ -166,10 +198,10 @@
   setText('intro-sparse', n(audit.known_sparse_cases.total));
   setText('answer-1', 'Images and cell labels used to teach and to evaluate an AI model. The dataset in ' +
     'this snapshot holds ' + n(c.distinct_filenames) + ' distinct cell images, ' + n(c.image_records) +
-    ' image records and ' + n(c.annotations) + ' supplied cell markings.');
+    ' image records and ' + n(c.annotations) + ' supplied cell labels.');
   setText('answer-2', 'The same ' + n(audit.overlap.train_val) + ' image filenames appear in both the ' +
     'learning and the checking groups, and ' + n(audit.known_sparse_cases.total) + ' previously reported ' +
-    'images have very few marked cells. A further ' + n(c.extra_within_split_records) + ' records repeat a ' +
+    'images have very few labelled cells. A further ' + n(c.extra_within_split_records) + ' records repeat a ' +
     'filename inside one group, which needs a documented policy rather than a silent fix.');
   setText('answer-3', 'A model can look more capable when the images used to check it overlap the images it ' +
     'learned from. Incomplete labels give a model unreliable examples of what a cell looks like.');
@@ -214,7 +246,7 @@
   var sparsePoints = [];
   for (var i = 0; i + 1 < sparseSeg.length; i += 2) { sparsePoints.push([sparseSeg[i], sparseSeg[i + 1]]); }
   var sparseCount = SITE.guided.sparse_count || sparseFinding.records[0].counts[0];
-  setText('sparse-count-callout', n(sparseCount) + (sparseCount === 1 ? ' marked cell' : ' marked cells'));
+  setText('sparse-count-callout', n(sparseCount) + (sparseCount === 1 ? ' labelled cell' : ' labelled cells'));
   setText('sparse-meaning', 'In this image, the label file gives the model only ' + n(sparseCount) +
     (sparseCount === 1 ? ' cell example.' : ' cell examples.'));
   setText('sparse-action', sparseFinding.recommendation);
@@ -231,7 +263,7 @@
       'not an independent test of a detector.'
   ]));
   setText('guided-sparse-boundary', 'A low label count alone is not proof of an error: the culture may be ' +
-    'partly confluent, or the annotator may have marked a representative subset.');
+    'partly confluent, or the annotator may have labelled a representative subset.');
 
   var overlaySvg = $('sparse-overlay');
   function polygonNode(points) {
@@ -248,12 +280,14 @@
     svg.appendChild(title);
     polygons.forEach(function (points) {
       var halo = polygonNode(points);
+      halo.setAttribute('class', 'mark');
       halo.setAttribute('fill', 'none');
       halo.setAttribute('stroke', '#0f172a');
       halo.setAttribute('stroke-opacity', '.5');
       halo.setAttribute('stroke-width', String((width / 704) * 4.2));
       svg.appendChild(halo);
       var mark = polygonNode(points);
+      mark.setAttribute('class', 'mark');
       mark.setAttribute('fill', '#ffed00');
       mark.setAttribute('fill-opacity', '.22');
       mark.setAttribute('stroke', '#ffed00');
@@ -270,35 +304,84 @@
       r = Math.min(r, Math.max(cx - 3, 8), Math.max(cy - 3, 8),
         Math.max(width - cx - 3, 8), Math.max(height - cy - 3, 8));
       var ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('class', 'locator-ring');
       ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', r);
       ring.setAttribute('fill', 'none'); ring.setAttribute('stroke', '#0f172a');
-      ring.setAttribute('stroke-opacity', '.45'); ring.setAttribute('stroke-width', '3');
+      ring.setAttribute('stroke-opacity', '.55'); ring.setAttribute('stroke-width', '3');
       ring.setAttribute('stroke-dasharray', '7 5');
       svg.appendChild(ring);
-      var boxWidth = 214, boxHeight = 44;
+      var boxWidth = 236, boxHeight = 44;
       var labelX = Math.min(cx + r + 46, width - boxWidth - 6);
       var labelY = Math.min(Math.max(cy - boxHeight / 2, 6), height - boxHeight - 6);
       var line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      line.setAttribute('class', 'locator-line');
       line.setAttribute('d', 'M' + (cx + r) + ' ' + cy + 'H' + labelX);
       line.setAttribute('stroke', '#0f172a'); line.setAttribute('stroke-width', '2');
       svg.appendChild(line);
+      var callout = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      callout.setAttribute('class', 'locator-callout');
       var box = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       box.setAttribute('x', labelX); box.setAttribute('y', labelY);
       box.setAttribute('width', boxWidth); box.setAttribute('height', boxHeight);
-      box.setAttribute('rx', 4); box.setAttribute('fill', '#0f172a');
-      svg.appendChild(box);
+      box.setAttribute('rx', 6); box.setAttribute('fill', '#0f172a');
+      callout.appendChild(box);
       var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      label.setAttribute('x', labelX + 12); label.setAttribute('y', labelY + 30);
+      label.setAttribute('x', labelX + 14); label.setAttribute('y', labelY + 30);
       label.setAttribute('fill', '#ffed00'); label.setAttribute('font-size', '24');
-      label.setAttribute('font-family', 'inherit');
-      label.textContent = 'Only marked cell';
-      svg.appendChild(label);
+      label.textContent = 'Only labelled cell';
+      callout.appendChild(label);
+      svg.appendChild(callout);
     }
   }
   drawOverlay(overlaySvg, [sparsePoints], 704, 520, { locator: true });
   if ($('intro-overlay')) {
     drawOverlay($('intro-overlay'), [sparsePoints], 704, 520, { locator: true });
+    setText('intro-readout-file', SITE.guided.sparse_file);
+    setText('intro-readout-count', n(sparseCount) + (sparseCount === 1 ? ' supplied label' : ' supplied labels'));
   }
+
+  /* The one orchestrated moment: the first time the overview is on screen, the
+     specimen comes into focus and the locator closes onto the only labelled cell.
+     Skipped entirely when the reader asks for reduced motion. */
+  var introSpecimen = $('intro-specimen');
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var introRevealed = false;
+  function revealIntro() {
+    if (introRevealed || !introSpecimen) { return; }
+    var overview = $('overview');
+    if (!overview || overview.hidden) { return; }
+    introRevealed = true;
+    if (reducedMotion.matches) { introSpecimen.classList.remove('will-reveal'); return; }
+    var image = introSpecimen.querySelector('img');
+    var ready = image && image.decode ? image.decode().catch(function () {}) : Promise.resolve();
+    ready.then(function () {
+      window.requestAnimationFrame(function () {
+        introSpecimen.classList.remove('will-reveal');
+        introSpecimen.classList.add('is-revealed');
+      });
+    });
+  }
+  if (introSpecimen && !reducedMotion.matches) { introSpecimen.classList.add('will-reveal'); }
+  tabShownHooks.push(function (panelId) { if (panelId === 'overview') { revealIntro(); } });
+
+  /* The overlap example: each group's own label version on the same photo. */
+  var overlapLayers = (SITE.guided.overlap_layers || []);
+  overlapLayers.forEach(function (layer) {
+    var target = $(layer.split === 'train' ? 'guided-train-labels' : 'guided-val-labels');
+    var readout = $(layer.split === 'train' ? 'guided-train-readout' : 'guided-val-readout');
+    if (!target) { return; }
+    target.src = layer.src;
+    target.alt = n(layer.labels) + ' supplied cell labels from the ' +
+      (layer.split === 'train' ? 'training' : 'validation') + ' record, drawn over the image.';
+    target.hidden = false;
+    if (readout) {
+      readout.textContent = '';
+      var swatch = el('span', 'legend-swatch');
+      swatch.setAttribute('aria-hidden', 'true');
+      readout.appendChild(swatch);
+      readout.appendChild(document.createTextNode(n(layer.labels) + ' labels · image id ' + layer.image_id));
+    }
+  });
 
   var sharedButton = $('guided-shared-button');
   var sparseButton = $('guided-sparse-button');
@@ -317,8 +400,8 @@
     guidedStatus.textContent = (alreadySelected ? 'This example is already selected. ' : '') +
       (isShared
         ? 'Viewing example 1 of 2 below: the same image appears in both the learning and the checking groups.'
-        : 'Viewing example 2 of 2 below: the label file marks just ' + n(sparseCount) +
-          (sparseCount === 1 ? ' cell.' : ' cells.')) +
+        : 'Viewing example 2 of 2 below: only ' + n(sparseCount) +
+          (sparseCount === 1 ? ' cell is labelled.' : ' cells are labelled.')) +
       ' Choose the other example to switch findings.';
     (isShared ? sharedPanel : sparsePanel).scrollIntoView({
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
@@ -333,7 +416,7 @@
   sparseCheckbox.addEventListener('change', function () {
     overlaySvg.toggleAttribute('hidden', !sparseCheckbox.checked);
     sparseStatus.textContent = sparseCheckbox.checked
-      ? 'Showing the ' + n(sparseCount) + ' cell marked in the label file.'
+      ? 'Showing the ' + (sparseCount === 1 ? 'one labelled cell.' : n(sparseCount) + ' labelled cells.')
       : 'Showing the original microscope image without the label overlay.';
   });
 
@@ -415,13 +498,35 @@
     });
   }
 
+  /* "Try it" steps through the flagged images first, then the comparison images
+     the review methods picked; each group keeps the chosen method's order. */
+  function isFlagged(example) { return example.finding_type !== 'review_priority'; }
+  function tryOrder(rows) {
+    return rows.filter(isFlagged).concat(rows.filter(function (row) { return !isFlagged(row); }));
+  }
+
   function renderCards(rows) {
     clear(listNode);
     clear(trySelect);
-    rows.forEach(function (example, index) {
-      var option = el('option', null, (index + 1) + '. ' + exampleLabel(example));
-      option.value = example.id;
-      trySelect.appendChild(option);
+    var ordered = tryOrder(rows);
+    var flaggedCount = rows.filter(isFlagged).length;
+    var groups = [
+      { label: 'Flagged by the audit (' + n(flaggedCount) + ')', rows: ordered.slice(0, flaggedCount) },
+      { label: 'Comparison images, no issue reported (' + n(ordered.length - flaggedCount) + ')',
+        rows: ordered.slice(flaggedCount) }
+    ];
+    var position = 0;
+    groups.forEach(function (group) {
+      if (!group.rows.length) { return; }
+      var optgroup = el('optgroup');
+      optgroup.label = group.label;
+      group.rows.forEach(function (example) {
+        position += 1;
+        var option = el('option', null, position + '. ' + exampleLabel(example));
+        option.value = example.id;
+        optgroup.appendChild(option);
+      });
+      trySelect.appendChild(optgroup);
     });
     trySelect.disabled = !rows.length;
     tryNext.disabled = rows.length < 2;
@@ -451,7 +556,8 @@
       }
       card.appendChild(el('span', 'card-name', example.file_name));
       var rank = rankOf(example, browserState.method, EXAMPLE_SEED);
-      var meta = example.cell_line + ' · ' + example.split + ' · ' + n(example.n_annotations) + ' markings';
+      var meta = example.cell_line + ' · ' + example.split + ' · ' + n(example.n_annotations) +
+        (example.n_annotations === 1 ? ' label' : ' labels');
       card.appendChild(el('span', 'card-meta', meta));
       var rankText = 'Rank ' + n(rank) + ' of ' + n(SITE.methods.pools.review.size) + ' by ' +
         METHOD_LABELS[browserState.method];
@@ -492,10 +598,13 @@
   function renderDetail() {
     var example = EXAMPLES.filter(function (e) { return e.id === browserState.selected; })[0] || null;
     clear(detail);
-    var rows = filtered();
+    var rows = tryOrder(filtered());
     var currentIndex = rows.findIndex(function (row) { return row.id === browserState.selected; });
     trySelect.value = browserState.selected || '';
-    setText('try-progress', example ? 'Image ' + (currentIndex + 1) + ' of ' + n(rows.length) : 'No matching images. Clear a filter below.');
+    setText('try-progress', example
+      ? 'Image ' + (currentIndex + 1) + ' of ' + n(rows.length) +
+        (isFlagged(example) ? ' · flagged by the audit' : ' · comparison image')
+      : 'No matching images. Clear a filter below.');
     if (!example) {
       var emptyTitle = el('h3', null, 'No matching examples');
       emptyTitle.id = 'detail-title';
@@ -532,32 +641,45 @@
     var left = el('div');
     var frame = el('div', 'preview-frame');
     if (example.preview.status === 'delivered' && example.preview.src) {
+      var stage = el('div', 'image-overlay');
       var img = el('img');
       img.src = example.preview.src;
       img.alt = 'Microscope image ' + example.file_name + ' from the ' + example.split +
         ' split with ' + example.cell_line + ' cells.' +
-        (overlayCheckbox.checked ? ' Yellow outlines mark the supplied annotation polygons.' : '');
+        (overlayCheckbox.checked ? ' Yellow outlines mark the supplied labels.' : '');
       img.width = example.preview.width || 704;
       img.height = example.preview.height || 520;
-      frame.appendChild(img);
+      stage.appendChild(img);
       if (overlayCheckbox.checked && example.preview.labels_src) {
         /* Dense image: show every supplied outline from the server-rendered label
            layer, not a capped subset that would look like missing labels. */
         var layer = el('img', 'label-layer');
         layer.src = example.preview.labels_src;
-        layer.alt = 'All ' + n(example.preview.labels_drawn) + ' supplied cell outlines drawn over the image.';
+        layer.alt = 'All ' + n(example.preview.labels_drawn) + ' supplied cell labels drawn over the image.';
         layer.width = example.preview.width || 704;
         layer.height = example.preview.height || 520;
-        frame.appendChild(layer);
+        stage.appendChild(layer);
       } else if (overlayCheckbox.checked && example.preview.polygons && example.preview.polygons.length) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('role', 'img');
         svg.setAttribute('aria-label', 'Outlines of the ' + example.preview.polygons_drawn +
-          ' supplied annotation polygons drawn over the image.');
+          ' supplied labels drawn over the image.');
         drawOverlay(svg, example.preview.polygons, example.preview.width || 704,
           example.preview.height || 520, { locator: example.preview.polygons.length === 1 });
-        frame.appendChild(svg);
+        stage.appendChild(svg);
       }
+      frame.appendChild(stage);
+      var readout = el('p', 'readout');
+      readout.appendChild(el('span', null, example.file_name));
+      var readoutMeta = el('span', 'readout-muted');
+      var swatch = el('span', 'legend-swatch');
+      swatch.setAttribute('aria-hidden', 'true');
+      readoutMeta.appendChild(swatch);
+      readoutMeta.appendChild(document.createTextNode(n(example.n_annotations) +
+        (example.n_annotations === 1 ? ' label' : ' labels') + ' · ' +
+        n(example.preview.width || 704) + ' × ' + n(example.preview.height || 520) + ' px'));
+      readout.appendChild(readoutMeta);
+      frame.appendChild(readout);
     } else {
       var missing = el('div', 'preview-missing');
       missing.appendChild(el('strong', null, 'This image is not included in this build.'));
@@ -574,16 +696,18 @@
       example.preview.polygons.length === 1;
     var labelStatus = el('p', 'disclosure', overlayCheckbox.checked
       ? (example.preview.cap_note || 'Showing the supplied cell labels.') +
-        ' Yellow outlines are supplied labels' +
-        (singleLabel ? '; a circle and pointer help locate the single label.' : '.')
+        (singleLabel ? ' The ring and pointer help you find it.' : '')
       : 'Labels hidden. You are looking at the original image.');
     labelStatus.id = 'try-label-status';
     labelStatus.setAttribute('role', 'status');
     simpleImage.appendChild(labelStatus);
     simpleGrid.appendChild(simpleImage);
     var simpleMeaning = el('div', 'try-meaning');
+    simpleMeaning.appendChild(el('span', isFlagged(example) ? 'finding-chip' : 'finding-chip quiet',
+      isFlagged(example) ? example.finding_label : 'Comparison image'));
     simpleMeaning.appendChild(el('h4', null, 'What the audit found'));
-    var findingSummary = 'This image was selected for comparison by the review methods. Selection alone does not show an error.';
+    var findingSummary = 'No issue is reported for this image. It is shown for comparison because a review ' +
+      'method ranked it highly, which on its own does not mean its labels are wrong.';
     if (example.is_known_case) {
       findingSummary = 'Only ' + n(example.n_annotations) +
         (example.n_annotations === 1 ? ' cell label is' : ' cell labels are') +
@@ -638,13 +762,13 @@
     var right = el('div');
     right.appendChild(el('h4', null, 'Counts with units'));
     var countItems = [
-      ['Supplied cell markings', n(example.n_annotations), 'count'],
-      ['Review-pool median markings', n(SITE.distribution.n_annotations.median), 'count'],
-      ['Median marking area, this image', dec(example.features.area_median, 2), 'pixels^2'],
-      ['Median marking area, pool', dec(SITE.distribution.area_median.median, 2), 'pixels^2'],
-      ['Median marking width', dec(example.features.bbox_width_median, 2), 'pixels'],
-      ['Median marking height', dec(example.features.bbox_height_median, 2), 'pixels'],
-      ['Median polygon points per marking', dec(example.features.n_points_median, 1), 'points'],
+      ['Supplied cell labels', n(example.n_annotations), 'count'],
+      ['Review-pool median labels', n(SITE.distribution.n_annotations.median), 'count'],
+      ['Median label area, this image', dec(example.features.area_median, 2), 'pixels^2'],
+      ['Median label area, pool', dec(SITE.distribution.area_median.median, 2), 'pixels^2'],
+      ['Median label width', dec(example.features.bbox_width_median, 2), 'pixels'],
+      ['Median label height', dec(example.features.bbox_height_median, 2), 'pixels'],
+      ['Median polygon points per label', dec(example.features.n_points_median, 1), 'points'],
       ['Mean pixel intensity', dec(example.features.pixel_mean, 2), 'intensity (0-255)'],
       ['Mean gradient magnitude', dec(example.features.gradient_mean, 3), 'intensity/pixel'],
       ['Recorded image size', n(example.features.width) + ' × ' + n(example.features.height), 'pixels'],
@@ -711,7 +835,7 @@
       right.appendChild(el('p', 'disclosure', 'Audit finding ' + example.finding.finding_id +
         ' · source record: ' + example.finding.records.map(function (rec) {
           return rec.split + ' image id ' + (rec.image_ids || []).join(', ') + ' with ' +
-            (rec.counts || []).join('/') + ' markings';
+            (rec.counts || []).join('/') + ' labels';
         }).join('; ') + '.'));
     }
     grid.appendChild(right);
@@ -757,10 +881,11 @@
   });
   tryNext.addEventListener('click', function () {
     var rows = filtered();
-    if (!rows.length) { return; }
+    var ordered = tryOrder(rows);
+    if (!ordered.length) { return; }
+    var position = ordered.findIndex(function (row) { return row.id === browserState.selected; });
+    browserState.selected = ordered[(position + 1) % ordered.length].id;
     var index = rows.findIndex(function (row) { return row.id === browserState.selected; });
-    index = (index + 1) % rows.length;
-    browserState.selected = rows[index].id;
     browserState.page = Math.floor(index / PER_PAGE) + 1;
     renderBrowse();
   });
@@ -918,7 +1043,7 @@
       'Lower is a higher review priority.'));
     var chead = el('thead');
     var cheadRow = el('tr');
-    ['Filename', 'Split', 'Markings', 'Isolation Forest', 'Robust', 'Low count', 'Random'].forEach(function (label, index) {
+    ['Filename', 'Split', 'Labels', 'Isolation Forest', 'Robust', 'Low count', 'Random'].forEach(function (label, index) {
       var th = el('th', index > 1 ? 'num' : null, label);
       if (index) { th.scope = 'col'; }
       cheadRow.appendChild(th);
@@ -1067,12 +1192,12 @@
     var table = $('rankings-table');
     clear(table);
     table.appendChild(el('caption', null, 'Complete projection of the ' + n(rows.length) + ' matching rows of ' +
-      'the ' + n(RANK.rows.length) + '-row review pool. Units: markings are a count, areas are pixels^2, ' +
+      'the ' + n(RANK.rows.length) + '-row review pool. Units: labels are a count, areas are pixels^2, ' +
       'dimensions are pixels, pixel statistics are 8-bit intensity (0-255, unrescaled). Rows marked ' +
       '“not illustrated” have no image preview in this bundle; their numbers are complete.'));
     var head = el('thead');
     var headRow = el('tr');
-    ['#', 'Filename', 'Split', 'Cell line', 'Markings', 'IF (seed 42)', 'Robust', 'Low count', 'Random', 'Illustrated']
+    ['#', 'Filename', 'Split', 'Cell line', 'Labels', 'Isolation Forest', 'Robust', 'Low count', 'Random', 'Illustrated']
       .forEach(function (label, position) {
         var th = el('th', position >= 4 && position <= 8 ? 'num' : null, label);
         if (position) { th.scope = 'col'; }

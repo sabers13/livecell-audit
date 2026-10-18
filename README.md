@@ -71,7 +71,7 @@ LIVECELL_DATA_ROOT=data/raw PYTHONPATH=src .venv/bin/python -m pytest tests/test
 python3 -m http.server --directory web/review 8321
 ```
 
-Measured in the reference release run (`20261018T181405Z-0e359b9bf088`, one capped job per stage, process peak RSS): audit 45 s / 195 MB, warehouse 14 s / 340 MB, features 96 s / 275 MB (5,239 TIFF reads dominate), ranking 28 s / 340 MB, evaluation 12 s / 350 MB, preview render 21 s / 60 MB. The test suite is **264 passed** in ~80 s including the real-data integration check. Details: [`docs/12_release.md`](docs/12_release.md).
+Measured in the reference release run (`20261018T220218Z-0e359b9bf088`, one capped job per stage, process peak RSS): audit 44 s / 199 MB, warehouse 16 s / 323 MB, features 98 s / 275 MB (5,239 TIFF reads dominate), ranking 28 s / 340 MB, evaluation 12 s / 350 MB, preview render 22 s / 60 MB. The test suite is **266 passed** in ~79 s including the real-data integration check. Details: [`docs/12_release.md`](docs/12_release.md).
 
 ---
 

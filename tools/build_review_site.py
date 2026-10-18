@@ -689,9 +689,47 @@ def build_previews(inputs, out_dir):
                         "tiff_sha256": entry.get("tiff_sha256"),
                     }
                 )
+    guided_layers = []
+    if manifest:
+        target = os.path.join(out_dir, "previews")
+        for entry in manifest.get("guided", []):
+            source = os.path.join(preview_dir, entry["file"])
+            if not os.path.isfile(source):
+                raise SystemExit(
+                    f"build_review_site: error: preview manifest names {entry['file']} but it is missing"
+                )
+            destination = os.path.join(target, entry["file"])
+            shutil.copyfile(source, destination)
+            digest = sha256_file(destination)
+            if digest != entry.get("png_sha256"):
+                raise SystemExit(
+                    f"build_review_site: error: copied guided layer {entry['file']} does not match "
+                    f"the manifest SHA-256 ({entry.get('png_sha256')} != {digest})"
+                )
+            guided_layers.append(
+                {
+                    "split": entry["split"],
+                    "image_id": entry["image_id"],
+                    "file_name": entry["file_name"],
+                    "src": f"previews/{entry['file']}",
+                    "labels": entry["outlines_drawn"],
+                    "png_sha256": digest,
+                }
+            )
+            png_provenance.append(
+                {
+                    "label": f"Guided label layer ({entry['split']} {entry['image_id']})",
+                    "role": "guided-labels-png",
+                    "path": os.path.relpath(destination, os.getcwd()).replace(os.sep, "/"),
+                    "bytes": os.path.getsize(destination),
+                    "sha256": digest,
+                    "preview_id": f"{entry['split']}_{entry['image_id']}",
+                }
+            )
     status = "delivered" if manifest else "pending"
     return {
         "status": status,
+        "guided_layers": guided_layers,
         "generated": when,
         "outline_cap": (manifest or {}).get("outline_cap", OUTLINE_CAP),
         "render": (manifest or {}).get("render"),
@@ -1119,19 +1157,19 @@ def main(argv=None):
         if preview["polygons_total"] is not None and preview["polygons_drawn"] is not None:
             if layer and layer.get("outlines_drawn") == preview["polygons_total"]:
                 preview["cap_note"] = (
-                    f"Showing all {preview['polygons_total']:,} supplied outlines."
+                    f"Showing all {preview['polygons_total']:,} supplied labels."
                 )
             elif preview["polygons_drawn"] < preview["polygons_total"]:
                 preview["cap_note"] = (
                     f"Showing {preview['polygons_drawn']} of {preview['polygons_total']:,} "
-                    "supplied outlines (deterministic cap, source order); the image has "
+                    "supplied labels (deterministic cap, source order); the image has "
                     "more labels than are drawn."
                 )
             elif preview["polygons_total"] == 1:
-                preview["cap_note"] = "Showing the single supplied outline."
+                preview["cap_note"] = "Showing the single supplied label."
             else:
                 preview["cap_note"] = (
-                    f"Showing all {preview['polygons_total']} supplied outlines."
+                    f"Showing all {preview['polygons_total']} supplied labels."
                 )
         examples.append(
             build_example(
@@ -1216,8 +1254,12 @@ def main(argv=None):
         },
         "examples": examples,
         "guided": {
-            "overlap_file": "Huh7_Phase_A10_2_00d00h00m_3.tif",
+            "overlap_file": inputs.report["examples"]["shared_image"]["file_name"],
             "overlap_records": inputs.report["examples"]["shared_image"],
+            "overlap_layers": [
+                layer for layer in previews["guided_layers"]
+                if layer["file_name"] == inputs.report["examples"]["shared_image"]["file_name"]
+            ],
             "overlap_finding": finding_summary(
                 findings_index.get(inputs.report["examples"]["shared_image"]["file_name"])
             ),
@@ -1233,7 +1275,7 @@ def main(argv=None):
         "methods": build_methods(inputs),
         "glossary": [
             {"term": "Dataset", "meaning": "A collection of images and their cell labels."},
-            {"term": "Annotation", "meaning": "A marking that tells the model where a cell is."},
+            {"term": "Label", "meaning": "An outline that tells the model where a cell is. Researchers call it an annotation."},
             {"term": "Train split", "meaning": "Images the model learns from."},
             {"term": "Validation split", "meaning": "Images used to check the model's progress."},
             {"term": "Test split", "meaning": "Held-back images; ranked here only for exploration."},
@@ -1306,6 +1348,12 @@ def main(argv=None):
                     for name, limit, label in SELECTION_STEPS
                 ],
                 "count": len(examples),
+                "guided": [
+                    {"split": split, "image_id": image_id,
+                     "file_name": inputs.report["examples"]["shared_image"]["file_name"]}
+                    for split, key in (("train", "train_image_ids"), ("val", "val_image_ids"))
+                    for image_id in inputs.report["examples"]["shared_image"][key][:1]
+                ],
                 "examples": [
                     {
                         "preview_id": example["id"],
@@ -1379,6 +1427,10 @@ def main(argv=None):
         "            Sjögren, Sartorius)\n"
         "  issue #14, alternate annotation versions: explained by Christoffer\n"
         "            Edlund (Sartorius)\n\n"
+        "Typeface: Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono,\n"
+        "copyright The Atkinson Hyperlegible Next and Mono Project Authors, licensed\n"
+        "under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt); the latin\n"
+        "subsets are included unmodified.\n\n"
         "Intended use: independent, noncommercial portfolio and education work.\n"
         "This project is not affiliated with, endorsed by, or connected to Sartorius.\n",
     )

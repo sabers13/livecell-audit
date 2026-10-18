@@ -1,7 +1,7 @@
 # 11. Review website (static review interface)
 
 The review website lives at `web/review/`. It is a static projection of one
-completed release run (currently `20261018T181405Z-0e359b9bf088`, see
+completed release run (currently `20261018T220218Z-0e359b9bf088`, see
 `docs/12_release.md`): no backend, no build step, no framework, no network call,
 and no dataset on the machine that renders it. Its design rules are in
 `DESIGN.md`.
@@ -107,7 +107,8 @@ page. The count is bounded at 40 because each example needs one preview.
 `tools/make_previews.py` runs on the data server and is bounded by design:
 
 - at most 40 PNGs (`--max-previews`, hard maximum 40), longest side at most
-  640 px (`--longest-side`, hard maximum 640);
+  704 px, the native image width (`--longest-side`, hard maximum 704), so previews
+  are exact copies of the TIFF pixels;
 - at most 20 supplied polygons per image in `polygons.json` (`--outline-cap`,
   hard maximum 20), taken in COCO source order; these are drawn as an SVG overlay
   for sparse images, with a locator circle for a single label;
@@ -143,7 +144,7 @@ single-label locator, full label layers on dense images, and the Results text.
 ## Limitations
 
 - The previews are 39 of the 3,067 review-pool candidates, downsampled to
-  ≤ 640 px. Every other candidate shows its numbers without an image, and the page
+  at their native 704 × 520 px. Every other candidate shows its numbers without an image, and the page
   says so.
 - No comprehension test with a person unfamiliar with the field has been
   performed; the design's comprehension questions are goals, not results.

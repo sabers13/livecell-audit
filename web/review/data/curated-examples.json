@@ -432,6 +432,18 @@
   }
  ],
  "generated_by": "tools/build_review_site.py",
+ "guided": [
+  {
+   "file_name": "Huh7_Phase_A10_2_00d00h00m_3.tif",
+   "image_id": 795492,
+   "split": "train"
+  },
+  {
+   "file_name": "Huh7_Phase_A10_2_00d00h00m_3.tif",
+   "image_id": 1037410,
+   "split": "val"
+  }
+ ],
  "outline_cap": 20,
  "pool": "ranking-fixed-mem/candidates.jsonl (review pool)",
  "pool_size": 3067,

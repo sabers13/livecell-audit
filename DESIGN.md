@@ -17,11 +17,23 @@ The overview is a short reading experience, not a dashboard to operate: no selec
 
 ## Visual direction
 
-- Light theme. Accent yellow `#FFED00`. Surfaces white `#FFFFFF` and cool light neutral `#F8FAFC`. Text `#0F172A` and `#334155`; secondary text `#475569`; dividers `#D9E1E8`.
-- Typeface: Inter when available, then the system sans-serif. Left-aligned headings and body; prose kept below about 75 characters per line.
-- Real microscopy images are the distinctive visual element. Quiet surroundings, limited borders, no decorative gradients or progress animations.
-- The first screen is a guided explanation with larger readable text and few controls; dense evidence sits below or behind disclosures.
-- Apple HIG at principles level: hierarchy, feedback, keyboard access, contrast and predictable controls.
+Tokens live in `web/review/assets/review.css` (`:root`, with a `prefers-color-scheme: dark` set). HIG level: principles-only.
+
+| Role | Token | Light | Dark | Contrast on paper (light / dark) |
+| --- | --- | --- | --- | --- |
+| Surface | `--paper` / `--wash` | `#FFFFFF` / `#F8FAFC` | `#0B1220` / `#131C2E` | — |
+| Specimen stage | `--stage` | `#0B111C` | `#05080F` | readout text `#CBD5E1` 12.7:1 / 13.5:1 |
+| Content | `--ink` | `#0F172A` | `#F1F5F9` | 17.9:1 / 17.1:1 |
+| Secondary content | `--body` / `--muted` | `#334155` / `#475569` | `#CBD5E1` / `#94A3B8` | 10.4:1, 7.6:1 / 12.6:1, 7.3:1 |
+| Action and focus | `--action` | `#214B85` | `#8FB4FF` | 8.7:1 / 9.0:1 |
+| Control boundary | `--control` | `#64748B` | `#64748B` | 4.8:1 / 3.9:1 |
+| Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | 15.6:1 on the stage |
+
+- **One colour, one meaning.** Yellow marks supplied cell labels, and the wordmark's highlighter underline is their legend. Interface state (selected tab, pressed buttons, switches, primary buttons) uses ink, never yellow.
+- **Typeface.** Atkinson Hyperlegible Next for text and Atkinson Hyperlegible Mono for identifiers, counts and readouts, self-hosted under the SIL OFL. The site is about reading data exactly, and these faces keep 1/l/I and 0/O distinct in filenames, ids and hashes. Scale in rem: display `clamp(2rem, …, 2.75rem)`, h2 1.75rem, h3 1.3125rem, body 1.0625rem (17 px), small 0.9375rem, caption 0.875rem, meta 0.8125rem (mono identifiers only).
+- **Signature: the specimen stage.** Every microscopy image sits on a dark stage with a mono readout strip (filename, label count, pixel size), as imaging software shows a specimen. Yellow outlines on it are the only strong colour on the page.
+- **Motion.** One orchestrated moment: the first time the overview is shown, the hero image comes into focus, its label appears, and the locator ring closes onto the only labelled cell (about one second, once). Otherwise only brief feedback: the tab bar slides, a newly shown panel rises in, label layers fade in, switches and disclosure chevrons ease. All motion is off under `prefers-reduced-motion`; the translucent tab bar turns opaque under `prefers-reduced-transparency`.
+- Left-aligned text, prose under about 72 characters per line, quiet surroundings, no decorative gradients.
 
 ## Interaction and content rules
 

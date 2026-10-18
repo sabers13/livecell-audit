@@ -172,7 +172,7 @@
   ],
   "global_fallback_rule": "a cell line with fewer than 20 fit images uses the documented global model fitted on all fit rows; no model is ever fitted on validation, test, held-out or known-case rows",
   "inputs": {
-    "feature_manifest_sha256": "cb99a4ddfd9fb14ebeb98fd52246595c2e88b379170462b50c659f2fbc5ac441",
+    "feature_manifest_sha256": "797af41b21a98a3defe4b750da9df268dc9693948bdbc557d65962cc5a911221",
     "feature_records": 5387,
     "feature_schema_version": "1",
     "source_sha256": {
@@ -180,7 +180,7 @@
       "train": "6788902479bc0ffd2838fb7160a778078f464ea6034ed76bb5a0e40263cb9e78",
       "val": "eb72a68f5065d9ade1805b496eecdcd14ca275e5f1bc6aae7e07279bddadfdc7"
     },
-    "warehouse_manifest_sha256": "5623e4f593b4add3dacf13ee9ebb7329443a6fd2e67b11623c0b3baae0ddf335",
+    "warehouse_manifest_sha256": "771584b24d3e935d140dae2217269c25d9166e377feff4c08cd9d8492d977881",
     "warehouse_schema_version": "1",
     "warehouse_view_version": 1
   },
