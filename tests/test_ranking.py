@@ -425,7 +425,6 @@ def test_handle_all_missing_and_zero_mad_columns():
 
 
 def test_annotation_aggregation_matches_warehouse_view(ml_env):
-    import duckdb
 
     annotations = load_annotations(ml_env["warehouse"])
     mine = aggregate_annotation_features(annotations).reset_index()
@@ -529,7 +528,6 @@ def test_rankings_are_reproducible(ml_env):
 
 
 def test_seed_sensitivity_and_baseline_stability(ml_env):
-    import pandas as pd
 
     candidates = _candidates(ml_env)
     # the two deterministic baselines are seed-independent
@@ -913,3 +911,32 @@ def test_sensitivity_summary_present(ml_env):
     assert "structured" in synthetic["selection"]["loss_scenario"]
     # raw deltas are available alongside percentile deltas
     assert synthetic["results"]["isolation_forest_seed42"]["paired_raw_delta_injected"]["count"] >= 1
+
+
+def test_evaluation_summary_states_how_many_labels_were_removed(ml_env):
+    summary = json.load(open(os.path.join(ml_env["evaluation"], "evaluation_summary.json")))
+    synthetic = json.load(open(os.path.join(ml_env["evaluation"], "synthetic_annotation_loss.json")))
+    loss = summary["synthetic_annotation_loss"]
+    # injected_fraction is a share of images; the per-image kept share is separate
+    assert loss["retained_fraction"] == synthetic["selection"]["loss_fraction"] == 0.10
+    assert loss["annotations_before"] == synthetic["selection"]["original_annotations_of_injected"]
+    assert loss["annotations_after"] == synthetic["selection"]["retained_annotations"]
+    assert 0 < loss["annotations_after"] < loss["annotations_before"]
+    notes = summary["evidence_notes"]
+    assert all(note[0].isupper() and note.endswith(".") for note in notes)
+    assert any("favour a count rule" in note for note in notes)
+
+
+def test_known_cases_credit_the_issue_reporter(ml_env):
+    known = json.load(open(os.path.join(ml_env["evaluation"], "known_cases.json")))
+    assert known["upstream_reporter"] == "ivan-ea"
+    assert known["upstream_issue"].endswith("/issues/21")
+
+
+def test_model_card_reports_constant_fit_features(ml_env):
+    card = json.load(open(os.path.join(ml_env["ranking"], "model_card.json")))
+    constant = card["feature_selection"]["constant_in_fit"]
+    assert set(constant) <= set(card["feature_selection"]["global_columns"])
+    # every fixture image has the same recorded size, so the size features are constant
+    assert {"width", "height", "image_area_pixels"} <= set(constant)
+    assert any("constant across the fit rows" in text for text in card["limitations"])

@@ -1,7 +1,7 @@
 [project]
 name = "livecell-audit"
 version = "0.1.0"
-description = "A reproducible data-quality pipeline, DuckDB warehouse, and feature analysis for the Sartorius LIVECell dataset"
+description = "A reproducible data-quality audit, DuckDB warehouse, feature analysis and review ranking for the Sartorius LIVECell dataset"
 authors = [{ name = "Saber Sojudi", email = "contact@sabersojudi.com" }]
 requires-python = ">=3.12"
 dependencies = [
@@ -9,6 +9,7 @@ dependencies = [
     "duckdb>=1.5.0",
     "numpy>=1.26.0",
     "pandas>=3.0.0",
+    "scikit-learn>=1.6.1",
 ]
 
 [project.optional-dependencies]

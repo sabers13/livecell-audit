@@ -1,12 +1,12 @@
-# Data
-data/raw/
-data/interim/
-data/curated/
-data/scratch/
-data/workbench/
-data/*.log
-*.zip
+# Data, local outputs, release runs and release packages stay out of git
+/data/
+/releases/
+*.log
 *.pth
+*.zip
+
+# Local agent instructions (contain private server details)
+AGENTS.md
 
 # Python
 __pycache__/
@@ -21,6 +21,9 @@ build/
 develop-eggs/
 dist/
 downloads/
+# exception: the review website ships the verified documents a reader can
+# download, so this directory is part of the deliverable
+!web/review/downloads/
 eggs/
 .eggs/
 lib/
@@ -35,12 +38,6 @@ wheels/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-
-# Node / React
-node_modules/
-web/dist/
-.env.local
-.env.*.local
 
 # IDE & OS
 .DS_Store

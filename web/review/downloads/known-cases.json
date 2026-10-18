@@ -1,0 +1,942 @@
+{
+  "baseline_counts": [
+    {
+      "file_name": "BT474_Phase_B3_1_03d00h00m_3.tif",
+      "observed_annotations": 1,
+      "reported_image_id": 10517,
+      "reported_version_n_annotations": 1
+    },
+    {
+      "file_name": "A172_Phase_A7_1_01d04h00m_3.tif",
+      "observed_annotations": 1,
+      "reported_image_id": 150535,
+      "reported_version_n_annotations": 1
+    },
+    {
+      "file_name": "A172_Phase_D7_1_01d20h00m_1.tif",
+      "observed_annotations": 1,
+      "reported_image_id": 205798,
+      "reported_version_n_annotations": 1
+    },
+    {
+      "file_name": "BV2_Phase_C4_1_01d16h00m_3.tif",
+      "observed_annotations": 4,
+      "reported_image_id": 628256,
+      "reported_version_n_annotations": 4
+    },
+    {
+      "file_name": "BV2_Phase_D4_1_00d12h00m_2.tif",
+      "observed_annotations": 9,
+      "reported_image_id": 718286,
+      "reported_version_n_annotations": 9
+    },
+    {
+      "file_name": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+      "observed_annotations": 1,
+      "reported_image_id": 1494964,
+      "reported_version_n_annotations": 1
+    },
+    {
+      "file_name": "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+      "observed_annotations": 1,
+      "reported_image_id": 1248961,
+      "reported_version_n_annotations": 1
+    },
+    {
+      "file_name": "BV2_Phase_A4_2_00d00h00m_1.tif",
+      "observed_annotations": 2,
+      "reported_image_id": 976048,
+      "reported_version_n_annotations": 2
+    },
+    {
+      "file_name": "BV2_Phase_A4_2_02d04h00m_3.tif",
+      "observed_annotations": 2,
+      "reported_image_id": 1007442,
+      "reported_version_n_annotations": 2
+    }
+  ],
+  "cases": [
+    {
+      "canonical_image_id": 10517,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "BT474_Phase_B3_1_03d00h00m_3.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 1,
+      "priorities": {
+        "isolation_forest_seed101": 0.9964412811000001,
+        "isolation_forest_seed42": 0.9964412811000001,
+        "isolation_forest_seed7": 0.9964412811000001,
+        "low_count_seed101": -1.0,
+        "low_count_seed42": -1.0,
+        "low_count_seed7": -1.0,
+        "random_seed101": 0.5564704692,
+        "random_seed42": 0.057231940200000005,
+        "random_seed7": 0.7204446509,
+        "robust_seed101": 1.0,
+        "robust_seed42": 1.0,
+        "robust_seed7": 1.0
+      },
+      "ranks": {
+        "isolation_forest_seed101": 8,
+        "isolation_forest_seed42": 12,
+        "isolation_forest_seed7": 6,
+        "low_count_seed101": 3,
+        "low_count_seed42": 3,
+        "low_count_seed7": 3,
+        "random_seed101": 1342,
+        "random_seed42": 2896,
+        "random_seed7": 867,
+        "robust_seed101": 4,
+        "robust_seed42": 4,
+        "robust_seed7": 4
+      },
+      "record_key": "train:52",
+      "reported_image_id": 10517,
+      "reported_split": "train",
+      "reported_version_n_annotations": 1,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 150535,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "A172_Phase_A7_1_01d04h00m_3.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 1,
+      "priorities": {
+        "isolation_forest_seed101": 0.9961089494,
+        "isolation_forest_seed42": 1.0,
+        "isolation_forest_seed7": 0.9922178988,
+        "low_count_seed101": -1.0,
+        "low_count_seed42": -1.0,
+        "low_count_seed7": -1.0,
+        "random_seed101": 0.9227256864000001,
+        "random_seed42": 0.9756223516,
+        "random_seed7": 0.8735534454,
+        "robust_seed101": 1.0,
+        "robust_seed42": 1.0,
+        "robust_seed7": 1.0
+      },
+      "ranks": {
+        "isolation_forest_seed101": 10,
+        "isolation_forest_seed42": 1,
+        "isolation_forest_seed7": 22,
+        "low_count_seed101": 1,
+        "low_count_seed42": 1,
+        "low_count_seed7": 1,
+        "random_seed101": 247,
+        "random_seed42": 89,
+        "random_seed7": 392,
+        "robust_seed101": 1,
+        "robust_seed42": 1,
+        "robust_seed7": 1
+      },
+      "record_key": "train:493",
+      "reported_image_id": 150535,
+      "reported_split": "train",
+      "reported_version_n_annotations": 1,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 205798,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "A172_Phase_D7_1_01d20h00m_1.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 1,
+      "priorities": {
+        "isolation_forest_seed101": 0.9883268482,
+        "isolation_forest_seed42": 0.9883268482,
+        "isolation_forest_seed7": 0.9922178988,
+        "low_count_seed101": -1.0,
+        "low_count_seed42": -1.0,
+        "low_count_seed7": -1.0,
+        "random_seed101": 0.4771006989,
+        "random_seed42": 0.7348931623,
+        "random_seed7": 0.5749529338,
+        "robust_seed101": 1.0,
+        "robust_seed42": 1.0,
+        "robust_seed7": 1.0
+      },
+      "ranks": {
+        "isolation_forest_seed101": 41,
+        "isolation_forest_seed42": 45,
+        "isolation_forest_seed7": 24,
+        "low_count_seed101": 2,
+        "low_count_seed42": 2,
+        "low_count_seed7": 2,
+        "random_seed101": 1587,
+        "random_seed42": 838,
+        "random_seed7": 1318,
+        "robust_seed101": 2,
+        "robust_seed42": 2,
+        "robust_seed7": 2
+      },
+      "record_key": "train:749",
+      "reported_image_id": 205798,
+      "reported_split": "train",
+      "reported_version_n_annotations": 1,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 628256,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "BV2_Phase_C4_1_01d16h00m_3.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 4,
+      "priorities": {
+        "isolation_forest_seed101": 0.95703125,
+        "isolation_forest_seed42": 0.95703125,
+        "isolation_forest_seed7": 0.9609375,
+        "low_count_seed101": -4.0,
+        "low_count_seed42": -4.0,
+        "low_count_seed7": -4.0,
+        "random_seed101": 0.0149923233,
+        "random_seed42": 0.8879888286000001,
+        "random_seed7": 0.1943396158,
+        "robust_seed101": 0.91015625,
+        "robust_seed42": 0.91015625,
+        "robust_seed7": 0.91015625
+      },
+      "ranks": {
+        "isolation_forest_seed101": 179,
+        "isolation_forest_seed42": 151,
+        "isolation_forest_seed7": 133,
+        "low_count_seed101": 8,
+        "low_count_seed42": 8,
+        "low_count_seed7": 8,
+        "random_seed101": 3045,
+        "random_seed42": 349,
+        "random_seed7": 2499,
+        "robust_seed101": 291,
+        "robust_seed42": 291,
+        "robust_seed7": 291
+      },
+      "record_key": "train:1296",
+      "reported_image_id": 628256,
+      "reported_split": "train",
+      "reported_version_n_annotations": 4,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 718286,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "BV2_Phase_D4_1_00d12h00m_2.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 9,
+      "priorities": {
+        "isolation_forest_seed101": 0.8984375,
+        "isolation_forest_seed42": 0.890625,
+        "isolation_forest_seed7": 0.921875,
+        "low_count_seed101": -9.0,
+        "low_count_seed42": -9.0,
+        "low_count_seed7": -9.0,
+        "random_seed101": 0.3426622976,
+        "random_seed42": 0.9761283907,
+        "random_seed7": 0.41490852570000003,
+        "robust_seed101": 0.73046875,
+        "robust_seed42": 0.73046875,
+        "robust_seed7": 0.73046875
+      },
+      "ranks": {
+        "isolation_forest_seed101": 365,
+        "isolation_forest_seed42": 385,
+        "isolation_forest_seed7": 272,
+        "low_count_seed101": 9,
+        "low_count_seed42": 9,
+        "low_count_seed7": 9,
+        "random_seed101": 1996,
+        "random_seed42": 86,
+        "random_seed7": 1800,
+        "robust_seed101": 893,
+        "robust_seed42": 893,
+        "robust_seed7": 893
+      },
+      "record_key": "train:1455",
+      "reported_image_id": 718286,
+      "reported_split": "train",
+      "reported_version_n_annotations": 9,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 1494964,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "train",
+      "file_name": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 1,
+      "priorities": {
+        "isolation_forest_seed101": 0.9768211921000001,
+        "isolation_forest_seed42": 0.9933774834,
+        "isolation_forest_seed7": 0.9834437086000001,
+        "low_count_seed101": -1.0,
+        "low_count_seed42": -1.0,
+        "low_count_seed7": -1.0,
+        "random_seed101": 0.1033273207,
+        "random_seed42": 0.3390158576,
+        "random_seed7": 0.352548267,
+        "robust_seed101": 0.9966887417,
+        "robust_seed42": 0.9966887417,
+        "robust_seed7": 0.9966887417
+      },
+      "ranks": {
+        "isolation_forest_seed101": 99,
+        "isolation_forest_seed42": 17,
+        "isolation_forest_seed7": 78,
+        "low_count_seed101": 4,
+        "low_count_seed42": 4,
+        "low_count_seed7": 4,
+        "random_seed101": 2741,
+        "random_seed42": 2019,
+        "random_seed7": 1997,
+        "robust_seed101": 21,
+        "robust_seed42": 21,
+        "robust_seed7": 21
+      },
+      "record_key": "train:2990",
+      "reported_image_id": 1494964,
+      "reported_split": "train",
+      "reported_version_n_annotations": 1,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 1248961,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "val",
+      "file_name": "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 1,
+      "priorities": {
+        "isolation_forest_seed101": 1.0,
+        "isolation_forest_seed42": 1.0,
+        "isolation_forest_seed7": 1.0,
+        "low_count_seed101": -1.0,
+        "low_count_seed42": -1.0,
+        "low_count_seed7": -1.0,
+        "random_seed101": 0.3744105589,
+        "random_seed42": 0.6484481706,
+        "random_seed7": 0.5460489815,
+        "robust_seed101": 1.0,
+        "robust_seed42": 1.0,
+        "robust_seed7": 1.0
+      },
+      "ranks": {
+        "isolation_forest_seed101": 7,
+        "isolation_forest_seed42": 7,
+        "isolation_forest_seed7": 5,
+        "low_count_seed101": 5,
+        "low_count_seed42": 5,
+        "low_count_seed7": 5,
+        "random_seed101": 1887,
+        "random_seed42": 1072,
+        "random_seed7": 1398,
+        "robust_seed101": 17,
+        "robust_seed42": 17,
+        "robust_seed7": 17
+      },
+      "record_key": "val:436",
+      "reported_image_id": 1248961,
+      "reported_split": "val",
+      "reported_version_n_annotations": 1,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 976048,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "test",
+      "file_name": "BV2_Phase_A4_2_00d00h00m_1.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 2,
+      "priorities": {
+        "isolation_forest_seed101": 0.921875,
+        "isolation_forest_seed42": 0.93359375,
+        "isolation_forest_seed7": 0.9453125,
+        "low_count_seed101": -2.0,
+        "low_count_seed42": -2.0,
+        "low_count_seed7": -2.0,
+        "random_seed101": 0.6721940376000001,
+        "random_seed42": 0.6217920299,
+        "random_seed7": 0.3861189937,
+        "robust_seed101": 0.9453125,
+        "robust_seed42": 0.9453125,
+        "robust_seed7": 0.9453125
+      },
+      "ranks": {
+        "isolation_forest_seed101": 267,
+        "isolation_forest_seed42": 248,
+        "isolation_forest_seed7": 181,
+        "low_count_seed101": 6,
+        "low_count_seed42": 6,
+        "low_count_seed7": 6,
+        "random_seed101": 1007,
+        "random_seed42": 1145,
+        "random_seed7": 1888,
+        "robust_seed101": 159,
+        "robust_seed42": 159,
+        "robust_seed7": 159
+      },
+      "record_key": "test:603",
+      "reported_image_id": 976048,
+      "reported_split": "test",
+      "reported_version_n_annotations": 2,
+      "reported_version_present_in_provenance": true
+    },
+    {
+      "canonical_image_id": 1007442,
+      "canonical_matches_reported_identity": true,
+      "canonical_split": "test",
+      "file_name": "BV2_Phase_A4_2_02d04h00m_3.tif",
+      "in_fit": false,
+      "in_review_pool": true,
+      "observed_annotations": 2,
+      "priorities": {
+        "isolation_forest_seed101": 0.9765625,
+        "isolation_forest_seed42": 0.984375,
+        "isolation_forest_seed7": 0.984375,
+        "low_count_seed101": -2.0,
+        "low_count_seed42": -2.0,
+        "low_count_seed7": -2.0,
+        "random_seed101": 0.47660975980000003,
+        "random_seed42": 0.9792246337,
+        "random_seed7": 0.03085984,
+        "robust_seed101": 0.98046875,
+        "robust_seed42": 0.98046875,
+        "robust_seed7": 0.98046875
+      },
+      "ranks": {
+        "isolation_forest_seed101": 100,
+        "isolation_forest_seed42": 64,
+        "isolation_forest_seed7": 62,
+        "low_count_seed101": 7,
+        "low_count_seed42": 7,
+        "low_count_seed7": 7,
+        "random_seed101": 1589,
+        "random_seed42": 78,
+        "random_seed7": 2981,
+        "robust_seed101": 77,
+        "robust_seed42": 77,
+        "robust_seed7": 77
+      },
+      "record_key": "test:664",
+      "reported_image_id": 1007442,
+      "reported_split": "test",
+      "reported_version_n_annotations": 2,
+      "reported_version_present_in_provenance": true
+    }
+  ],
+  "evidence_type": "regression exercise on nine known sparse-label cases; not recall over all mislabelled images and not a generalisation benchmark",
+  "kind": "known_case_regression",
+  "known_cases_canonical_matches_reported_identity": 9,
+  "known_cases_in_fit": 0,
+  "known_cases_in_pool": 9,
+  "known_cases_reported_identity_present": 9,
+  "known_cases_total": 9,
+  "pool_definition": "frozen review pool: every canonical non-fit row (held-out training groups, official validation split, official test split, and known-case rows excluded from fitting), deduplicated by filename",
+  "pool_size": 3067,
+  "recovery": {
+    "isolation_forest_seed101": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 3,
+        "recovered_filename_level": 3,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 3,
+        "recovered_filename_level": 3,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 4,
+        "recovered_filename_level": 4,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    },
+    "isolation_forest_seed42": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 2,
+        "recovered_filename_level": 2,
+        "recovered_filenames": [
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 4,
+        "recovered_filename_level": 4,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    },
+    "isolation_forest_seed7": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 2,
+        "recovered_filename_level": 2,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 4,
+        "recovered_filename_level": 4,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 4,
+        "recovered_filename_level": 4,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    },
+    "low_count_seed101": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      }
+    },
+    "low_count_seed42": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      }
+    },
+    "low_count_seed7": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 9,
+        "recovered_filename_level": 9,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "BV2_Phase_C4_1_01d16h00m_3.tif",
+          "BV2_Phase_D4_1_00d12h00m_2.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_00d00h00m_1.tif",
+          "BV2_Phase_A4_2_02d04h00m_3.tif"
+        ]
+      }
+    },
+    "random_seed101": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      }
+    },
+    "random_seed42": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      }
+    },
+    "random_seed7": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 0,
+        "recovered_filename_level": 0,
+        "recovered_filenames": []
+      }
+    },
+    "robust_seed101": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 3,
+        "recovered_filename_level": 3,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    },
+    "robust_seed42": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 3,
+        "recovered_filename_level": 3,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    },
+    "robust_seed7": {
+      "at_10": {
+        "budget": 10,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 3,
+        "recovered_filename_level": 3,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif"
+        ]
+      },
+      "at_25": {
+        "budget": 25,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      },
+      "at_50": {
+        "budget": 50,
+        "known_cases_total": 9,
+        "pool_size": 3067,
+        "recovered": 5,
+        "recovered_filename_level": 5,
+        "recovered_filenames": [
+          "BT474_Phase_B3_1_03d00h00m_3.tif",
+          "A172_Phase_A7_1_01d04h00m_3.tif",
+          "A172_Phase_D7_1_01d20h00m_1.tif",
+          "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+          "SkBr3_Phase_H3_2_00d00h00m_1.tif"
+        ]
+      }
+    }
+  },
+  "recovery_rule": "a case is recovered only when the reported (split, image_id, filename) exists in preserved provenance, the canonical version is that reported version, and it ranks within the budget; a filename-level count is reported separately",
+  "upstream_issue": "https://github.com/sartorius-research/LIVECell/issues/21",
+  "upstream_reporter": "ivan-ea"
+}

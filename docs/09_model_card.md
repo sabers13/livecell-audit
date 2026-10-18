@@ -1,14 +1,11 @@
-# 09-ML. Model card — fit-only review ranking (milestone 4)
+# 09. Model card — fit-only review ranking
 
-> File-name note: the machine-readable **data contract** for the warehouse and
-> feature stages is [`09_data_contract.md`](09_data_contract.md). This file is
-> the requested milestone-4 **model card** (a distinct document).
+> The machine-readable **data contract** for the warehouse and feature stages is
+> [`09_data_contract.md`](09_data_contract.md). This file is the **model card**
+> of the review ranking.
 
 Scope: the Isolation Forest review ranking and its baselines, implemented in
-`src/livecell_audit/ranking.py` on branch `expansion/research-workbench`.
-Local-only: no cloud run, no publication, no push/merge, no UI change. The raw
-dataset at `/home/saber/projects/livecell-audit/data/raw` and the original
-`/home/saber/Projects/firstmate` tree were read only.
+`src/livecell_audit/ranking.py`. The raw dataset is only read.
 
 ## 1. Scientific question
 
@@ -218,3 +215,10 @@ verifies the run with `ranking.verify_ranking_outputs` /
   or extra ML dependency was added (there is no concrete need).
 - Content manifests are integrity evidence, not protection against an attacker
   who rewrites both the marker and the manifest.
+- The Isolation Forest mixes label statistics with image texture, so it ranks
+  unusual images rather than labels that disagree with their image; acquisition
+  time and well are excluded from its features.
+- On LIVECell, `width`, `height` and `image_area_pixels` are constant (every image
+  is 704 × 520) and carry no information. They are kept so the frozen
+  configuration and its results stay unchanged, and recorded in
+  `model_card.json` under `feature_selection.constant_in_fit`.

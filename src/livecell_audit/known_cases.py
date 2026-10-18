@@ -1,10 +1,11 @@
 """The nine previously reported sparse-label cases used as regression examples.
 
 These image records were reported upstream in
-``sartorius-research/LIVECell`` issue #21 ("Incomplete annotations",
-reported by ``alxndrdiaz`` in October 2022, with further examples and
-discussion from community members such as ``StefanBaar``) and re-verified
-locally in ``docs/02_upstream_bugs_and_findings.md``.
+``sartorius-research/LIVECell`` issue #21 ("A few images have incomplete
+annotations.", opened by ``ivan-ea`` on 13 October 2022 with a threshold of
+ten segments per image; a Sartorius maintainer replied that the images had
+slipped through QA) and re-verified locally in
+``docs/02_upstream_bugs_and_findings.md``.
 
 They are stored here as *identities* (filename, split, image id) only. The
 annotation counts are never stored here: the audit derives every count from
@@ -19,7 +20,7 @@ from __future__ import annotations
 from typing import Dict, List
 
 UPSTREAM_ISSUE = "https://github.com/sartorius-research/LIVECell/issues/21"
-UPSTREAM_REPORTER = "alxndrdiaz"
+UPSTREAM_REPORTER = "ivan-ea"
 
 KNOWN_SPARSE_CASES: List[Dict[str, object]] = [
     {"file_name": "BT474_Phase_B3_1_03d00h00m_3.tif", "split": "train", "image_id": 10517},

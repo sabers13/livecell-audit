@@ -1,14 +1,10 @@
-# Exact runtime pins for the LIVECell workbench (milestones 2-4).
-# Python 3.12. Installed and tested in a project-local .venv; see
-# docs/08_data_analysis_completion.md and docs/09_model_card.md for the
-# recorded environment.
+# Exact runtime pins for the LIVECell audit pipeline. Python 3.12; the reference
+# release run used exactly these versions (see docs/10_ranking_evaluation.md §1).
 #
 # Install:  python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 #
-# numpy is deliberately kept at 1.26.4 (the version the milestone-3 feature
-# outputs were built with). scikit-learn 1.6.1 / scipy 1.15.3 are compatible
-# with numpy 1.26.4, so adding the ranking stage did not change the feature
-# environment.
+# numpy stays at 1.26.4, the version the feature outputs were built with;
+# scikit-learn 1.6.1 and scipy 1.15.3 are compatible with it.
 duckdb==1.5.6
 numpy==1.26.4
 pandas==3.0.3

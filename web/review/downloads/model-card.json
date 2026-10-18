@@ -1,0 +1,708 @@
+{
+  "annotation_reproduction": {
+    "columns": {
+      "area_max": 0.0,
+      "area_mean": 6.821210263296962e-13,
+      "area_median": 0.0,
+      "area_min": 0.0,
+      "area_std": 9.094947017729282e-13,
+      "area_sum": 2.9103830456733704e-10,
+      "bbox_height_mean": 8.526512829121202e-14,
+      "bbox_height_median": 0.0,
+      "bbox_width_mean": 6.394884621840902e-14,
+      "bbox_width_median": 0.0,
+      "n_annotations": 0.0,
+      "n_points_max": 0.0,
+      "n_points_mean": 0.0,
+      "n_points_median": 0.0,
+      "n_points_min": 0.0,
+      "n_points_sum": 0.0
+    },
+    "max_abs_diff": 2.9103830456733704e-10,
+    "max_abs_diff_sql": 0.0,
+    "note": "pandas reference helper and the SQL aggregation used for synthetic recomputation are each compared with lc.v1_image_annotation_stats on a deterministic bounded sample; the focused test checks the pandas helper exhaustively on a fixture",
+    "sampled_images": 500,
+    "sql_columns": {
+      "area_max": 0.0,
+      "area_mean": 0.0,
+      "area_median": 0.0,
+      "area_min": 0.0,
+      "area_std": 0.0,
+      "area_sum": 0.0,
+      "bbox_height_mean": 0.0,
+      "bbox_height_median": 0.0,
+      "bbox_width_mean": 0.0,
+      "bbox_width_median": 0.0,
+      "n_annotations": 0.0,
+      "n_points_max": 0.0,
+      "n_points_mean": 0.0,
+      "n_points_median": 0.0,
+      "n_points_min": 0.0,
+      "n_points_sum": 0.0
+    },
+    "total_images": 5387
+  },
+  "feature_schema_version": "1",
+  "feature_selection": {
+    "all_missing_handling": "a feature absent for every fit row of a model is dropped for that model; remaining nulls are imputed with the model's fit-only median",
+    "constant_in_fit": [
+      "width",
+      "height",
+      "image_area_pixels"
+    ],
+    "dropped_all_missing_global": [],
+    "excluded_features": {
+      "annotation_join_status": "join bookkeeping",
+      "cell_line": "acquisition/grouping context",
+      "crop": "acquisition context",
+      "dimensions_match": "audit bookkeeping",
+      "dimensions_status": "audit bookkeeping",
+      "field": "acquisition context",
+      "file_name": "filename (identifier)",
+      "filename_parsed": "metadata flag",
+      "has_annotations": "derived from n_annotations",
+      "has_image_file": "availability flag",
+      "image_features_available": "computation status",
+      "image_features_status": "computation status",
+      "image_id": "original COCO id (identifier)",
+      "is_alternate_version": "version bookkeeping",
+      "is_cross_split_overlap": "version bookkeeping",
+      "local_height": "local TIFF dimension check (nullable)",
+      "local_width": "local TIFF dimension check (nullable)",
+      "metadata_complete": "metadata flag",
+      "original_filename": "filename (identifier)",
+      "record_key": "row key",
+      "record_position": "row key",
+      "records_for_filename": "version bookkeeping",
+      "split": "split identity, not an image property",
+      "splits_for_filename": "version bookkeeping",
+      "time_hours": "acquisition context",
+      "timestamp": "acquisition context",
+      "versions_in_split": "version bookkeeping",
+      "well": "acquisition context",
+      "well_col": "acquisition context",
+      "well_row": "acquisition context",
+      "zero_annotation": "derived from n_annotations"
+    },
+    "global_columns": [
+      "n_annotations",
+      "area_sum",
+      "area_mean",
+      "area_median",
+      "area_min",
+      "area_max",
+      "area_std",
+      "bbox_width_mean",
+      "bbox_width_median",
+      "bbox_height_mean",
+      "bbox_height_median",
+      "n_points_mean",
+      "n_points_median",
+      "n_points_min",
+      "n_points_max",
+      "n_points_sum",
+      "pixel_mean",
+      "pixel_std",
+      "gradient_mean",
+      "pixel_min",
+      "pixel_max",
+      "width",
+      "height",
+      "image_area_pixels"
+    ],
+    "model_features": [
+      "n_annotations",
+      "area_sum",
+      "area_mean",
+      "area_median",
+      "area_min",
+      "area_max",
+      "area_std",
+      "bbox_width_mean",
+      "bbox_width_median",
+      "bbox_height_mean",
+      "bbox_height_median",
+      "n_points_mean",
+      "n_points_median",
+      "n_points_min",
+      "n_points_max",
+      "n_points_sum",
+      "pixel_mean",
+      "pixel_std",
+      "gradient_mean",
+      "pixel_min",
+      "pixel_max",
+      "width",
+      "height",
+      "image_area_pixels"
+    ],
+    "robust_features": [
+      "n_annotations",
+      "area_sum",
+      "area_mean",
+      "area_median",
+      "area_min",
+      "area_max",
+      "area_std",
+      "bbox_width_mean",
+      "bbox_width_median",
+      "bbox_height_mean",
+      "bbox_height_median",
+      "n_points_mean",
+      "n_points_median",
+      "n_points_min",
+      "n_points_max",
+      "n_points_sum",
+      "pixel_mean",
+      "pixel_std",
+      "gradient_mean",
+      "pixel_max"
+    ],
+    "zero_mad_handling": "robust baseline: a zero MAD falls back to the fit-only global MAD; if that is also zero the feature is skipped for that row"
+  },
+  "fitted_cell_lines": [
+    "A172",
+    "BT474",
+    "BV2",
+    "Huh7",
+    "MCF7",
+    "SHSY5Y",
+    "SKOV3",
+    "SkBr3"
+  ],
+  "global_fallback_rule": "a cell line with fewer than 20 fit images uses the documented global model fitted on all fit rows; no model is ever fitted on validation, test, held-out or known-case rows",
+  "inputs": {
+    "feature_manifest_sha256": "cb99a4ddfd9fb14ebeb98fd52246595c2e88b379170462b50c659f2fbc5ac441",
+    "feature_records": 5387,
+    "feature_schema_version": "1",
+    "source_sha256": {
+      "test": "9eb5805ca031cebcd70bab4a4aa0c89d98646c206d333803a8d5b10ea7fe9960",
+      "train": "6788902479bc0ffd2838fb7160a778078f464ea6034ed76bb5a0e40263cb9e78",
+      "val": "eb72a68f5065d9ade1805b496eecdcd14ca275e5f1bc6aae7e07279bddadfdc7"
+    },
+    "warehouse_manifest_sha256": "5623e4f593b4add3dacf13ee9ebb7329443a6fd2e67b11623c0b3baae0ddf335",
+    "warehouse_schema_version": "1",
+    "warehouse_view_version": 1
+  },
+  "limitations": [
+    "Scores are unusualness indicators; a sparse image may be annotated correctly.",
+    "The nine known cases are a regression exercise, not recall over all bad labels.",
+    "Acquisition groups are a leakage proxy, not proof of biological independence.",
+    "Official test imagery is ranked only for exploration, never for tuning.",
+    "No calibration against real annotation error is claimed or performed.",
+    "The Isolation Forest mixes label statistics with image texture, so it flags unusual images rather than labels that disagree with their image; time and well context are excluded from its features.",
+    "3 of 24 model features are constant across the fit rows (width, height, image_area_pixels) and carry no information."
+  ],
+  "models": {
+    "A172": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 257,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "BT474": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 281,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "BV2": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 256,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "Huh7": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 259,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "MCF7": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 317,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "SHSY5Y": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 302,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "SKOV3": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 197,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 197,
+        "42": 197,
+        "7": 197
+      }
+    },
+    "SkBr3": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 303,
+      "kind": "cell_line",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    },
+    "global": {
+      "columns": [
+        "n_annotations",
+        "area_sum",
+        "area_mean",
+        "area_median",
+        "area_min",
+        "area_max",
+        "area_std",
+        "bbox_width_mean",
+        "bbox_width_median",
+        "bbox_height_mean",
+        "bbox_height_median",
+        "n_points_mean",
+        "n_points_median",
+        "n_points_min",
+        "n_points_max",
+        "n_points_sum",
+        "pixel_mean",
+        "pixel_std",
+        "gradient_mean",
+        "pixel_min",
+        "pixel_max",
+        "width",
+        "height",
+        "image_area_pixels"
+      ],
+      "dropped_all_missing": [],
+      "fit_rows": 2172,
+      "kind": "global_fallback",
+      "max_samples": {
+        "101": 256,
+        "42": 256,
+        "7": 256
+      }
+    }
+  },
+  "partition": {
+    "caveat": "practical leakage proxy only, not proof of biological independence; with 4-6 training acquisition groups per cell line a held-out group is a coarse holdout",
+    "cell_lines": {
+      "A172": {
+        "cell_line": "A172",
+        "fit_groups": [
+          "A172|A7|field1",
+          "A172|A7|field2",
+          "A172|D7|field1",
+          "A172|D7|field2"
+        ],
+        "holdout_groups": [
+          "A172|B7|field1",
+          "A172|B7|field2"
+        ],
+        "n_fit_images": 257,
+        "n_groups": 6,
+        "n_holdout_images": 129,
+        "n_known_case_records_excluded": 2,
+        "partition_key": "A172"
+      },
+      "BT474": {
+        "cell_line": "BT474",
+        "fit_groups": [
+          "BT474|A3|field1",
+          "BT474|A3|field2",
+          "BT474|C3|field1",
+          "BT474|C3|field2"
+        ],
+        "holdout_groups": [
+          "BT474|B3|field1",
+          "BT474|B3|field2"
+        ],
+        "n_fit_images": 281,
+        "n_groups": 6,
+        "n_holdout_images": 147,
+        "n_known_case_records_excluded": 1,
+        "partition_key": "BT474"
+      },
+      "BV2": {
+        "cell_line": "BV2",
+        "fit_groups": [
+          "BV2|B4|field1",
+          "BV2|B4|field2",
+          "BV2|D4|field1",
+          "BV2|D4|field2"
+        ],
+        "holdout_groups": [
+          "BV2|C4|field1",
+          "BV2|C4|field2"
+        ],
+        "n_fit_images": 256,
+        "n_groups": 6,
+        "n_holdout_images": 128,
+        "n_known_case_records_excluded": 2,
+        "partition_key": "BV2"
+      },
+      "Huh7": {
+        "cell_line": "Huh7",
+        "fit_groups": [
+          "Huh7|A10|field1",
+          "Huh7|A10|field2",
+          "Huh7|A11|field1"
+        ],
+        "holdout_groups": [
+          "Huh7|A11|field2"
+        ],
+        "n_fit_images": 259,
+        "n_groups": 4,
+        "n_holdout_images": 93,
+        "n_known_case_records_excluded": 0,
+        "partition_key": "Huh7"
+      },
+      "MCF7": {
+        "cell_line": "MCF7",
+        "fit_groups": [
+          "MCF7|E4|field1",
+          "MCF7|E4|field2",
+          "MCF7|G4|field1",
+          "MCF7|G4|field2"
+        ],
+        "holdout_groups": [
+          "MCF7|F4|field1",
+          "MCF7|F4|field2"
+        ],
+        "n_fit_images": 317,
+        "n_groups": 6,
+        "n_holdout_images": 152,
+        "n_known_case_records_excluded": 0,
+        "partition_key": "MCF7"
+      },
+      "SHSY5Y": {
+        "cell_line": "SHSY5Y",
+        "fit_groups": [
+          "SHSY5Y|B10|field1",
+          "SHSY5Y|B10|field2",
+          "SHSY5Y|D10|field1",
+          "SHSY5Y|D10|field2"
+        ],
+        "holdout_groups": [
+          "SHSY5Y|C10|field1",
+          "SHSY5Y|C10|field2"
+        ],
+        "n_fit_images": 302,
+        "n_groups": 6,
+        "n_holdout_images": 146,
+        "n_known_case_records_excluded": 1,
+        "partition_key": "SHSY5Y"
+      },
+      "SKOV3": {
+        "cell_line": "SKOV3",
+        "fit_groups": [
+          "SKOV3|G4|field1",
+          "SKOV3|G4|field2",
+          "SKOV3|H4|field1"
+        ],
+        "holdout_groups": [
+          "SKOV3|H4|field2"
+        ],
+        "n_fit_images": 197,
+        "n_groups": 4,
+        "n_holdout_images": 69,
+        "n_known_case_records_excluded": 0,
+        "partition_key": "SKOV3"
+      },
+      "SkBr3": {
+        "cell_line": "SkBr3",
+        "fit_groups": [
+          "SkBr3|E3|field1",
+          "SkBr3|E3|field2",
+          "SkBr3|H3|field1",
+          "SkBr3|H3|field2"
+        ],
+        "holdout_groups": [
+          "SkBr3|F3|field1",
+          "SkBr3|F3|field2"
+        ],
+        "n_fit_images": 303,
+        "n_groups": 6,
+        "n_holdout_images": 146,
+        "n_known_case_records_excluded": 0,
+        "partition_key": "SkBr3"
+      }
+    },
+    "counts": {
+      "canonical_filenames": 5239,
+      "canonical_filenames_no_eligible_version": 0,
+      "distinct_filenames_total": 5239,
+      "excluded_known_case": 6,
+      "excluded_unusable": 0,
+      "excluded_unusable_filenames": 0,
+      "fit": 2172,
+      "held_out": 1010,
+      "test": 1512,
+      "validation": 539
+    },
+    "policy": "group related images by (cell_line, well, field); keep time points, crops and alternate annotation versions together; split each cell line's eligible training groups deterministically ~75/25 with at least one fit and one held-out group when possible"
+  },
+  "protocol": {
+    "budgets": [
+      10,
+      25,
+      50
+    ],
+    "default_seed": 42,
+    "isolation_forest": {
+      "contamination": "auto",
+      "max_samples": "min(256, n_fit)",
+      "n_estimators": 200,
+      "n_jobs": 1,
+      "score_transform": "priority = -score_samples (higher = more unusual)"
+    },
+    "min_cell_line_fit_images": 20,
+    "partition_holdout_fraction": 0.25,
+    "partition_seed": 42,
+    "preprocessing": "sklearn Pipeline(SimpleImputer(median), RobustScaler, IsolationForest), fitted on fit rows only",
+    "sensitivity_seeds": [
+      7,
+      42,
+      101
+    ]
+  },
+  "question": "At the same review budget, does an Isolation Forest ranking offer useful prioritisation compared with simple baselines? A negative result is valid.",
+  "ranking_schema_version": "1",
+  "score_semantics": "Scores indicate unusualness, never the probability that a label is wrong. Priority is a fit-only empirical percentile in [0, 1] and is a relative review priority, not an error probability.",
+  "stage": "ranking"
+}

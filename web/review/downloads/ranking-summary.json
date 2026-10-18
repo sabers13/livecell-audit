@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "candidates": "candidates.jsonl",
+    "candidates_parquet": "candidates.parquet",
+    "fit_reference": "fit_reference.json",
+    "model_card": "model_card.json",
+    "partition_manifest": "partition_manifest.json",
+    "version_provenance": "version_provenance.jsonl"
+  },
+  "counts": {
+    "canonical_filenames": 5239,
+    "cell_line_models": 8,
+    "feature_records": 5387,
+    "fit_rows": 2172,
+    "global_fallback_models": 1,
+    "held_out_rows": 1010,
+    "known_case_candidates": 9,
+    "review_pool_candidates": 3067,
+    "test_rows": 1512,
+    "validation_rows": 539
+  },
+  "generated_stage": "ranking",
+  "methods": [
+    "low_count",
+    "robust",
+    "isolation_forest",
+    "random"
+  ],
+  "protocol": {
+    "budgets": [
+      10,
+      25,
+      50
+    ],
+    "default_seed": 42,
+    "isolation_forest": {
+      "contamination": "auto",
+      "max_samples_cap": 256,
+      "n_estimators": 200,
+      "n_jobs": 1
+    },
+    "sensitivity_seeds": [
+      7,
+      42,
+      101
+    ]
+  },
+  "provenance": {
+    "annotation_reproduction_max_abs_diff": 2.9103830456733704e-10,
+    "annotation_reproduction_max_abs_diff_sql": 0.0,
+    "feature_manifest_sha256": "cb99a4ddfd9fb14ebeb98fd52246595c2e88b379170462b50c659f2fbc5ac441",
+    "feature_schema_version": "1",
+    "source_sha256": {
+      "test": "9eb5805ca031cebcd70bab4a4aa0c89d98646c206d333803a8d5b10ea7fe9960",
+      "train": "6788902479bc0ffd2838fb7160a778078f464ea6034ed76bb5a0e40263cb9e78",
+      "val": "eb72a68f5065d9ade1805b496eecdcd14ca275e5f1bc6aae7e07279bddadfdc7"
+    },
+    "warehouse_manifest_sha256": "5623e4f593b4add3dacf13ee9ebb7329443a6fd2e67b11623c0b3baae0ddf335"
+  },
+  "schema_version": "1",
+  "score_semantics": "unusualness priority in [0, 1] (fit-only percentile); not an error probability; raw scores preserved in candidates.jsonl",
+  "stage": "ranking"
+}

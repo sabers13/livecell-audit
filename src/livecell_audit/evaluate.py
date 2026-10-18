@@ -69,6 +69,9 @@ from .ranking import (
 EVALUATION_SCHEMA_VERSION = "1"
 
 #: Deterministic synthetic-loss configuration (declared before seeing results).
+#: Despite its name, ANNOTATION_LOSS_FRACTION is the share of annotations each
+#: corrupted image *keeps* (~90% are removed); the name is kept because it is
+#: recorded as ``loss_fraction`` in existing outputs.
 ANNOTATION_LOSS_FRACTION = 0.10
 ANNOTATION_LOSS_SELECTION_FRACTION = 0.5
 ANNOTATION_LOSS_MASK_SEED = 42
@@ -815,6 +818,11 @@ def _public_summary(
             "pool_size": synthetic["pool_size"],
             "injected_images": synthetic["injected_images"],
             "injected_fraction": synthetic["injected_fraction"],
+            # injected_fraction is the share of *images* corrupted; the share of
+            # annotations kept in each corrupted image is retained_fraction.
+            "retained_fraction": synthetic["selection"]["loss_fraction"],
+            "annotations_before": synthetic["selection"]["original_annotations_of_injected"],
+            "annotations_after": synthetic["selection"]["retained_annotations"],
             "budgets": synthetic["budgets"],
             "seeds": synthetic["seeds"],
             "metrics": best,
@@ -828,10 +836,14 @@ def _public_summary(
             "real_world_precision": None,
         },
         "evidence_notes": [
-            "known-case recovery is a regression exercise on nine examples, not recall",
-            "synthetic precision/AUC are simulation metrics, not real error precision",
-            "real-world precision is unmeasured; no expert review available",
-            "seed spread covers model/random-reference seeds only; mask and partition are fixed",
+            "Known-case recovery is a regression exercise on nine examples, not recall.",
+            "Both tests favour a count rule by design: the nine known cases were reported "
+            "upstream with a ten-or-fewer label threshold, and the simulation removes labels. "
+            "They cannot show what a model adds beyond counting.",
+            "Synthetic precision and AUC are simulation metrics, not real error precision.",
+            "Real-world precision is unmeasured; no expert review is available.",
+            "Seed spread covers model and random-reference seeds only; the corruption mask "
+            "and the partition are fixed.",
         ],
     }
 

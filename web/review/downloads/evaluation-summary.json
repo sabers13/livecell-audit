@@ -1,0 +1,577 @@
+{
+  "evidence_notes": [
+    "Known-case recovery is a regression exercise on nine examples, not recall.",
+    "Both tests favour a count rule by design: the nine known cases were reported upstream with a ten-or-fewer label threshold, and the simulation removes labels. They cannot show what a model adds beyond counting.",
+    "Synthetic precision and AUC are simulation metrics, not real error precision.",
+    "Real-world precision is unmeasured; no expert review is available.",
+    "Seed spread covers model and random-reference seeds only; the corruption mask and the partition are fixed."
+  ],
+  "human_review": {
+    "real_world_precision": null,
+    "records": 100,
+    "status": "awaiting_scientific_review",
+    "strata": [
+      "top_isolation_forest",
+      "top_robust_baseline",
+      "top_low_count_baseline",
+      "random_sample"
+    ]
+  },
+  "known_case_regression": {
+    "known_cases_canonical_matches_reported_identity": 9,
+    "known_cases_in_fit": 0,
+    "known_cases_in_pool": 9,
+    "known_cases_reported_identity_present": 9,
+    "known_cases_total": 9,
+    "pool_size": 3067,
+    "recovery": {
+      "isolation_forest_seed101": {
+        "at_10": 3,
+        "at_25": 3,
+        "at_50": 4
+      },
+      "isolation_forest_seed42": {
+        "at_10": 2,
+        "at_25": 4,
+        "at_50": 5
+      },
+      "isolation_forest_seed7": {
+        "at_10": 2,
+        "at_25": 4,
+        "at_50": 4
+      },
+      "low_count_seed101": {
+        "at_10": 9,
+        "at_25": 9,
+        "at_50": 9
+      },
+      "low_count_seed42": {
+        "at_10": 9,
+        "at_25": 9,
+        "at_50": 9
+      },
+      "low_count_seed7": {
+        "at_10": 9,
+        "at_25": 9,
+        "at_50": 9
+      },
+      "random_seed101": {
+        "at_10": 0,
+        "at_25": 0,
+        "at_50": 0
+      },
+      "random_seed42": {
+        "at_10": 0,
+        "at_25": 0,
+        "at_50": 0
+      },
+      "random_seed7": {
+        "at_10": 0,
+        "at_25": 0,
+        "at_50": 0
+      },
+      "robust_seed101": {
+        "at_10": 3,
+        "at_25": 5,
+        "at_50": 5
+      },
+      "robust_seed42": {
+        "at_10": 3,
+        "at_25": 5,
+        "at_50": 5
+      },
+      "robust_seed7": {
+        "at_10": 3,
+        "at_25": 5,
+        "at_50": 5
+      }
+    },
+    "recovery_seed_spread": {
+      "isolation_forest": {
+        "at_10": {
+          "max": 3.0,
+          "mean": 2.3333333333333335,
+          "min": 2.0,
+          "n": 3,
+          "range": 1.0,
+          "values": [
+            2.0,
+            2.0,
+            3.0
+          ]
+        },
+        "at_25": {
+          "max": 4.0,
+          "mean": 3.6666666666666665,
+          "min": 3.0,
+          "n": 3,
+          "range": 1.0,
+          "values": [
+            4.0,
+            4.0,
+            3.0
+          ]
+        },
+        "at_50": {
+          "max": 5.0,
+          "mean": 4.333333333333333,
+          "min": 4.0,
+          "n": 3,
+          "range": 1.0,
+          "values": [
+            4.0,
+            5.0,
+            4.0
+          ]
+        }
+      },
+      "low_count": {
+        "at_10": {
+          "max": 9.0,
+          "mean": 9.0,
+          "min": 9.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            9.0,
+            9.0,
+            9.0
+          ]
+        },
+        "at_25": {
+          "max": 9.0,
+          "mean": 9.0,
+          "min": 9.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            9.0,
+            9.0,
+            9.0
+          ]
+        },
+        "at_50": {
+          "max": 9.0,
+          "mean": 9.0,
+          "min": 9.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            9.0,
+            9.0,
+            9.0
+          ]
+        }
+      },
+      "random": {
+        "at_10": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "at_25": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "at_50": {
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "robust": {
+        "at_10": {
+          "max": 3.0,
+          "mean": 3.0,
+          "min": 3.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            3.0,
+            3.0,
+            3.0
+          ]
+        },
+        "at_25": {
+          "max": 5.0,
+          "mean": 5.0,
+          "min": 5.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        },
+        "at_50": {
+          "max": 5.0,
+          "mean": 5.0,
+          "min": 5.0,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            5.0,
+            5.0,
+            5.0
+          ]
+        }
+      }
+    }
+  },
+  "schema_version": "1",
+  "stage": "evaluation",
+  "synthetic_annotation_loss": {
+    "annotations_after": 16849,
+    "annotations_before": 168370,
+    "budgets": [
+      10,
+      25,
+      50
+    ],
+    "injected_fraction": 0.5,
+    "injected_images": 505,
+    "loss_scenario": "structured loss: the retained annotations are the lowest warehouse record_position values of each image. This is a deliberately structured removal scenario, not random annotation dropout.",
+    "metrics": {
+      "isolation_forest_seed101": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 0.96,
+          "at_50": 0.94
+        },
+        "synthetic_roc_auc": 0.8456798353102637
+      },
+      "isolation_forest_seed42": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 0.98
+        },
+        "synthetic_roc_auc": 0.8730614645622978
+      },
+      "isolation_forest_seed7": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 0.96
+        },
+        "synthetic_roc_auc": 0.8560964611312616
+      },
+      "low_count_seed101": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 1.0
+        },
+        "synthetic_roc_auc": 0.9639329477502205
+      },
+      "low_count_seed42": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 1.0
+        },
+        "synthetic_roc_auc": 0.9639329477502205
+      },
+      "low_count_seed7": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 1.0
+        },
+        "synthetic_roc_auc": 0.9639329477502205
+      },
+      "random_seed101": {
+        "precision_at_k": {
+          "at_10": 0.4,
+          "at_25": 0.6,
+          "at_50": 0.5
+        },
+        "synthetic_roc_auc": 0.49675914126066073
+      },
+      "random_seed42": {
+        "precision_at_k": {
+          "at_10": 0.5,
+          "at_25": 0.48,
+          "at_50": 0.5
+        },
+        "synthetic_roc_auc": 0.49333986864032936
+      },
+      "random_seed7": {
+        "precision_at_k": {
+          "at_10": 0.7,
+          "at_25": 0.48,
+          "at_50": 0.52
+        },
+        "synthetic_roc_auc": 0.5156239584354475
+      },
+      "robust_seed101": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 0.96
+        },
+        "synthetic_roc_auc": 0.8000274482893834
+      },
+      "robust_seed42": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 0.96
+        },
+        "synthetic_roc_auc": 0.8000274482893834
+      },
+      "robust_seed7": {
+        "precision_at_k": {
+          "at_10": 1.0,
+          "at_25": 1.0,
+          "at_50": 0.96
+        },
+        "synthetic_roc_auc": 0.8000274482893834
+      }
+    },
+    "pool_size": 1010,
+    "retained_fraction": 0.1,
+    "seed_summary": {
+      "isolation_forest": {
+        "note": "seed sensitivity of the model/random reference; the corruption mask and partition are fixed across seeds",
+        "precision_at_k": {
+          "at_10": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "at_25": {
+            "max": 1.0,
+            "mean": 0.9866666666666667,
+            "min": 0.96,
+            "n": 3,
+            "range": 0.040000000000000036,
+            "values": [
+              1.0,
+              1.0,
+              0.96
+            ]
+          },
+          "at_50": {
+            "max": 0.98,
+            "mean": 0.96,
+            "min": 0.94,
+            "n": 3,
+            "range": 0.040000000000000036,
+            "values": [
+              0.96,
+              0.98,
+              0.94
+            ]
+          }
+        },
+        "synthetic_roc_auc": {
+          "max": 0.8730614645622978,
+          "mean": 0.858279253667941,
+          "min": 0.8456798353102637,
+          "n": 3,
+          "range": 0.027381629252034134,
+          "values": [
+            0.8560964611312616,
+            0.8730614645622978,
+            0.8456798353102637
+          ]
+        }
+      },
+      "low_count": {
+        "note": "seed sensitivity of the model/random reference; the corruption mask and partition are fixed across seeds",
+        "precision_at_k": {
+          "at_10": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "at_25": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "at_50": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "synthetic_roc_auc": {
+          "max": 0.9639329477502205,
+          "mean": 0.9639329477502206,
+          "min": 0.9639329477502205,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            0.9639329477502205,
+            0.9639329477502205,
+            0.9639329477502205
+          ]
+        }
+      },
+      "random": {
+        "note": "seed sensitivity of the model/random reference; the corruption mask and partition are fixed across seeds",
+        "precision_at_k": {
+          "at_10": {
+            "max": 0.7,
+            "mean": 0.5333333333333333,
+            "min": 0.4,
+            "n": 3,
+            "range": 0.29999999999999993,
+            "values": [
+              0.7,
+              0.5,
+              0.4
+            ]
+          },
+          "at_25": {
+            "max": 0.6,
+            "mean": 0.52,
+            "min": 0.48,
+            "n": 3,
+            "range": 0.12,
+            "values": [
+              0.48,
+              0.48,
+              0.6
+            ]
+          },
+          "at_50": {
+            "max": 0.52,
+            "mean": 0.5066666666666667,
+            "min": 0.5,
+            "n": 3,
+            "range": 0.020000000000000018,
+            "values": [
+              0.52,
+              0.5,
+              0.5
+            ]
+          }
+        },
+        "synthetic_roc_auc": {
+          "max": 0.5156239584354475,
+          "mean": 0.5019076561121459,
+          "min": 0.49333986864032936,
+          "n": 3,
+          "range": 0.022284089795118145,
+          "values": [
+            0.5156239584354475,
+            0.49333986864032936,
+            0.49675914126066073
+          ]
+        }
+      },
+      "robust": {
+        "note": "seed sensitivity of the model/random reference; the corruption mask and partition are fixed across seeds",
+        "precision_at_k": {
+          "at_10": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "at_25": {
+            "max": 1.0,
+            "mean": 1.0,
+            "min": 1.0,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "at_50": {
+            "max": 0.96,
+            "mean": 0.96,
+            "min": 0.96,
+            "n": 3,
+            "range": 0.0,
+            "values": [
+              0.96,
+              0.96,
+              0.96
+            ]
+          }
+        },
+        "synthetic_roc_auc": {
+          "max": 0.8000274482893834,
+          "mean": 0.8000274482893834,
+          "min": 0.8000274482893834,
+          "n": 3,
+          "range": 0.0,
+          "values": [
+            0.8000274482893834,
+            0.8000274482893834,
+            0.8000274482893834
+          ]
+        }
+      }
+    },
+    "seeds": [
+      7,
+      42,
+      101
+    ]
+  }
+}

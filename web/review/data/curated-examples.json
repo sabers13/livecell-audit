@@ -1,0 +1,482 @@
+{
+ "count": 39,
+ "examples": [
+  {
+   "cell_line": "BT474",
+   "file_name": "BT474_Phase_B3_1_03d00h00m_3.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 10517,
+   "n_annotations": 1,
+   "preview_id": "train_10517",
+   "record_key": "train:52",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "A172",
+   "file_name": "A172_Phase_A7_1_01d04h00m_3.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 150535,
+   "n_annotations": 1,
+   "preview_id": "train_150535",
+   "record_key": "train:493",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "A172",
+   "file_name": "A172_Phase_D7_1_01d20h00m_1.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 205798,
+   "n_annotations": 1,
+   "preview_id": "train_205798",
+   "record_key": "train:749",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_C4_1_01d16h00m_3.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 628256,
+   "n_annotations": 4,
+   "preview_id": "train_628256",
+   "record_key": "train:1296",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_D4_1_00d12h00m_2.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 718286,
+   "n_annotations": 9,
+   "preview_id": "train_718286",
+   "record_key": "train:1455",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "SHSY5Y",
+   "file_name": "SHSY5Y_Phase_D10_1_01d16h00m_4.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 1494964,
+   "n_annotations": 1,
+   "preview_id": "train_1494964",
+   "record_key": "train:2990",
+   "selection_reason": "known_case",
+   "split": "train"
+  },
+  {
+   "cell_line": "SkBr3",
+   "file_name": "SkBr3_Phase_H3_2_00d00h00m_1.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 1248961,
+   "n_annotations": 1,
+   "preview_id": "val_1248961",
+   "record_key": "val:436",
+   "selection_reason": "known_case",
+   "split": "val"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_A4_2_00d00h00m_1.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 976048,
+   "n_annotations": 2,
+   "preview_id": "test_976048",
+   "record_key": "test:603",
+   "selection_reason": "known_case",
+   "split": "test"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_A4_2_02d04h00m_3.tif",
+   "finding_type": "low_annotation_count",
+   "image_id": 1007442,
+   "n_annotations": 2,
+   "preview_id": "test_1007442",
+   "record_key": "test:664",
+   "selection_reason": "known_case",
+   "split": "test"
+  },
+  {
+   "cell_line": "A172",
+   "file_name": "A172_Phase_B7_2_03d00h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 209726,
+   "n_annotations": 617,
+   "preview_id": "train_209726",
+   "record_key": "train:769",
+   "selection_reason": "top_isolation_forest",
+   "split": "train"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_F4_1_00d12h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 387255,
+   "n_annotations": 101,
+   "preview_id": "train_387255",
+   "record_key": "train:1094",
+   "selection_reason": "top_isolation_forest",
+   "split": "train"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_00d16h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 588920,
+   "n_annotations": 124,
+   "preview_id": "test_588920",
+   "record_key": "test:436",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_03d00h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 580473,
+   "n_annotations": 1414,
+   "preview_id": "test_580473",
+   "record_key": "test:423",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "SKOV3",
+   "file_name": "SKOV3_Phase_G4_1_02d20h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 1368653,
+   "n_annotations": 359,
+   "preview_id": "val_1368653",
+   "record_key": "val:473",
+   "selection_reason": "top_isolation_forest",
+   "split": "val"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_00d20h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 613460,
+   "n_annotations": 136,
+   "preview_id": "test_613460",
+   "record_key": "test:486",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_03d12h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 578289,
+   "n_annotations": 1487,
+   "preview_id": "test_578289",
+   "record_key": "test:420",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "SkBr3",
+   "file_name": "SkBr3_Phase_F3_1_00d08h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 1054449,
+   "n_annotations": 184,
+   "preview_id": "train_1054449",
+   "record_key": "train:2075",
+   "selection_reason": "top_isolation_forest",
+   "split": "train"
+  },
+  {
+   "cell_line": "SkBr3",
+   "file_name": "SkBr3_Phase_G3_1_00d00h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 1314230,
+   "n_annotations": 194,
+   "preview_id": "test_1314230",
+   "record_key": "test:1049",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "BT474",
+   "file_name": "BT474_Phase_D3_1_03d12h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 121082,
+   "n_annotations": 156,
+   "preview_id": "test_121082",
+   "record_key": "test:97",
+   "selection_reason": "top_isolation_forest",
+   "split": "test"
+  },
+  {
+   "cell_line": "BT474",
+   "file_name": "BT474_Phase_A3_2_00d00h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 99248,
+   "n_annotations": 205,
+   "preview_id": "val_99248",
+   "record_key": "val:65",
+   "selection_reason": "top_robust_baseline",
+   "split": "val"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_A4_2_02d16h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 950023,
+   "n_annotations": 1735,
+   "preview_id": "test_950023",
+   "record_key": "test:560",
+   "selection_reason": "top_robust_baseline",
+   "split": "test"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_C4_2_03d00h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 761918,
+   "n_annotations": 2714,
+   "preview_id": "train_761918",
+   "record_key": "train:1540",
+   "selection_reason": "top_robust_baseline",
+   "split": "train"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_01d04h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 555549,
+   "n_annotations": 183,
+   "preview_id": "test_555549",
+   "record_key": "test:373",
+   "selection_reason": "top_robust_baseline",
+   "split": "test"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_2_01d08h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 568238,
+   "n_annotations": 237,
+   "preview_id": "test_568238",
+   "record_key": "test:399",
+   "selection_reason": "top_robust_baseline",
+   "split": "test"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_03d00h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 1019154,
+   "n_annotations": 21,
+   "preview_id": "train_1019154",
+   "record_key": "train:1829",
+   "selection_reason": "top_low_count_baseline",
+   "split": "train"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A12_2_00d00h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 1037607,
+   "n_annotations": 25,
+   "preview_id": "test_1037607",
+   "record_key": "test:674",
+   "selection_reason": "top_low_count_baseline",
+   "split": "test"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_02d16h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 1028053,
+   "n_annotations": 26,
+   "preview_id": "train_1028053",
+   "record_key": "train:1970",
+   "selection_reason": "top_low_count_baseline",
+   "split": "train"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_03d12h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 1025973,
+   "n_annotations": 27,
+   "preview_id": "train_1025973",
+   "record_key": "train:1935",
+   "selection_reason": "top_low_count_baseline",
+   "split": "train"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_02d00h00m_4.tif",
+   "finding_type": "cross_split_overlap",
+   "image_id": 752538,
+   "n_annotations": 28,
+   "preview_id": "train_752538",
+   "record_key": "train:1526",
+   "selection_reason": "top_low_count_baseline",
+   "split": "train"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A12_2_04d00h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 1046096,
+   "n_annotations": 39,
+   "preview_id": "test_1046096",
+   "record_key": "test:813",
+   "selection_reason": "review_sample_random",
+   "split": "test"
+  },
+  {
+   "cell_line": "SHSY5Y",
+   "file_name": "SHSY5Y_Phase_C10_1_03d08h00m_1.tif",
+   "finding_type": "review_priority",
+   "image_id": 1467399,
+   "n_annotations": 926,
+   "preview_id": "train_1467399",
+   "record_key": "train:2925",
+   "selection_reason": "review_sample_random",
+   "split": "train"
+  },
+  {
+   "cell_line": "SkBr3",
+   "file_name": "SkBr3_Phase_G3_2_00d04h00m_3.tif",
+   "finding_type": "review_priority",
+   "image_id": 1260699,
+   "n_annotations": 226,
+   "preview_id": "test_1260699",
+   "record_key": "test:893",
+   "selection_reason": "review_sample_random",
+   "split": "test"
+  },
+  {
+   "cell_line": "MCF7",
+   "file_name": "MCF7_Phase_H4_1_03d04h00m_4.tif",
+   "finding_type": "review_priority",
+   "image_id": 610560,
+   "n_annotations": 1227,
+   "preview_id": "test_610560",
+   "record_key": "test:482",
+   "selection_reason": "review_sample_random",
+   "split": "test"
+  },
+  {
+   "cell_line": "BV2",
+   "file_name": "BV2_Phase_C4_2_01d12h00m_4.tif",
+   "finding_type": "review_priority",
+   "image_id": 703732,
+   "n_annotations": 235,
+   "preview_id": "train_703732",
+   "record_key": "train:1431",
+   "selection_reason": "review_sample_random",
+   "split": "train"
+  },
+  {
+   "cell_line": "SHSY5Y",
+   "file_name": "SHSY5Y_Phase_A10_1_00d16h00m_2.tif",
+   "finding_type": "review_priority",
+   "image_id": 1689492,
+   "n_annotations": 200,
+   "preview_id": "test_1689492",
+   "record_key": "test:1551",
+   "selection_reason": "review_sample_random",
+   "split": "test"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A12_1_04d00h00m_1.tif",
+   "finding_type": "alternate_annotation_version",
+   "image_id": 983296,
+   "n_annotations": 113,
+   "preview_id": "test_983296",
+   "record_key": "test:616",
+   "selection_reason": "alternate_annotation_version",
+   "split": "test"
+  },
+  {
+   "cell_line": "SKOV3",
+   "file_name": "SKOV3_Phase_F4_2_02d16h00m_1.tif",
+   "finding_type": "alternate_annotation_version",
+   "image_id": 1253492,
+   "n_annotations": 268,
+   "preview_id": "test_1253492",
+   "record_key": "test:875",
+   "selection_reason": "alternate_annotation_version",
+   "split": "test"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_02d04h00m_4.tif",
+   "finding_type": "cross_split_overlap",
+   "image_id": 1028233,
+   "n_annotations": 32,
+   "preview_id": "train_1028233",
+   "record_key": "train:1974",
+   "selection_reason": "confirmed_cross_split_overlap",
+   "split": "train"
+  },
+  {
+   "cell_line": "Huh7",
+   "file_name": "Huh7_Phase_A11_2_02d00h00m_2.tif",
+   "finding_type": "cross_split_overlap",
+   "image_id": 742327,
+   "n_annotations": 42,
+   "preview_id": "train_742327",
+   "record_key": "train:1501",
+   "selection_reason": "confirmed_cross_split_overlap",
+   "split": "train"
+  }
+ ],
+ "generated_by": "tools/build_review_site.py",
+ "outline_cap": 20,
+ "pool": "ranking-fixed-mem/candidates.jsonl (review pool)",
+ "pool_size": 3067,
+ "purpose": "Input for tools/make_previews.py: exactly the illustrated example set so the server render and this website cannot drift apart.",
+ "schema_version": 1,
+ "selection_rule": [
+  {
+   "description": "upstream-reported sparse-label cases (issue #21)",
+   "limit": 9,
+   "step": "known_case"
+  },
+  {
+   "description": "highest Isolation Forest priority (seed 42)",
+   "limit": 10,
+   "step": "top_isolation_forest"
+  },
+  {
+   "description": "highest robust statistical-baseline priority",
+   "limit": 5,
+   "step": "top_robust_baseline"
+  },
+  {
+   "description": "fewest supplied annotations after the known cases",
+   "limit": 5,
+   "step": "top_low_count_baseline"
+  },
+  {
+   "description": "the frozen review sample's random stratum, in sample order",
+   "limit": 6,
+   "step": "review_sample_random"
+  },
+  {
+   "description": "repeated filenames with alternative annotation versions",
+   "limit": 2,
+   "step": "alternate_annotation_version"
+  },
+  {
+   "description": "filenames present in both learning and checking groups",
+   "limit": 2,
+   "step": "confirmed_cross_split_overlap"
+  },
+  {
+   "description": "top Isolation Forest row for any cell line not yet covered",
+   "limit": 8,
+   "step": "cell_line_coverage"
+  }
+ ]
+}

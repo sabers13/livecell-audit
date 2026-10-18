@@ -1,8 +1,7 @@
-# 10. Ranking and evaluation results (milestone 4)
+# 10. Ranking and evaluation results
 
-Milestone 4 of the roadmap: a fit-only review ranking (baselines + Isolation
-Forest) and three separate kinds of evidence. Implemented on branch
-`expansion/research-workbench` in `src/livecell_audit/ranking.py` and
+A fit-only review ranking (baselines + Isolation Forest) and three separate
+kinds of evidence, implemented in `src/livecell_audit/ranking.py` and
 `src/livecell_audit/evaluate.py`. The configuration is frozen in
 [`09_model_card.md`](09_model_card.md); the machine-readable feature/warehouse
 contract is [`09_data_contract.md`](09_data_contract.md).
@@ -11,13 +10,15 @@ contract is [`09_data_contract.md`](09_data_contract.md).
 existing low-count baseline. Low-count recovered 9/9 known cases in the top 10
 and reached precision@K = 1.0 at every budget on the synthetic annotation-loss
 task (AUC 0.964), while the Isolation Forest recovered 2–5 of the nine known
-cases and reached AUC 0.856–0.873. A well-supported negative result; ML did not
-add value here. No image is deleted or relabelled.
+cases and reached AUC 0.846–0.873. ML did not add value here, but read this with
+care: both tests are defined by label count (the nine cases were reported with a
+ten-or-fewer threshold, and the simulation removes ~90% of the labels of the
+corrupted images), so they favour a counting rule by design and cannot show what
+a model adds beyond counting. No image is deleted or relabelled.
 
 ## 1. Environment and exact commands
 
-Ran on the authorized server (`saber_s13@100.72.6.64`), project
-`/home/saber_s13/projects/livecell-audit`, inside the tested launcher limits
+Ran on the data server inside the memory-capped launcher `run-job`
 (1536 MiB RAM, 1024 MiB throttle, 1 CPU, one job, 30 min). Python 3.12.15;
 `numpy 1.26.4`, `pandas 3.0.3`, `duckdb 1.5.6`, `scikit-learn 1.6.1`,
 `scipy 1.15.3`.
@@ -38,8 +39,7 @@ run-job .venv/bin/python -m livecell_audit evaluate \
 
 # focused, then full test suite (real-data integration check enabled)
 run-job .venv/bin/python -m pytest tests/test_ranking.py tests/test_features.py -q
-LIVECELL_DATA_ROOT=/home/saber_s13/projects/livecell-audit/data/raw \
-  run-job .venv/bin/python -m pytest tests/ -q -p no:cacheprovider
+run-job env LIVECELL_DATA_ROOT=data/raw .venv/bin/python -m pytest tests/ -q -p no:cacheprovider
 ```
 
 Reference official docs: scikit-learn
@@ -170,12 +170,25 @@ unweighted population precision estimate.
 - **Low-count baseline won** on every stated metric: 9/9 known-case recovery at
   K=10, precision@K = 1.0 at all budgets, and the best synthetic AUC (0.964).
 - **Isolation Forest lost** to low-count: 2–5/9 known cases, synthetic AUC
-  0.856–0.873.
-- **Isolation Forest beat the random reference and marginally under-performed
-  the robust z baseline** on AUC (0.858 vs 0.800 robust — actually slightly
-  better than robust, but far below low-count). It did not add value over the
-  existing rule.
+  0.846–0.873.
+- **Isolation Forest beat the random reference and the robust z baseline on
+  synthetic AUC** (mean 0.858 vs 0.800 robust and 0.502 random), but recovered
+  no more known cases than the robust baseline at any budget (fewer at K=25),
+  and stayed far below low-count. It did not add value over the existing rule.
 - No hyperparameter was tuned to change this; the negative result stands.
+- **Why the comparison favours low-count:** the known cases were selected
+  upstream with a "ten or fewer segments" threshold, and the simulation removes
+  ~90% of the annotations of each corrupted image. A count rule is the target
+  of both tests. They show that the Isolation Forest is not a better *counter*;
+  they cannot show whether it finds label problems a count misses. That needs a
+  criterion that is not a label count: the frozen human review sample, or
+  agreement between the images that were annotated twice.
+- **Why the Isolation Forest is weak here:** its 24 features mix label
+  statistics with image texture, so it ranks unusual *images* rather than labels
+  that disagree with their image; acquisition time and well are excluded; and
+  three features (`width`, `height`, `image_area_pixels`) are constant because
+  every LIVECell image is 704 × 520. The model card records constant features
+  under `feature_selection.constant_in_fit`.
 
 ## 7. Measured runtime, memory and output sizes
 
@@ -218,7 +231,7 @@ Outputs (under `data/workbench/`): `ranking/candidates.parquet` 702 KB,
   evaluated with feature build B that shares the COCO hashes but differs in TIFF
   pixels); tampered feature marker rejection; and fabricated-judgment rejection.
 
-## 9. Data contract for the next (UI/export) worker
+## 9. Data contract for consumers (website, exports)
 
 Consume the completed runs with the helpers, not by re-deriving anything:
 

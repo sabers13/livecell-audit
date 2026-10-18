@@ -1,7 +1,6 @@
 # 09. Public data contract: warehouse and features
 
-This is the machine-readable contract for the two expansion stages added on
-branch `expansion/research-workbench`:
+This is the machine-readable contract for the two stages that follow the audit:
 
 - **warehouse** (`livecell_audit.warehouse`) — a completed audit run loaded into
   DuckDB plus typed Parquet exports;
@@ -138,10 +137,9 @@ protected `manifest.json` (mode/partial/schema), the immutable
 diagnostics, and the actual `features.jsonl`/`features.parquet` record counts.
 A marker whose `partial`/`mode`/`source_sha256` fields were edited alone is
 rejected, because the protected outputs and the real feature table still
-describe the original run. (Regression: the supervisor probe that generated
-`max_filenames=1` features and flipped only the marker to `partial=false`,
-`mode=full`, `source_sha256={'train':'incorrect'}` is now rejected with
-`not release-ready`.)
+describe the original run. (Regression test: a partial `max_filenames=1` build
+whose marker is edited to `partial=false`, `mode=full` and a wrong
+`source_sha256` is rejected as `not release-ready`.)
 
 The ranking stage records the exact **feature build identity** it consumed
 (`source_sha256`, `feature_manifest_sha256`, `warehouse_manifest_sha256`), and
@@ -201,21 +199,21 @@ bit depths (a documented limitation).
 ## 5. CLI contract
 
 ```bash
-# 1. audit (unchanged, milestone 1)
+# 1. audit
 PYTHONPATH=src python3 -m livecell_audit audit \
-    --data-root /home/saber/projects/livecell-audit/data/raw \
-    --out-dir /tmp/opencode/fixed-out
+    --data-root data/raw \
+    --out-dir data/workbench/audit
 
 # 2. warehouse
 PYTHONPATH=src python3 -m livecell_audit warehouse \
-    --audit-dir /tmp/opencode/fixed-out \
+    --audit-dir data/workbench/audit \
     --out-dir data/workbench/warehouse \
-    --data-root /home/saber/projects/livecell-audit/data/raw
+    --data-root data/raw
 
 # 3. features
 PYTHONPATH=src python3 -m livecell_audit features \
     --warehouse-dir data/workbench/warehouse \
-    --data-root /home/saber/projects/livecell-audit/data/raw \
+    --data-root data/raw \
     --out-dir data/workbench/features
 ```
 

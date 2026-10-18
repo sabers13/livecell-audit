@@ -5,9 +5,10 @@ source tree) and is skipped when the data root is absent. It asserts the
 observations from the brief as *checks on derived output*, never as
 implementation constants: the audit computes every number from the raw files.
 
-Run directly (outside the lightweight fixture suite) with e.g.::
+The data root is ``LIVECELL_DATA_ROOT`` when set, otherwise the repository's
+``data/raw``. Run directly (outside the lightweight fixture suite) with e.g.::
 
-    LIVECELL_DATA_ROOT=/home/saber/projects/livecell-audit/data/raw \\
+    LIVECELL_DATA_ROOT=/path/to/data/raw \\
         PYTHONPATH=src python3 -m pytest tests/test_integration.py -q
 """
 
@@ -18,7 +19,8 @@ import os
 import pytest
 
 DATA_ROOT = os.environ.get(
-    "LIVECELL_DATA_ROOT", "/home/saber/projects/livecell-audit/data/raw"
+    "LIVECELL_DATA_ROOT",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "raw"),
 )
 
 pytestmark = pytest.mark.skipif(

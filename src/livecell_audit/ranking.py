@@ -1040,6 +1040,14 @@ def build_analysis_state(
     global_columns, dropped_global = _select_columns(fit_rows)
     if not global_columns:
         raise RankingError("no usable model features in the fit rows")
+    # Descriptive only: features with a single value across the fit rows carry no
+    # information for the Isolation Forest. They are reported, not removed, so the
+    # frozen configuration and its results are unchanged.
+    constant_in_fit = [
+        name
+        for name in global_columns
+        if pd.Series(_numeric_values(fit_rows[name])).dropna().nunique() <= 1
+    ]
 
     cell_line_order = sorted(
         str(x) for x in fit_rows["cell_line"].dropna().unique().tolist()
@@ -1115,6 +1123,7 @@ def build_analysis_state(
         dropped_all_missing_global=dropped_global,
         partition=partition,
         annotation_reproduction=reproduction,
+        diagnostics={"constant_in_fit": constant_in_fit},
     )
 
     # --- assemble the partition manifest per record ------------------------
@@ -1328,6 +1337,7 @@ def _model_card(
             "global_columns": state.global_columns,
             "dropped_all_missing_global": state.dropped_all_missing_global,
             "robust_features": state.robust_features,
+            "constant_in_fit": list(state.diagnostics.get("constant_in_fit", [])),
             "excluded_features": EXCLUDED_FEATURES,
             "all_missing_handling": (
                 "a feature absent for every fit row of a model is dropped for "
@@ -1382,8 +1392,22 @@ def _model_card(
             "Acquisition groups are a leakage proxy, not proof of biological independence.",
             "Official test imagery is ranked only for exploration, never for tuning.",
             "No calibration against real annotation error is claimed or performed.",
-        ],
+            "The Isolation Forest mixes label statistics with image texture, so it flags "
+            "unusual images rather than labels that disagree with their image; time and "
+            "well context are excluded from its features.",
+        ]
+        + _constant_feature_limitation(state),
     }
+
+
+def _constant_feature_limitation(state: RankingState) -> List[str]:
+    constant = list(state.diagnostics.get("constant_in_fit", []))
+    if not constant:
+        return []
+    return [
+        f"{len(constant)} of {len(state.global_columns)} model features are constant "
+        f"across the fit rows ({', '.join(constant)}) and carry no information."
+    ]
 
 
 def _deltas_summary(values: pd.Series) -> Dict[str, Any]:

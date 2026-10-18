@@ -2,16 +2,17 @@
 
 Examples:
     PYTHONPATH=src python3 -m livecell_audit audit \\
-        --data-root /home/saber/projects/livecell-audit/data/raw \\
-        --out-dir /tmp/livecell-out
+        --data-root data/raw \\
+        --out-dir data/workbench/audit
 
     PYTHONPATH=src python3 -m livecell_audit warehouse \\
-        --audit-dir /tmp/livecell-out \\
-        --out-dir data/workbench/warehouse
+        --audit-dir data/workbench/audit \\
+        --out-dir data/workbench/warehouse \\
+        --data-root data/raw
 
     PYTHONPATH=src python3 -m livecell_audit features \\
         --warehouse-dir data/workbench/warehouse \\
-        --data-root /home/saber/projects/livecell-audit/data/raw \\
+        --data-root data/raw \\
         --out-dir data/workbench/features
 """
 

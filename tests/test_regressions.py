@@ -253,7 +253,6 @@ def test_known_case_requires_split_id_and_filename(tmp_path, monkeypatch):
 
 
 def test_failed_run_does_not_look_complete(tmp_path):
-    from tests.conftest import write_coco
 
     root = tmp_path / "data"
     (root / "annotations").mkdir(parents=True)
