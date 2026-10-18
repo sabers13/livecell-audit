@@ -54,26 +54,39 @@ PYTHONPATH=src python3 -m livecell_audit features \
     --data-root /path/to/data/raw \
     --out-dir data/workbench/features
 
-# 4. Rebuild the connected report page from the audit outputs
+# 4. Fit fit-only baselines + Isolation Forest and export review rankings
+PYTHONPATH=src python3 -m livecell_audit rank \
+    --features-dir data/workbench/features \
+    --warehouse-dir data/workbench/warehouse \
+    --out-dir data/workbench/ranking
+
+# 5. Known-case regression, synthetic annotation-loss experiment, review sample
+PYTHONPATH=src python3 -m livecell_audit evaluate \
+    --features-dir data/workbench/features \
+    --warehouse-dir data/workbench/warehouse \
+    --ranking-dir data/workbench/ranking \
+    --out-dir data/workbench/evaluation
+
+# 6. Rebuild the connected report page from the audit outputs
 PYTHONPATH=src python3 scripts/build_report.py \
     --audit-dir /path/to/outputs \
     --data-root /path/to/data/raw \
     --report-dir web/report
 
-# 5. View it (no build step; file:// works too)
+# 7. View it (no build step; file:// works too)
 python3 -m http.server --directory web/report 8321
 ```
 
-`--audit-dir` must be a *completed* run: the builder refuses a directory without a valid `COMPLETED` marker (see below) and never overwrites an existing report from incomplete or stale evidence. To reuse an older snapshot, rerun the audit into it first — the builder does not fabricate markers for pre-marker snapshots such as the committed `data/derived/`. The `warehouse` and `features` stages enforce the same completion contract.
+`--audit-dir` must be a *completed* run: the builder refuses a directory without a valid `COMPLETED` marker (see below) and never overwrites an existing report from incomplete or stale evidence. To reuse an older snapshot, rerun the audit into it first — the builder does not fabricate markers for pre-marker snapshots such as the committed `data/derived/`. The `warehouse`, `features`, `rank` and `evaluate` stages enforce the same completion contract, and a ranking/evaluation run records the exact feature/warehouse build identity it consumed.
 
 ```bash
-# 6. Run the checks
+# 8. Run the checks
 PYTHONPATH=src python3 -m pytest tests/ -q          # full suite (fixtures + integration)
 LIVECELL_DATA_ROOT=/path/to/data/raw \
   PYTHONPATH=src python3 -m pytest tests/test_integration.py -q   # full-dataset check only
 ```
 
-Measured on the full dataset: the repaired two-pass audit takes **~47 s, ~118 MB peak**; the warehouse **~13–27 s**; the feature stage **~65–71 s** (5,239 TIFF reads dominate). See `docs/08_data_analysis_completion.md` for exact commands, sizes and limitations.
+Measured on the full dataset under the capped server job (1536 MiB RAM, 1024 MiB throttle, 1 CPU): the repaired two-pass audit takes **~47 s, ~118 MB peak**; the warehouse **~13–27 s**; the feature stage **~65–71 s** (5,239 TIFF reads dominate); the ranking stage **~27 s, ~400 MB peak** (down from ~1.0 GB before the bounded annotation-read repair); the evaluation stage **~11 s, ~256 MB peak**. The full suite is **237 passed** (~77 s including the real-data integration check). See `docs/08_data_analysis_completion.md`, `docs/09_model_card.md` and `docs/10_ranking_evaluation.md` for exact commands, sizes and limitations.
 
 ---
 
@@ -82,23 +95,30 @@ Measured on the full dataset: the repaired two-pass audit takes **~47 s, ~118 MB
 ```text
 src/livecell_audit/   # audit package: streaming COCO reader, filename parser,
                       # analysis + deterministic exports, CLI
-                      # + warehouse.py (DuckDB/Parquet) and features.py (pandas)
+                      # + warehouse.py (DuckDB/Parquet), features.py (pandas),
+                      # + ranking.py (baselines + Isolation Forest),
+                      # + evaluate.py (known cases, synthetic loss, review sample)
                       # + completion.py (staged promotion / completion marker)
 tests/                # fixture tests (overlap, versions, missing/malformed files,
                       # parsing, determinism, section-order/dimension/known-case
                       # regressions, completion contract, report-builder validation,
-                      # warehouse reconciliation/ambiguity, feature formulas)
+                      # warehouse reconciliation/ambiguity, feature formulas,
+                      # ranking/evaluation contract)
                       # + full-dataset integration check
 scripts/              # download_data.sh (provenance), build_report.py (report builder)
 data/derived/         # committed small outputs: report.json, findings.json,
                       # run.json, manifests/sources.json + val_membership.json
                       # (a pre-marker MVP snapshot; rerun the audit to regenerate)
 data/workbench/       # gitignored local outputs: warehouse/ (DuckDB + Parquet),
-                      # features/ (feature table + summaries)
+                      # features/ (feature table + summaries),
+                      # ranking/ (candidates, partition, model card, models),
+                      # evaluation/ (known cases, synthetic loss, review sample)
 web/prototype/        # reference interface mock (verified snapshot, no engine)
 web/report/           # connected static report built from real generated data
 docs/                 # design + interface spec + findings + completion reports
-                      # (docs/07 audit, docs/08 warehouse+features, docs/09 contract)
+                      # (docs/07 audit, docs/08 warehouse+features,
+                      #  docs/09_data_contract.md, docs/09_model_card.md,
+                      #  docs/10_ranking_evaluation.md)
 requirements.txt      # exact runtime pins
 requirements-dev.txt  # runtime + test runner
 ```

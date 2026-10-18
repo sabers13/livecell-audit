@@ -131,6 +131,24 @@ A tampered marker, a modified database, or a database swapped in from a
 different run is rejected. The warehouse marker also sets `partial: false`;
 the feature marker sets `partial`/`mode`.
 
+`features.verify_features_outputs` (and `features.assert_release_ready`) go
+further than the marker's own fields: they **reconcile** the marker against the
+protected `manifest.json` (mode/partial/schema), the immutable
+`feature_dictionary.json` provenance (source hashes, schema, mode), `run.json`
+diagnostics, and the actual `features.jsonl`/`features.parquet` record counts.
+A marker whose `partial`/`mode`/`source_sha256` fields were edited alone is
+rejected, because the protected outputs and the real feature table still
+describe the original run. (Regression: the supervisor probe that generated
+`max_filenames=1` features and flipped only the marker to `partial=false`,
+`mode=full`, `source_sha256={'train':'incorrect'}` is now rejected with
+`not release-ready`.)
+
+The ranking stage records the exact **feature build identity** it consumed
+(`source_sha256`, `feature_manifest_sha256`, `warehouse_manifest_sha256`), and
+`ranking.assert_build_consistency` refuses to combine a ranking or evaluation run
+with a different feature/warehouse build — even one with the same COCO source
+hashes but a different feature table (for example after TIFF pixels changed).
+
 ## 4. Feature outputs
 
 ```

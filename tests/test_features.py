@@ -382,7 +382,6 @@ def test_release_ready_rejects_modified_feature_outputs(feature_dataset, tmp_pat
 # --------------------------------------------------------------------------- #
 # partial mode (review item 1)
 
-
 def test_partial_mode_marks_not_attempted_and_is_not_release_ready(feature_dataset, tmp_path):
     from livecell_audit.features import assert_release_ready, verify_features_outputs
 
@@ -433,3 +432,112 @@ def test_apostrophe_in_output_paths_is_supported(feature_dataset, tmp_path):
     assert (fe_out / "features.parquet").is_file()
     assert (fe_out / "manifest.json").is_file()
     assert _rows(fe_out)["train:0"]["image_features_status"] == "ok"
+
+
+# --------------------------------------------------------------------------- #
+# input-validator prerequisite: reconcile a marker against its protected outputs
+
+
+def _edit_marker(fe_out, **fields):
+    marker_path = Path(fe_out) / "COMPLETED"
+    marker = json.loads(marker_path.read_text(encoding="utf-8"))
+    marker.update(fields)
+    marker_path.write_text(json.dumps(marker, indent=2, sort_keys=True), encoding="utf-8")
+
+
+def test_release_ready_rejects_flipped_partial_marker(feature_dataset, tmp_path):
+    """A partial run whose marker alone claims full/other hashes is rejected.
+
+    This is the supervisor probe: the protected manifest, dictionary, run
+    diagnostics and the real feature table all still describe the partial run.
+    """
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out), max_filenames=1))
+
+    _edit_marker(
+        fe_out,
+        partial=False,
+        mode="full",
+        source_sha256={"train": "incorrect"},
+    )
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    joined = " | ".join(result["problems"])
+    assert "manifest mode" in joined
+    assert "manifest partial" in joined
+    assert "source_sha256" in joined
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))
+
+
+def test_release_ready_rejects_marker_source_hash_mismatch(feature_dataset, tmp_path):
+    """A full run with only the marker's source hash altered is rejected."""
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+    good = json.loads((Path(fe_out) / "COMPLETED").read_text(encoding="utf-8"))["source_sha256"]
+    _edit_marker(fe_out, source_sha256={**good, "train": "deadbeef"})
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    assert any("source_sha256" in problem for problem in result["problems"])
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))
+
+
+def test_release_ready_rejects_marker_schema_and_count_mismatch(feature_dataset, tmp_path):
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+    _edit_marker(fe_out, feature_schema_version="999")
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    assert any("feature_schema_version" in problem for problem in result["problems"])
+
+    _edit_marker(fe_out, feature_records=9999)
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    joined = " | ".join(result["problems"])
+    assert "features.jsonl rows" in joined
+    assert "diagnostics" in joined
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))
+
+
+def test_release_ready_rejects_missing_required_outputs(feature_dataset, tmp_path):
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+
+    os.remove(fe_out / "features.jsonl")
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    assert any("features.jsonl" in problem for problem in result["problems"])
+
+    # A required output absent from the protected manifest is also rejected.
+    os.remove(fe_out / "run.json")
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    assert any("run.json" in problem for problem in result["problems"])
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))
+
+
+def test_release_ready_rejects_tampered_feature_table(feature_dataset, tmp_path):
+    from livecell_audit.features import assert_release_ready, verify_features_outputs
+
+    _audit, wh, fe_out = _pipeline(feature_dataset["data_root"], tmp_path)
+    run_features(FeatureConfig(warehouse_dir=str(wh), out_dir=str(fe_out)))
+    with open(fe_out / "features.jsonl", "a", encoding="utf-8") as handle:
+        handle.write("{}\n")
+    result = verify_features_outputs(str(fe_out))
+    assert result["ok"] is False
+    joined = " | ".join(result["problems"])
+    assert "features.jsonl" in joined
+    with pytest.raises(FeatureError, match="not release-ready"):
+        assert_release_ready(str(fe_out))

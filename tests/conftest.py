@@ -2,9 +2,43 @@
 
 from __future__ import annotations
 
+import gc
 import json
+import os
 
 import pytest
+
+
+@pytest.fixture(autouse=True)
+def _release_memory_after_each_test():
+    """Return freed heap pages to the OS after every test.
+
+    The full pipeline (warehouse/features/ranking/evaluation) is exercised on
+    fixtures; on a memory-capped runner glibc can hold freed pages, so the test
+    process's RSS creeps up across a module and trips a cgroup high-water mark.
+    ``malloc_trim`` releases them. It is a no-op where the symbol is absent.
+    """
+    yield
+    gc.collect()
+    try:
+        import ctypes
+
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:  # pragma: no cover - non-glibc platforms
+        pass
+
+
+def pytest_configure(config):
+    """Arm a faulthandler dump when ``LIVECELL_TEST_FAULTHANDLER_TIMEOUT`` is set.
+
+    A diagnostic aid for locating a stalled test on a memory-capped runner; it
+    has no effect unless the environment variable is set.
+    """
+    timeout = os.environ.get("LIVECELL_TEST_FAULTHANDLER_TIMEOUT")
+    if timeout:
+        import faulthandler
+
+        faulthandler.dump_traceback_later(float(timeout), repeat=True)
 
 
 def write_tif(path, size=(16, 12)):

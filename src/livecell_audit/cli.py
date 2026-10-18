@@ -23,8 +23,10 @@ import sys
 
 from . import __version__
 from .audit import SPLITS, AuditConfig, run_audit
-from .errors import AuditError, FeatureError, WarehouseError
+from .errors import AuditError, EvaluationError, FeatureError, RankingError, WarehouseError
+from .evaluate import EvaluationConfig, run_evaluation
 from .features import FeatureConfig, run_features
+from .ranking import BUDGETS, RankingConfig, run_ranking
 from .warehouse import WarehouseConfig, run_warehouse
 
 
@@ -130,6 +132,42 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help="development only: read image statistics for at most N distinct filenames",
+    )
+
+    rank = sub.add_parser(
+        "rank",
+        help="fit fit-only baselines + Isolation Forest and export review rankings",
+    )
+    rank.add_argument("--features-dir", required=True, help="a completed feature run directory")
+    rank.add_argument("--warehouse-dir", required=True, help="the matching warehouse directory")
+    rank.add_argument(
+        "--out-dir", required=True, help="directory receiving rankings, partition, model card"
+    )
+    rank.add_argument("--seed", type=int, default=42, help="default seed (default: 42)")
+    rank.add_argument(
+        "--budgets",
+        type=int,
+        nargs="+",
+        default=list(BUDGETS),
+        help="review budgets (default: 10 25 50)",
+    )
+
+    evaluate = sub.add_parser(
+        "evaluate",
+        help="known-case regression, synthetic annotation-loss experiment, review sample",
+    )
+    evaluate.add_argument("--features-dir", required=True, help="a completed feature run directory")
+    evaluate.add_argument("--warehouse-dir", required=True, help="the matching warehouse directory")
+    evaluate.add_argument("--ranking-dir", required=True, help="a completed ranking run directory")
+    evaluate.add_argument(
+        "--out-dir", required=True, help="directory receiving evaluation tables"
+    )
+    evaluate.add_argument(
+        "--budgets",
+        type=int,
+        nargs="+",
+        default=list(BUDGETS),
+        help="review budgets (default: 10 25 50)",
     )
     return parser
 
@@ -240,6 +278,68 @@ def _run_features_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_rank_command(args: argparse.Namespace) -> int:
+    result = run_ranking(
+        RankingConfig(
+            features_dir=args.features_dir,
+            warehouse_dir=args.warehouse_dir,
+            out_dir=args.out_dir,
+            seed=args.seed,
+            budgets=tuple(args.budgets),
+        )
+    )
+    summary = result["state"].partition["counts"]
+    print(
+        json.dumps(
+            {
+                "out_dir": result["out_dir"],
+                "candidates": int(len(result["candidates"])),
+                "fit_rows": summary["fit"],
+                "held_out_rows": summary["held_out"],
+                "validation_rows": summary["validation"],
+                "test_rows": summary["test"],
+                "known_case_candidates": int(result["candidates"]["is_known_case"].sum()),
+                "runtime_seconds": result["run"]["runtime_seconds"],
+                "peak_memory_mb": result["run"]["peak_memory_mb"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def _run_evaluate_command(args: argparse.Namespace) -> int:
+    result = run_evaluation(
+        EvaluationConfig(
+            features_dir=args.features_dir,
+            ranking_dir=args.ranking_dir,
+            warehouse_dir=args.warehouse_dir,
+            out_dir=args.out_dir,
+            budgets=tuple(args.budgets),
+        )
+    )
+    summary = result["summary"]
+    print(
+        json.dumps(
+            {
+                "out_dir": result["out_dir"],
+                "known_cases_in_pool": summary["known_case_regression"]["known_cases_in_pool"],
+                "known_cases_in_fit": summary["known_case_regression"]["known_cases_in_fit"],
+                "synthetic_pool_size": summary["synthetic_annotation_loss"]["pool_size"],
+                "synthetic_injected_images": summary["synthetic_annotation_loss"][
+                    "injected_images"
+                ],
+                "review_sample_records": summary["human_review"]["records"],
+                "runtime_seconds": result["run"]["runtime_seconds"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
@@ -249,7 +349,11 @@ def main(argv: list[str] | None = None) -> int:
             return _run_warehouse_command(args)
         if args.command == "features":
             return _run_features_command(args)
-    except (AuditError, WarehouseError, FeatureError) as exc:
+        if args.command == "rank":
+            return _run_rank_command(args)
+        if args.command == "evaluate":
+            return _run_evaluate_command(args)
+    except (AuditError, WarehouseError, FeatureError, RankingError, EvaluationError) as exc:
         print(f"livecell-audit: error: {exc}", file=sys.stderr)
         return 2
     print(f"livecell-audit: error: unknown command {args.command!r}", file=sys.stderr)

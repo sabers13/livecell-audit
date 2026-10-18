@@ -28,3 +28,21 @@ class FeatureError(Exception):
     contract violation. A failed feature build never leaves a completed
     output directory behind.
     """
+
+
+class RankingError(Exception):
+    """Raised when the ML ranking stage cannot proceed.
+
+    Raised for a missing or tampered feature/warehouse input, an inconsistent
+    known-case exclusion or group partition, or an empty candidate pool. A
+    failed ranking build never leaves a completed output directory behind.
+    """
+
+
+class EvaluationError(Exception):
+    """Raised when the evaluation stage cannot proceed.
+
+    Raised for a missing or tampered ranking run, an inconsistent synthetic
+    annotation-loss recomputation, or a candidate pool that cannot be ranked at
+    the declared budgets.
+    """

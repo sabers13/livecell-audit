@@ -46,7 +46,7 @@ from __future__ import annotations
 import os
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import duckdb
 import numpy as np
@@ -59,6 +59,7 @@ from .completion import (
     STAGING_DIRNAME,
     build_manifest,
     clear_stale,
+    count_lines,
     dump_json,
     load_completion_marker,
     promote_staged,
@@ -83,6 +84,17 @@ FEATURE_OUTPUT_PATHS = (
     "cell_line_summary.parquet",
     "feature_distributions.json",
     "feature_dictionary.json",
+    "run.json",
+)
+
+#: Outputs a consumer must find in the manifest before trusting a feature run.
+#: ``run.json`` and ``feature_dictionary.json`` are needed to reconcile the
+#: marker against the protected provenance, so they are required explicitly.
+FEATURE_REQUIRED_OUTPUTS = (
+    "features.parquet",
+    "features.jsonl",
+    "feature_dictionary.json",
+    "cell_line_summary.json",
     "run.json",
 )
 
@@ -412,6 +424,218 @@ def _image_statistics(path: str) -> Dict[str, Any]:
 
 def _split_rank(series: pd.Series) -> pd.Series:
     return series.map(lambda value: SPLIT_ORDER.get(value, 99)).astype("int64")
+
+
+#: Per-annotation-version annotation aggregates, in the exact form the SQL view
+#: ``lc.v1_image_annotation_stats`` publishes. Recomputed in pandas so the same
+#: definitions can be applied to a modified annotation set (for example the
+#: synthetic annotation-loss experiment) without re-reading the warehouse view.
+ANNOTATION_FEATURE_COLUMNS: Tuple[str, ...] = (
+    "n_annotations",
+    "area_sum",
+    "area_mean",
+    "area_median",
+    "area_min",
+    "area_max",
+    "area_std",
+    "bbox_width_mean",
+    "bbox_width_median",
+    "bbox_height_mean",
+    "bbox_height_median",
+    "n_points_mean",
+    "n_points_median",
+    "n_points_min",
+    "n_points_max",
+    "n_points_sum",
+)
+
+
+def aggregate_annotation_features(annotations: pd.DataFrame) -> pd.DataFrame:
+    """Recompute the label-dependent aggregates for a set of annotation records.
+
+    This reproduces ``lc.v1_image_annotation_stats`` exactly: same inputs
+    (``area``, ``bbox`` width/height, ``n_points``), same formulas and the same
+    missing-value behaviour. It exists so a synthetic annotation set (annotations
+    removed) can be aggregated with the *same* feature definitions as the
+    unmodified pipeline instead of fabricating summary values.
+
+    The input must have ``split``, ``image_id``, ``area``, ``bbox`` (length 4,
+    COCO ``[x, y, w, h]``) and ``n_points``. The result is indexed by
+    ``(split, image_id)``; an empty input yields an empty frame with the
+    declared columns, never a fabricated row.
+    """
+    columns = ["split", "image_id", *ANNOTATION_FEATURE_COLUMNS]
+    if annotations is None or len(annotations) == 0:
+        empty = pd.DataFrame({name: pd.Series(dtype="float64") for name in columns})
+        return empty.set_index(["split", "image_id"])
+
+    missing = {"split", "image_id", "area", "bbox", "n_points"} - set(annotations.columns)
+    if missing:
+        raise FeatureError(f"annotations are missing required columns: {sorted(missing)}")
+
+    bbox = annotations["bbox"].to_numpy()
+    bbox_array = np.vstack([np.asarray(value, dtype="float64") for value in bbox])
+    if bbox_array.ndim != 2 or bbox_array.shape[1] != 4:
+        raise FeatureError("annotation bbox must be a length-4 [x, y, w, h] array")
+
+    work = pd.DataFrame(
+        {
+            "split": annotations["split"].to_numpy(),
+            "image_id": annotations["image_id"].to_numpy(),
+            "area": annotations["area"].to_numpy(dtype="float64"),
+            # COCO bbox is [x, y, w, h]; width is index 2 and height index 3.
+            "bbox_width": bbox_array[:, 2],
+            "bbox_height": bbox_array[:, 3],
+            "n_points": annotations["n_points"].to_numpy(dtype="float64"),
+        }
+    )
+    grouped = work.groupby(["split", "image_id"], sort=True)
+    stats = grouped.agg(
+        n_annotations=("area", "size"),
+        area_sum=("area", "sum"),
+        area_mean=("area", "mean"),
+        area_median=("area", "median"),
+        area_min=("area", "min"),
+        area_max=("area", "max"),
+        area_std=("area", lambda values: values.std(ddof=1)),
+        bbox_width_mean=("bbox_width", "mean"),
+        bbox_width_median=("bbox_width", "median"),
+        bbox_height_mean=("bbox_height", "mean"),
+        bbox_height_median=("bbox_height", "median"),
+        n_points_mean=("n_points", "mean"),
+        n_points_median=("n_points", "median"),
+        n_points_min=("n_points", "min"),
+        n_points_max=("n_points", "max"),
+        n_points_sum=("n_points", "sum"),
+    )
+    stats["n_annotations"] = stats["n_annotations"].astype("int64")
+    return stats[list(ANNOTATION_FEATURE_COLUMNS)]
+
+
+#: SQL aggregate expressions that recompute the label-dependent features for a
+#: *subset* of ``lc.annotations``. They are the same definitions the published
+#: view ``lc.v1_image_annotation_stats`` uses (COCO ``bbox`` is ``[x, y, w, h]``
+#: so width is element 3 and height element 4 in DuckDB's 1-based arrays). The
+#: selection joins deliberately use non-colliding key names (``sel_split`` etc.)
+#: so these expressions stay unqualified and identical to the view.
+ANNOTATION_AGGREGATE_COLUMNS_SQL = """
+    split,
+    image_id,
+    COUNT(*)          AS n_annotations,
+    SUM(area)         AS area_sum,
+    AVG(area)         AS area_mean,
+    median(area)      AS area_median,
+    MIN(area)         AS area_min,
+    MAX(area)         AS area_max,
+    stddev_samp(area) AS area_std,
+    AVG(bbox[3])      AS bbox_width_mean,
+    median(bbox[3])   AS bbox_width_median,
+    AVG(bbox[4])      AS bbox_height_mean,
+    median(bbox[4])   AS bbox_height_median,
+    AVG(n_points)     AS n_points_mean,
+    median(n_points)  AS n_points_median,
+    MIN(n_points)     AS n_points_min,
+    MAX(n_points)     AS n_points_max,
+    SUM(n_points)     AS n_points_sum
+"""
+
+#: DuckDB session caps for warehouse reads. DuckDB's defaults (every core, a
+#: share of *system* memory) exceed the capped server job budget, so warehouse
+#: reads run single-threaded under a fixed ceiling and fail cleanly instead of
+#: being killed by the kernel.
+WAREHOUSE_THREADS = 1
+WAREHOUSE_MEMORY_LIMIT_MB = 512
+
+
+def connect_warehouse(db_path: str, read_only: bool = True) -> duckdb.DuckDBPyConnection:
+    """Open a warehouse connection capped to the job's thread/memory budget."""
+    con = duckdb.connect(db_path, read_only=read_only)
+    con.execute(f"SET threads = {int(WAREHOUSE_THREADS)}")
+    con.execute(f"SET memory_limit = '{int(WAREHOUSE_MEMORY_LIMIT_MB)}MB'")
+    return con
+
+
+def aggregate_annotation_features_sql(
+    con: duckdb.DuckDBPyConnection,
+    keys: Optional[Sequence[Tuple[str, int]]] = None,
+    record_positions: Optional[Sequence[int]] = None,
+) -> pd.DataFrame:
+    """Recompute the label-dependent aggregates for a bounded annotation subset.
+
+    This is the memory-bounded counterpart of
+    :func:`aggregate_annotation_features`: the aggregation happens in SQL over
+    ``lc.annotations`` and only the per-image aggregates cross into pandas, so a
+    large annotation set is never materialised row by row (no object ``bbox``
+    column, no ``np.vstack``). It uses the same definitions as the published view
+    ``lc.v1_image_annotation_stats``.
+
+    The subset is selected either by annotation ``record_position`` (the unique
+    warehouse annotation-row identity, used by the synthetic retention mask) or
+    by ``(split, image_id)`` image keys. The result has the columns ``split``,
+    ``image_id`` and :data:`ANNOTATION_FEATURE_COLUMNS` — the same shape as
+    ``aggregate_annotation_features(...).reset_index()`` — with
+    ``n_annotations`` as ``int64`` and the remaining features as ``float64``. An
+    empty selection yields an empty frame with the declared columns, never a
+    fabricated row.
+    """
+    if keys is not None and record_positions is not None:
+        raise FeatureError("pass either keys or record_positions, not both")
+    columns = ["split", "image_id", *ANNOTATION_FEATURE_COLUMNS]
+
+    if keys is not None:
+        pairs = sorted({(str(split), int(image_id)) for split, image_id in keys})
+        if not pairs:
+            return _empty_annotation_aggregate(columns)
+        con.execute("DROP TABLE IF EXISTS lc_annotation_keys")
+        con.execute(
+            "CREATE TEMP TABLE lc_annotation_keys(sel_split VARCHAR, sel_image_id BIGINT)"
+        )
+        con.executemany("INSERT INTO lc_annotation_keys VALUES (?, ?)", pairs)
+        source = (
+            "FROM lc.annotations a JOIN lc_annotation_keys k "
+            "ON k.sel_split = a.split AND k.sel_image_id = a.image_id"
+        )
+    elif record_positions is not None:
+        positions = sorted({int(position) for position in record_positions})
+        if not positions:
+            return _empty_annotation_aggregate(columns)
+        con.execute("DROP TABLE IF EXISTS lc_annotation_positions")
+        con.execute(
+            "CREATE TEMP TABLE lc_annotation_positions(sel_record_position BIGINT)"
+        )
+        con.executemany(
+            "INSERT INTO lc_annotation_positions VALUES (?)",
+            [(position,) for position in positions],
+        )
+        source = (
+            "FROM lc.annotations a JOIN lc_annotation_positions p "
+            "ON p.sel_record_position = a.record_position"
+        )
+    else:
+        source = "FROM lc.annotations a"
+
+    frame = con.execute(
+        "SELECT " + ANNOTATION_AGGREGATE_COLUMNS_SQL + source + " GROUP BY split, image_id"
+    ).df()
+    if frame.empty:
+        return _empty_annotation_aggregate(columns)
+    frame = frame[columns].copy()
+    frame["n_annotations"] = frame["n_annotations"].astype("int64")
+    for name in ANNOTATION_FEATURE_COLUMNS:
+        if name != "n_annotations":
+            frame[name] = frame[name].astype("float64")
+    return frame
+
+
+def _empty_annotation_aggregate(columns: Sequence[str]) -> pd.DataFrame:
+    """Empty per-image aggregate frame with the declared columns."""
+    dtypes = {"split": "object", "image_id": "int64", "n_annotations": "int64"}
+    return pd.DataFrame(
+        {
+            name: pd.Series(dtype=dtypes.get(name, "float64"))
+            for name in columns
+        }
+    )
 
 
 def _resolve_data_root(con: duckdb.DuckDBPyConnection, config: FeatureConfig) -> Optional[str]:
@@ -959,12 +1183,175 @@ def run_features(config: FeatureConfig) -> Dict[str, Any]:
     }
 
 
+def _parquet_row_count(path: str) -> Optional[int]:
+    """Row count of a Parquet file, or ``None`` when it cannot be read."""
+    if not os.path.isfile(path):
+        return None
+    con = duckdb.connect()
+    try:
+        return int(con.execute(f"SELECT COUNT(*) FROM read_parquet({_sql_str(path)})").fetchone()[0])
+    except Exception:
+        return None
+    finally:
+        con.close()
+
+
+def _read_json_checked(path: str, label: str, problems: List[str]) -> Optional[Any]:
+    if not os.path.isfile(path):
+        problems.append(f"missing {label}: {os.path.basename(path)}")
+        return None
+    try:
+        return read_json(path)
+    except (OSError, ValueError) as exc:
+        problems.append(f"unparsable {label}: {exc}")
+        return None
+
+
+def _reconcile_feature_outputs(
+    out_dir: str, marker: Dict[str, Any], manifest: Optional[Dict[str, Any]]
+) -> List[str]:
+    """Reconcile a feature marker with its protected outputs.
+
+    A JSON marker on its own is not evidence: its ``mode``/``partial`` claim
+    must agree with the protected ``manifest.json`` written at build time, its
+    ``source_sha256`` must agree with the immutable ``feature_dictionary.json``
+    provenance, and its record/filename/annotation counts must agree with
+    ``run.json`` diagnostics **and** the actual ``features.jsonl`` /
+    ``features.parquet`` contents. This rejects a marker whose partial fields or
+    source hashes have been edited while the protected outputs still describe
+    the real (partial or different) run.
+    """
+    problems: List[str] = []
+    marker_mode = marker.get("mode")
+    marker_partial = bool(marker.get("partial"))
+
+    if manifest is not None:
+        if manifest.get("stage") != "features":
+            problems.append(f"manifest stage {manifest.get('stage')!r} != 'features'")
+        if str(manifest.get("schema_version")) != FEATURE_SCHEMA_VERSION:
+            problems.append(
+                f"manifest schema_version {manifest.get('schema_version')!r} "
+                f"!= {FEATURE_SCHEMA_VERSION!r}"
+            )
+        if manifest.get("mode") != marker_mode:
+            problems.append(
+                f"marker mode {marker_mode!r} != manifest mode {manifest.get('mode')!r}"
+            )
+        if bool(manifest.get("partial")) != marker_partial:
+            problems.append(
+                f"marker partial {marker_partial} != manifest partial "
+                f"{bool(manifest.get('partial'))} (protected outputs describe a "
+                "different mode)"
+            )
+
+    run = _read_json_checked(os.path.join(out_dir, "run.json"), "run.json", problems)
+    dictionary = _read_json_checked(
+        os.path.join(out_dir, "feature_dictionary.json"), "feature_dictionary.json", problems
+    )
+
+    if isinstance(run, dict):
+        if run.get("stage") != "features":
+            problems.append(f"run.json stage {run.get('stage')!r} != 'features'")
+        if run.get("mode") != marker_mode:
+            problems.append(f"run.json mode {run.get('mode')!r} != marker mode {marker_mode!r}")
+        if bool(run.get("partial")) != marker_partial:
+            problems.append(
+                f"run.json partial {bool(run.get('partial'))} != marker partial {marker_partial}"
+            )
+        if str(run.get("feature_schema_version")) != FEATURE_SCHEMA_VERSION:
+            problems.append(
+                f"run.json feature_schema_version {run.get('feature_schema_version')!r} "
+                f"!= {FEATURE_SCHEMA_VERSION!r}"
+            )
+    diagnostics = (run or {}).get("diagnostics") if isinstance(run, dict) else None
+    if isinstance(diagnostics, dict):
+        if bool(diagnostics.get("partial")) != marker_partial:
+            problems.append(
+                f"run diagnostics partial {bool(diagnostics.get('partial'))} "
+                f"!= marker partial {marker_partial}"
+            )
+        if not marker_partial and int(diagnostics.get("image_features_not_attempted", 0)) != 0:
+            problems.append(
+                "full run has not_attempted image records: "
+                f"{diagnostics.get('image_features_not_attempted')}"
+            )
+        if not marker_partial and int(diagnostics.get("filenames_read", -1)) != int(
+            diagnostics.get("distinct_filenames_total", -2)
+        ):
+            problems.append(
+                "full run read a different number of filenames than the dataset contains"
+            )
+
+    source_hashes = marker.get("source_sha256") or {}
+    if not source_hashes:
+        problems.append("marker has no source_sha256 provenance")
+    dict_source = ((dictionary or {}).get("source_manifest") or {}).get("source_sha256")
+    if isinstance(dictionary, dict):
+        if str(dictionary.get("feature_schema_version")) != FEATURE_SCHEMA_VERSION:
+            problems.append(
+                f"feature_dictionary feature_schema_version "
+                f"{dictionary.get('feature_schema_version')!r} != {FEATURE_SCHEMA_VERSION!r}"
+            )
+        if dictionary.get("mode") != marker_mode:
+            problems.append(
+                f"feature_dictionary mode {dictionary.get('mode')!r} != marker mode {marker_mode!r}"
+            )
+        if dict_source != source_hashes:
+            problems.append(
+                "feature_dictionary source_sha256 != marker source_sha256 "
+                "(protected provenance disagrees with the marker)"
+            )
+    if not marker.get("warehouse_manifest_sha256"):
+        problems.append("marker has no warehouse manifest identity")
+
+    # --- counts must agree with the actual feature table --------------------
+    expected_records = marker.get("feature_records")
+    expected_filenames = marker.get("distinct_filenames")
+    expected_annotations = marker.get("annotations_attached")
+    jsonl_path = os.path.join(out_dir, "features.jsonl")
+    parquet_path = os.path.join(out_dir, "features.parquet")
+    if os.path.isfile(jsonl_path):
+        lines = count_lines(jsonl_path)
+        if expected_records is not None and lines != expected_records:
+            problems.append(f"features.jsonl rows={lines} != marker feature_records={expected_records}")
+    else:
+        problems.append("missing features.jsonl")
+    if os.path.isfile(parquet_path):
+        rows = _parquet_row_count(parquet_path)
+        if rows is None:
+            problems.append("features.parquet is unreadable")
+        elif expected_records is not None and rows != expected_records:
+            problems.append(f"features.parquet rows={rows} != marker feature_records={expected_records}")
+    else:
+        problems.append("missing features.parquet")
+    if isinstance(diagnostics, dict):
+        for label, value in (
+            ("records", expected_records),
+            ("filenames_read", expected_filenames),
+            ("annotation_total_attached", expected_annotations),
+        ):
+            if value is not None and diagnostics.get(label) != value:
+                problems.append(
+                    f"marker {label} value {value!r} != run diagnostics {label} "
+                    f"{diagnostics.get(label)!r}"
+                )
+    return problems
+
+
 def verify_features_outputs(out_dir: str) -> Dict[str, Any]:
-    """Verify a completed feature run's marker and content manifest.
+    """Verify a completed feature run's marker and every protected output.
 
     Returns ``{"ok": bool, "problems": [...], "marker": ..., "manifest": ...}``
     for a consumer that wants to inspect rather than raise. A partial run is
     reported via ``problems`` so it cannot be published as a release dataset.
+
+    The check is not satisfied by a well-formed marker alone: the marker is
+    reconciled with the protected ``manifest.json`` (mode/partial/schema), the
+    immutable ``feature_dictionary.json`` provenance (source hashes, schema,
+    mode), ``run.json`` diagnostics, and the actual ``features.jsonl`` /
+    ``features.parquet`` record counts. A marker whose partial flag, mode or
+    source hashes were edited still fails because the protected outputs and the
+    real feature table keep describing the original run.
     """
     out_dir = os.path.abspath(out_dir)
     marker = load_completion_marker(out_dir)
@@ -988,9 +1375,10 @@ def verify_features_outputs(out_dir: str) -> Dict[str, Any]:
         out_dir,
         stage="features",
         expected_sha256=manifest_info.get("sha256"),
-        required_paths=("features.parquet", "feature_dictionary.json"),
+        required_paths=FEATURE_REQUIRED_OUTPUTS,
     )
     problems.extend(result["problems"])
+    problems.extend(_reconcile_feature_outputs(out_dir, marker, result["manifest"]))
     return {
         "ok": not problems,
         "problems": problems,
