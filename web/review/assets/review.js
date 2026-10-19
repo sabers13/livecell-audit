@@ -444,6 +444,9 @@
     setText('intro-readout-file', SITE.guided.sparse_file);
     setText('intro-readout-count', n(sparseCount) + (sparseCount === 1 ? ' supplied label' : ' supplied labels'));
   }
+  if ($('overview-sparse-overlay')) {
+    drawOverlay($('overview-sparse-overlay'), [sparsePoints], 704, 520, { locator: true });
+  }
 
   /* The one orchestrated moment: the first time the overview is on screen, the
      specimen comes into focus and the locator closes onto the only labelled cell.
@@ -515,6 +518,28 @@
   }
   sharedButton.addEventListener('click', function () { selectGuided('shared'); });
   sparseButton.addEventListener('click', function () { selectGuided('sparse'); });
+
+  var overviewCase = 'shared';
+  var overviewCaseButtons = Array.prototype.slice.call(document.querySelectorAll('[data-overview-case]'));
+  overviewCaseButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      overviewCase = button.dataset.overviewCase;
+      overviewCaseButtons.forEach(function (item) {
+        item.setAttribute('aria-pressed', String(item.dataset.overviewCase === overviewCase));
+      });
+      $('overview-shared-case').hidden = overviewCase !== 'shared';
+      $('overview-sparse-case').hidden = overviewCase !== 'sparse';
+      $('overview-case-status').textContent = overviewCase === 'shared'
+        ? 'Showing the same photo with its training and validation labels.'
+        : 'Showing an image with one supplied cell label.';
+    });
+  });
+  $('overview-case-detail').addEventListener('click', function (event) {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) { return; }
+    event.preventDefault();
+    selectTab(tabLinks.filter(function (link) { return link.dataset.tab === 'try-it'; })[0]);
+    selectGuided(overviewCase);
+  });
 
   var sparseCheckbox = $('show-sparse-label');
   var sparseStatus = $('sparse-overlay-status');

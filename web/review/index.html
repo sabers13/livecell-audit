@@ -71,11 +71,10 @@
       <div class="project-actions reveal">
         <a class="btn project-source" href="https://github.com/sabers13/livecell-audit" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1-.4-2-1-2 3 0 6-2 6-6 0-1-.4-2-1-3 0-1 0-2-.2-3-2 0-3 1-4 2a13 13 0 0 0-6 0C8 5 7 4 5 4c-.2 1-.2 2 0 3-1 1-1 2-1 3 0 4 3 6 6 6-.6 0-1 1-1 2v4"/></svg>View on GitHub</a>
         <a class="btn project-contact" href="https://sabersojudi.com/#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M8 7v14M16 7v14"/></svg>Hire Me</a>
-      <a class="btn btn-primary reveal" href="#try-it">Review images <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
     <section class="hero-example reveal" aria-labelledby="ov-example-title">
-      <div class="card-h"><h2 id="ov-example-title">A real example</h2><span class="chip label-chip"><span class="legend-swatch" aria-hidden="true"></span>supplied label</span></div>
+      <div class="card-h"><h2 id="ov-example-title">A real example</h2><a class="btn btn-small btn-primary" href="#try-it">Review images <span aria-hidden="true">→</span></a></div>
       <figure class="first-example">
         <div class="specimen" id="intro-specimen">
           <div class="image-overlay">
@@ -162,24 +161,32 @@
 
     <section id="overview-examples" class="card c6 overview-examples reveal" aria-labelledby="overview-examples-title">
       <div class="card-h"><h2 id="overview-examples-title">Two examples in detail</h2></div>
-      <p class="muted card-sub">Two checks, with evidence and a next step for each.</p>
-      <div class="example-summaries">
-        <article class="example-summary inset">
-          <div class="specimen"><div class="image-overlay">
-            <img src="assets/guided-shared.png" alt="The same Huh7 microscope photo appears in two data groups." width="704" height="520">
-            <img class="label-layer" src="previews/guided_train_795492.labels.png" alt="" width="704" height="520">
-          </div></div>
-          <div><h3>Same image in two groups</h3><p>30 photos appear in both training and validation. Familiar examples can make evaluation less reliable.</p></div>
-        </article>
-        <article class="example-summary inset">
-          <div class="specimen"><div class="image-overlay">
-            <img src="assets/guided-sparse.png" alt="Many visible cells, with only one supplied cell label." width="704" height="520">
-            <svg viewBox="0 0 704 520" aria-hidden="true"><polygon points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="3"/></svg>
-          </div></div>
-          <div><h3>Very few labelled cells</h3><p>9 reported images have ten or fewer labels. They need review before being used as training examples.</p></div>
-        </article>
+      <div class="segmented overview-case-switch" role="group" aria-label="Choose an overview example">
+        <button type="button" data-overview-case="shared" aria-pressed="true" aria-controls="overview-shared-case">Same image in two groups</button>
+        <button type="button" data-overview-case="sparse" aria-pressed="false" aria-controls="overview-sparse-case">Very few labelled cells</button>
       </div>
-      <a class="btn btn-small btn-secondary" href="#case-studies">Explore both examples <span aria-hidden="true">→</span></a>
+      <p id="overview-case-status" class="sr-only" role="status" aria-live="polite"></p>
+      <article id="overview-shared-case" class="overview-case" aria-label="Same image in two groups">
+        <div class="overview-visual"><div class="overview-photo-grid">
+          <figure><div class="specimen"><div class="image-overlay">
+            <img src="assets/guided-shared.png" alt="Huh7 microscope photo in the training group." width="704" height="520">
+            <img class="label-layer" src="previews/guided_train_795492.labels.png" alt="68 supplied training labels." width="704" height="520">
+          </div></div><figcaption>Training · 68 labels</figcaption></figure>
+          <figure><div class="specimen"><div class="image-overlay">
+            <img src="assets/guided-shared.png" alt="The same Huh7 photo in the validation group." width="704" height="520">
+            <img class="label-layer" src="previews/guided_val_1037410.labels.png" alt="83 supplied validation labels." width="704" height="520">
+          </div></div><figcaption>Validation · 83 labels</figcaption></figure>
+        </div></div>
+        <p><strong>30 photos appear in both groups.</strong> The same photo has different versions of its labels. Familiar examples can make evaluation less reliable.</p>
+      </article>
+      <article id="overview-sparse-case" class="overview-case" aria-label="Very few labelled cells" hidden>
+        <div class="overview-visual"><figure class="overview-single-photo"><div class="specimen"><div class="image-overlay">
+          <img src="assets/guided-sparse.png" alt="Many visible A172 cells, with only one supplied cell label." width="704" height="520">
+          <svg id="overview-sparse-overlay" viewBox="0 0 704 520" role="img" aria-label="The one supplied label in yellow, with a ring and pointer to locate it."></svg>
+        </div></div><figcaption>Many cells · 1 supplied label</figcaption></figure></div>
+        <p><strong>9 reported images have ten or fewer labels.</strong> Review them before using them as training examples; a low count alone does not prove an error.</p>
+      </article>
+      <a class="btn btn-small btn-secondary" id="overview-case-detail" href="#case-studies">Explore this example <span aria-hidden="true">→</span></a>
     </section>
 
     <section id="work" class="card c6 reveal" aria-labelledby="work-title">

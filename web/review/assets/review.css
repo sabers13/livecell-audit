@@ -396,11 +396,16 @@ tfoot td { padding: 12px 12px 0; }
 .hero-example .readout { padding: 8px 10px; font-size: 11px; }
 .hero-example figcaption { font-size: 12px; line-height: 1.5; margin-top: 8px; }
 .overview-examples { display: flex; flex-direction: column; }
-.example-summaries { display: grid; gap: 12px; margin: 4px 0 18px; }
-.example-summary { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 14px; padding: 12px; }
-.example-summary .specimen { border-radius: 10px; }
-.example-summary h3 { font-size: 14.5px; line-height: 1.4; }
-.example-summary p { margin-top: 5px; font-size: var(--fs-small); color: var(--ink-2); }
+.overview-case-switch { align-self: flex-start; }
+.overview-case-switch button { font-size: 12px; padding: 8px 10px; }
+.overview-case { margin-bottom: 16px; }
+.overview-visual { height: 214px; display: grid; align-items: center; justify-items: center; margin: 12px 0; }
+.overview-photo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: 100%; }
+.overview-photo-grid figure { width: 100%; max-width: 244px; justify-self: center; }
+.overview-single-photo { width: 100%; max-width: 244px; }
+.overview-visual figcaption { margin-top: 6px; font-size: 11.5px; color: var(--ink-muted); }
+.overview-case > p { font-size: var(--fs-small); color: var(--ink-2); }
+.overview-case > p strong { color: var(--ink); }
 .overview-examples > .btn { align-self: flex-start; margin-top: auto; }
 .work-list { list-style: none; padding: 0; display: grid; gap: 10px; }
 .work-list li { display: flex; gap: 12px; align-items: flex-start; max-width: none; }
@@ -648,7 +653,6 @@ dl.kv dd .unit { display: block; font-weight: 400; color: var(--ink-muted); font
   .page-head { flex-direction: column; align-items: flex-start; }
   .overview-intro { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .hero-example { max-width: 300px; }
-  .example-summary { grid-template-columns: 80px minmax(0, 1fr); gap: 10px; }
   #guided-shared-panel, #guided-sparse-panel { scroll-margin-top: 142px; }
   .kpis, .kpis.four { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px; gap: 8px; }
   .tile { min-height: 120px; padding: 12px; }
