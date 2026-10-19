@@ -9,42 +9,43 @@ The first reader is a recruiter without a microscopy or machine-learning backgro
 
 Information priority:
 
-1. Explain what was built in one sentence, with the two headline findings, their practical meaning and their upstream origin.
-2. Show one real, already annotated example and a short "What I built" section without requiring a click.
-3. Offer three tabs: Overview, Try it and Results.
+1. Explain what was built in one sentence, and show the headline findings as KPI tiles with their practical meaning and upstream origin.
+2. Show one real, already annotated example and a short "What I built" card without requiring a click.
+3. Offer four sections: Overview, Images, Methods and Data.
 
-The overview is a short reading experience, not a dashboard to operate: no selector, overlay switch, search field or ranking control appears by default, and the first screen must explain the work even if the reader never clicks. "Try it" opens a real image immediately, with an image selector, a next-image button and a supplied-label toggle; search, filters and detailed counts are optional disclosures. Results holds the comparison, full rankings, downloads and optional provenance.
+The overview is a dashboard to read, not one to operate: KPI tiles, one chart and two progress bars replace raw numbers in prose, and the first screen must explain the work even if the reader never clicks. Images opens a real image immediately, with an image selector, a next-image button and a supplied-label toggle; search, filters and detailed counts are optional disclosures. Methods holds the comparison as tiles, bars and tables; Data holds the full rankings, downloads and optional provenance.
 
 ## Visual direction
 
-Tokens live in `web/review/assets/review.css` (`:root`, with a `prefers-color-scheme: dark` set). HIG level: principles-only.
+The layout follows the pill-dashboard pattern (page → shell → card → inset surface stack, a floating pill top bar, a split icon rail, one gradient hero tile per section, hatched remainders on bars and charts, blur-in card entrance, count-up figures and a circular appearance wipe). Its colours are taken from the portfolio site, sabersojudi.com, with a touch of the Sartorius brand yellow. Tokens live in `web/review/assets/review.css` (`:root`, a `[data-theme="dark"]` set and the same set under `prefers-color-scheme: dark`).
 
-| Role | Token | Light | Dark | Contrast on paper (light / dark) |
+| Role | Token | Light | Dark | Notes |
 | --- | --- | --- | --- | --- |
-| Surface | `--paper` / `--wash` | `#FFFFFF` / `#F8FAFC` | `#0B1220` / `#131C2E` | — |
-| Specimen stage | `--stage` | `#0B111C` | `#05080F` | readout text `#CBD5E1` 12.7:1 / 13.5:1 |
-| Content | `--ink` | `#0F172A` | `#F1F5F9` | 17.9:1 / 17.1:1 |
-| Secondary content | `--body` / `--muted` | `#334155` / `#475569` | `#CBD5E1` / `#94A3B8` | 10.4:1, 7.6:1 / 12.6:1, 7.3:1 |
-| Action and focus | `--action` | `#214B85` | `#8FB4FF` | 8.7:1 / 9.0:1 |
-| Control boundary | `--control` | `#64748B` | `#64748B` | 4.8:1 / 3.9:1 |
-| Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | 15.6:1 on the stage |
+| Page / shell / card / inset | `--bg-page` … `--bg-inset` | `#E5E7EB` / `#F3F4F6` / `#FFFFFF` / `#F3F4F6` | `#030712` / `#0B0F19` / `#111827` / `#1A2232` | Tailwind gray, as on the portfolio; depth comes from tone, not shadows |
+| Content | `--ink` / `--ink-2` / `--ink-muted` | `#111827` / `#374151` / `#6B7280` | `#F9FAFB` / `#D1D5DB` / `#9CA3AF` | muted is 4.8:1 on white |
+| Accent | `--accent` | `#2563EB` (portfolio blue-600) | same | one hero tile per section, the label switch, the default method's bar, the notification dot |
+| Hero gradient | `--accent-gradient` | blue-600 → blue-700 → violet-700 | same | white text is 5.2:1 or more on every stop; the soft highlight sits behind the tile icon, not text; the violet end echoes the portfolio's purple gradient text |
+| Soft chips | `--accent-soft` / `--on-accent-soft` | `#DBEAFE` / `#1E40AF` | translucent blue / `#BFDBFE` | the portfolio's blue-100 / blue-800 chip |
+| Status chips | `--success*`, `--danger*` | green-700 on green-100, red-700 on red-100 | light text on translucent tint | always with text, never colour alone |
+| Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | Sartorius yellow; 15.6:1 on the stage |
+| Specimen stage | `--stage` | `#0B111C` | `#05080F` | readout text `#CBD5E1` |
 
-- **One colour, one meaning.** Yellow marks supplied cell labels, and the wordmark's highlighter underline is their legend. Interface state (selected tab, pressed buttons, switches, primary buttons) uses ink, never yellow.
-- **Typeface.** Atkinson Hyperlegible Next for text and Atkinson Hyperlegible Mono for identifiers, counts and readouts, self-hosted under the SIL OFL. The site is about reading data exactly, and these faces keep 1/l/I and 0/O distinct in filenames, ids and hashes. Scale in rem: display `clamp(2rem, …, 2.75rem)`, h2 1.75rem, h3 1.3125rem, body 1.0625rem (17 px), small 0.9375rem, caption 0.875rem, meta 0.8125rem (mono identifiers only).
-- **Signature: the specimen stage.** Every microscopy image sits on a dark stage with a mono readout strip (filename, label count, pixel size), as imaging software shows a specimen. Yellow outlines on it are the only strong colour on the page.
-- **Motion.** One orchestrated moment: the first time the overview is shown, the hero image comes into focus, its label appears, and the locator ring closes onto the only labelled cell (about one second, once). Otherwise only brief feedback: the tab bar slides, a newly shown panel rises in, label layers fade in, switches and disclosure chevrons ease. All motion is off under `prefers-reduced-motion`; the translucent tab bar turns opaque under `prefers-reduced-transparency`.
-- Left-aligned text, prose under about 72 characters per line, quiet surroundings, no decorative gradients.
+- **One colour, one meaning.** Yellow marks supplied cell labels; the wordmark's highlighter underline and the dot on the logo mark are their legend. Blue is the one accent; primary buttons and the selected nav pill are ink (white in dark mode), never blue or yellow.
+- **Typeface.** Inter (variable, latin subset, self-hosted under the SIL OFL), as on the portfolio, with `cv11`/`ss01` and tabular figures for every number; filenames, ids and hashes use the system monospace. Title 40 px/600/-0.03em, KPI 34 px/600/-0.02em, card title 18 px/600, body 15 px.
+- **Signature: the specimen stage.** Every microscopy image sits on a dark stage with a mono readout strip (filename, label count, pixel size), as imaging software shows a specimen. Yellow outlines on it are the only yellow on the page apart from the legend.
+- **Motion.** Cards enter blur → sharp with a 60 ms stagger each time a section is shown; big figures count up and bars fill the first time; the nav pill slides; the appearance switch wipes in as a circle from the pressed button. The first time the overview is shown, the hero image comes into focus, its label appears and the locator ring closes onto the only labelled cell. The chrome never animates on a section change. All of it is off under `prefers-reduced-motion` (figures show their final value at once).
+- Left-aligned text, prose under about 75 characters per line, no drop shadows on light-mode cards.
 
 ## Interaction and content rules
 
 - No audience selector or required onboarding. The understandable version is the default for everyone.
 - Show the problem, its consequence and a real example together. Introduce plain wording before technical terms, and define terms where used.
-- Navigation is three accessible tabs with arrow-key and Home/End support; the selection is kept in the URL and browser history.
+- Navigation is four accessible tabs with arrow-key and Home/End support, mirrored by the icon rail; the selection is kept in the URL and browser history.
 - Native buttons, links, checkboxes and disclosures only; nothing depends on hover.
 - A selected example updates its image, status, finding and recommended next step together.
 - Text labels accompany colour. Yellow is an accent and an annotation aid, not a severity scale.
 - Supplied labels are drawn as supplied and never described as cell boundaries detected by this project. A dense image shows all of its supplied outlines, never a subset that could be mistaken for missing labels.
-- Do not invent a health percentage or imply that the dataset has been corrected. Distinguish a verified observation, an interpretation and a recommended action.
+- Do not invent a health percentage, a trend or a delta: every KPI chip is a ratio or difference of figures shown on the page (for example 30 of 569 validation photos), never a change over time. Do not imply that the dataset has been corrected. Distinguish a verified observation, an interpretation and a recommended action.
 - Credit upstream reports where a finding is shown; a reproduced issue is not presented as a discovery.
 - Preserve alternative annotation versions; a repeated filename is not automatically a corrupt record.
 - State the limits of an evaluation next to its result (for example, that both tests are defined by label count).

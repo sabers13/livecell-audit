@@ -141,11 +141,9 @@ SITE_SHELL_FILES = (
     "index.html",
     os.path.join("assets", "review.css"),
     os.path.join("assets", "review.js"),
-    os.path.join("assets", "fonts", "atkinson-hyperlegible-next-latin-wght-normal.woff2"),
-    os.path.join("assets", "fonts", "atkinson-hyperlegible-next-latin-wght-italic.woff2"),
-    os.path.join("assets", "fonts", "atkinson-hyperlegible-mono-latin-wght-normal.woff2"),
-    os.path.join("assets", "fonts", "OFL-atkinson-hyperlegible-next.txt"),
-    os.path.join("assets", "fonts", "OFL-atkinson-hyperlegible-mono.txt"),
+    os.path.join("assets", "fonts", "inter-latin-wght-normal.woff2"),
+    os.path.join("assets", "fonts", "inter-latin-wght-italic.woff2"),
+    os.path.join("assets", "fonts", "OFL-inter.txt"),
 )
 
 ATTRIBUTION = (
@@ -190,7 +188,7 @@ DEFERRED = (
 #: facts of that run (ids, counts, hashes, byte sizes), never machine paths, host
 #: names, account names or SSH targets.
 REFERENCE_RUN = {
-    "run_id": "20261018T220218Z-0e359b9bf088",
+    "run_id": "20261018T231214Z-0e359b9bf088",
     "verified_by": "check of the run records, chain verification and packaged archive",
     "chain_verification": {"checks": 92, "failures": 0},
     "inputs": {
@@ -201,7 +199,7 @@ REFERENCE_RUN = {
     "warehouse": {"schema_version": 1, "view_version": 1},
     "evaluation": {
         "ranking_manifest_sha256": (
-            "1289e9499402de2d9c33641409d6e6be34eadba6f0eda517e2d234c32ff04e61"
+            "f4364e5ca4b5dcbcdabdcfb137c7477961cab7e77f9422bb8f625eb78dbffe6a"
         ),
         "match": "exact match against the ranking stage's manifest",
     },
@@ -214,26 +212,26 @@ REFERENCE_RUN = {
     "previews": {"rendered": 39, "hash_verified": 39, "label_layers": 30, "guided_layers": 2},
     "stage_peak_memory_mb": {
         "audit": 199,
-        "warehouse": 323,
+        "warehouse": 326,
         "features": 275,
         "ranking": 340,
         "evaluation": 350,
         "previews": 60,
-        "site": 111,
+        "site": 110,
     },
     "peak_memory_method": (
         "process peak RSS of each stage command (getrusage RUSAGE_CHILDREN ru_maxrss), "
         "one job at a time"
     ),
     "launcher_cgroup": (
-        "the launcher's cgroup memory.peak also counts page cache: it reached the 1 GiB "
-        "throttle in the audit, warehouse and features stages, and the features stage used "
-        "up to 240 MB of job swap; no stage reached the 1536 MiB limit"
+        "the launcher's cgroup memory.peak also counts page cache: the audit stage reached "
+        "772 MB and the warehouse stage 585 MB, the features stage reached the 1 GiB throttle "
+        "and used 244 MB of job swap; no stage reached the 1536 MiB limit"
     ),
     "package": {
-        "file": "livecell-audit-release-20261018T220218Z-0e359b9bf088.zip",
-        "bytes": 10925730,
-        "sha256": "dbe585c491b8d428804115f311a2521ad849a3baa56648101cda7afb8f83a582",
+        "file": "livecell-audit-release-20261018T231214Z-0e359b9bf088.zip",
+        "bytes": 10943796,
+        "sha256": "aacac6ed3e33e0fa158af60ca00db89bff600e74c9f5d8e83e2088d6485b5522",
         "verified": True,
     },
 }

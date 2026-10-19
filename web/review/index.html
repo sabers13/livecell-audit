@@ -2,431 +2,538 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Saber Sojudi built a Python pipeline to check LIVECell images and labels, flag reused images and present clear evidence for scientific review.">
 <title>LIVECell Audit — a data science project by Saber Sojudi</title>
+<script>
+  /* apply a saved appearance before first paint; without one the page follows the OS */
+  try { var savedTheme = localStorage.getItem('livecell-theme'); if (savedTheme === 'light' || savedTheme === 'dark') { document.documentElement.dataset.theme = savedTheme; } } catch (e) {}
+</script>
 <link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
-<a class="skip" href="#start">Skip to the explanation</a>
-<div class="wrap">
-<header class="topbar recruiter-header">
-  <a href="#start" class="brand" aria-label="LIVECell Audit, project overview"><span>LIVECell</span> Audit</a>
-  <p class="project-author">A data science project by <strong>Saber Sojudi</strong></p>
+<a class="skip" href="#main">Skip to the dashboard</a>
+<div class="shell">
+<header class="topbar">
+  <a href="#overview" class="pill logo" aria-label="LIVECell Audit, overview"><span class="mark" aria-hidden="true">LC</span><span class="wordmark"><span class="highlight">LIVECell</span> Audit</span></a>
+  <nav id="project-tabs" class="pill nav project-tabs" aria-label="Dashboard sections">
+    <a id="tab-overview" href="#overview" data-tab="overview">Overview</a>
+    <a id="tab-try-it" href="#try-it" data-tab="try-it">Images</a>
+    <a id="tab-results" href="#results" data-tab="results">Methods</a>
+    <a id="tab-data" href="#data" data-tab="data">Data</a>
+  </nav>
+  <div class="topbar-right">
+    <div class="pill actions">
+      <a class="icon-btn" href="#rankings" aria-label="Search the full rankings" title="Search the rankings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
+      <a class="icon-btn dot" href="#downloads" aria-label="Download the evidence" title="Downloads"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></a>
+      <a class="icon-btn" href="#technical" aria-label="Technical details and sources" title="Sources"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></a>
+    </div>
+    <a class="pill profile" href="https://sabersojudi.com/" aria-label="Saber Sojudi, portfolio website">
+      <span class="avatar" aria-hidden="true">SS</span>
+      <span class="who"><b>Saber Sojudi</b><small>sabersojudi.com</small></span>
+      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    </a>
+  </div>
 </header>
 
-<nav id="project-tabs" class="project-tabs" aria-label="Project sections">
-  <a id="tab-overview" href="#overview" data-tab="overview">Overview</a>
-  <a id="tab-try-it" href="#try-it" data-tab="try-it">Try it</a>
-  <a id="tab-results" href="#results" data-tab="results">Results</a>
-</nav>
-<main>
+<div class="body">
+<aside class="rail" aria-label="Quick navigation">
+  <div class="group" role="group" aria-label="Appearance">
+    <button class="icon-btn" type="button" data-theme-set="light" aria-label="Light appearance" title="Light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    <button class="icon-btn" type="button" data-theme-set="dark" aria-label="Dark appearance" title="Dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+  </div>
+  <nav class="group main" aria-label="Sections">
+    <a class="icon-btn" href="#overview" data-rail="overview" aria-label="Overview" title="Overview"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></a>
+    <a class="icon-btn" href="#try-it" data-rail="try-it" aria-label="Image review" title="Images"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></a>
+    <a class="icon-btn" href="#results" data-rail="results" aria-label="Method comparison" title="Methods"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></a>
+    <a class="icon-btn" href="#data" data-rail="data" aria-label="Rankings and sources" title="Data"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></a>
+  </nav>
+  <div class="group" role="group" aria-label="More">
+    <a class="icon-btn" href="#glossary" aria-label="Plain-language glossary" title="Glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></a>
+    <a class="icon-btn" href="https://sabersojudi.com/" aria-label="Back to the portfolio" title="Portfolio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/></svg></a>
+  </div>
+</aside>
+
+<main id="main">
+<!-- ============================================================ OVERVIEW -->
 <div id="overview" class="project-panel" data-tab-panel="overview">
-<section id="start" class="recruiter-overview" aria-labelledby="page-title">
-  <div id="examples" class="recruiter-hero">
-    <div class="recruiter-story">
-      <h1 id="page-title">Checking the data used to train AI</h1>
-      <p class="recruiter-intro">I built a Python tool that checks cell images and their labels, then gives scientists a clear list of examples to review.</p>
-      <p class="project-coverage">Checked on <span id="intro-coverage">5,239</span> images from Sartorius’ public LIVECell dataset.</p>
-      <dl class="key-findings" aria-label="What the checks found">
-        <div>
-          <dt><strong id="intro-overlap">30</strong> <span class="finding-name">reused images</span></dt>
-          <dd>The same photo sits in the learning and the checking group, which can make validation scores look better than they are.</dd>
-        </div>
-        <div>
-          <dt><strong id="intro-sparse">9</strong> <span class="finding-name">images flagged for review</span></dt>
-          <dd>Very few cells are labelled. A scientist should review these examples.</dd>
-        </div>
-      </dl>
-      <p class="project-coverage">Both issues were first reported on GitHub (<a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">#26</a>, <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">#21</a>). My tool reproduces them from the raw files and tracks them with evidence.</p>
+  <div class="page-head" id="start">
+    <div>
+      <h1 class="reveal" id="page-title">Checking the data used to <span class="gradient-text">train AI</span></h1>
+      <p class="sub reveal">I built a Python tool that checks the images and cell labels in Sartorius’ public LIVECell dataset, then gives scientists a clear list of examples to review.</p>
     </div>
-    <figure class="first-example">
-      <div class="specimen" id="intro-specimen">
-        <div class="image-overlay">
-          <img src="assets/guided-sparse.png" alt="A real LIVECell microscope image with many visible cells. Only one cell has a supplied label, outlined in yellow." width="704" height="520">
-          <svg id="intro-overlay" viewBox="0 0 704 520" role="img" aria-label="The one supplied cell label, with a ring and pointer to help locate it.">
-            <title>The one supplied cell label</title>
-            <polygon class="mark" points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="2.4"/>
-            <circle class="locator-ring" cx="198" cy="33" r="28" fill="none" stroke="#0f172a" stroke-opacity=".55" stroke-width="3" stroke-dasharray="7 5"/>
-            <path class="locator-line" d="M226 33H275" stroke="#0f172a" stroke-width="2"/>
-            <g class="locator-callout"><rect x="275" y="10" width="236" height="44" rx="6" fill="#0f172a"/><text x="289" y="40" fill="#ffed00" font-size="24">Only labelled cell</text></g>
-          </svg>
-        </div>
-        <p class="readout"><span id="intro-readout-file">A172_Phase_A7_1_01d04h00m_3.tif</span><span class="readout-muted"><span class="legend-swatch" aria-hidden="true"></span><span id="intro-readout-count">1 supplied label</span> · 704 × 520 px</span></p>
+    <a class="btn btn-primary reveal" href="#try-it">Review images <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="grid">
+    <section class="card c4 reveal" aria-labelledby="ov-labels-title">
+      <div class="card-h"><h2 id="ov-labels-title" class="card-kicker">Supplied cell labels checked</h2><span class="chip neutral">3 splits</span></div>
+      <p class="big num" id="ov-labels" data-count="1662447">1,662,447</p>
+      <p class="chip-line"><span class="chip up" id="ov-files-chip">✓ 0 missing images</span> <span class="muted" id="ov-labels-note">in 5,387 image records</span></p>
+      <div class="row2">
+        <a class="btn btn-primary" href="#try-it">Review images</a>
+        <a class="btn btn-secondary" href="#results">See methods</a>
       </div>
-      <figcaption><strong>A real example: many cells, just one label</strong><span>The yellow outline is the supplied label. The ring and pointer help you find it.</span></figcaption>
-    </figure>
-  </div>
-</section>
-<section id="work" class="work-summary" aria-labelledby="work-title">
-  <h2 id="work-title">What I built</h2>
-  <ul class="work-list">
-    <li><strong>A repeatable data pipeline</strong><span>Python checks with automated tests.</span></li>
-    <li><strong>A comparison of methods</strong><span>Machine learning did not beat a simple label count. The tests favour counting by design, and the results say so.</span></li>
-    <li><strong>A report you can verify</strong><span>Every finding connects to its evidence.</span></li>
-  </ul>
-  <p class="project-skills">Python · pandas · DuckDB · scikit-learn · automated testing</p>
-</section>
-<p class="overview-action"><a class="button primary" href="#try-it">Try the image review <span class="arrow" aria-hidden="true">→</span></a></p>
-</div>
-<div id="try-it" class="project-panel" data-tab-panel="try-it">
-<section id="browse" class="section try-review" aria-labelledby="browse-title">
-  <h2 id="browse-title">Try the image review</h2>
-  <p class="section-intro">Pick an image. Show or hide its cell labels.</p>
-  <div class="try-controls" role="group" aria-label="Try reviewing an image">
-    <div class="control">
-      <label for="try-example">Choose an image</label>
-      <select id="try-example"></select>
-    </div>
-    <button id="try-next" class="button primary" type="button">Next image <span class="arrow" aria-hidden="true">→</span></button>
-    <label class="check-label"><input id="browse-overlay" class="switch" type="checkbox" role="switch" checked> Show cell labels</label>
-  </div>
-  <p id="try-progress" class="count" role="status" aria-live="polite"></p>
-  <article id="detail" class="detail" aria-live="polite" aria-labelledby="detail-title">
-    <h3 id="detail-title">Select an example</h3>
-    <p>Choose an example from the list above to see its image, evidence and recommended review action.</p>
-  </article>
+      <div class="inset split-tiles" id="ov-splits" role="list" aria-label="Image records per split"></div>
+    </section>
 
-  <details id="browse-filters" class="details">
-    <summary>Search and filter all examples</summary>
-    <div class="content">
-      <p class="preview" id="preview-status">Verified dataset snapshot · 17 October 2026</p>
-      <p id="browse-intro">Loading the illustrated example selection&hellip;</p>
-  <div class="controls" role="group" aria-label="Filter and order the illustrated examples">
-    <div class="control">
-      <label for="browse-search">Search by filename</label>
-      <input id="browse-search" type="search" placeholder="e.g. A172_Phase" autocomplete="off">
-    </div>
-    <div class="control">
-      <label for="browse-finding">Finding type</label>
-      <select id="browse-finding"><option value="">All findings</option></select>
-    </div>
-    <div class="control">
-      <label for="browse-cell-line">Cell line</label>
-      <select id="browse-cell-line"><option value="">All cell lines</option></select>
-    </div>
-    <div class="control">
-      <label for="browse-split">Split</label>
-      <select id="browse-split">
-        <option value="">All splits</option>
-        <option value="train">train (learning)</option>
-        <option value="val">val (checking)</option>
-        <option value="test">test (held back)</option>
-      </select>
-    </div>
-    <div class="control">
-      <label for="browse-method">Order by method</label>
-      <select id="browse-method"></select>
-    </div>
-    <div class="control">
-      <label for="browse-budget">Review budget</label>
-      <select id="browse-budget"></select>
-    </div>
-  </div>
-  <p id="browse-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
-
-  <div class="browse-layout">
-    <div class="browse-list" role="group" aria-label="Illustrated examples, as a list of buttons" id="browse-list"></div>
-    <div class="browse-pager">
-      <button id="browse-prev" class="button small" type="button">Previous</button>
-      <span id="browse-page" class="page-label">Page 1 of 1</span>
-      <button id="browse-next" class="button small" type="button">Next</button>
-    </div>
-  </div>
-
-
-    </div>
-  </details>
-</section>
-<details class="details">
-  <summary>Understand the two types of finding</summary>
-  <div class="content"><section id="case-studies" class="section" aria-labelledby="examples-title">
-  <h2 id="examples-title">Two examples in detail</h2>
-  <p class="section-intro">Choose one of two real findings. Each one shows what was found, why it matters, what is uncertain, and what a person should do next.</p>
-  <div class="switcher" role="group" aria-label="Choose a finding to explore">
-    <button id="guided-shared-button" class="button" type="button" aria-pressed="true" aria-controls="guided-shared-panel">Same image in two groups<span id="guided-shared-selected" class="viewing-marker" aria-hidden="true">Viewing</span></button>
-    <button id="guided-sparse-button" class="button" type="button" aria-pressed="false" aria-controls="guided-sparse-panel">Very few labelled cells<span id="guided-sparse-selected" class="viewing-marker" aria-hidden="true" hidden>Viewing</span></button>
-  </div>
-  <p id="guided-status" class="boundary" role="status" aria-live="polite">Viewing example 1 of 2 below: the same image appears in both the learning and the checking groups. Choose the other example to switch findings.</p>
-
-  <article id="guided-shared-panel" aria-labelledby="guided-shared-title">
-    <div class="finding-head">
-      <span class="tag">Confirmed overlap</span>
-      <h3 id="guided-shared-title">30 image filenames appear in both the learning and the checking groups</h3>
-      <p>A fair check should use images the model has not already learned from.</p>
-    </div>
-    <div class="photo-pair">
-      <figure class="photo-panel">
-        <div class="specimen"><div class="image-overlay">
-          <img src="assets/guided-shared.png" alt="A Huh7 cell image from the learning group." width="704" height="520">
-          <img id="guided-train-labels" class="label-layer" alt="" width="704" height="520" hidden>
-        </div><p class="readout"><span>Learning group</span><span class="readout-muted" id="guided-train-readout">training split</span></p></div>
-        <figcaption class="caption"><strong>Images the model learns from</strong><span>Researchers call this the training split.</span></figcaption>
-      </figure>
-      <figure class="photo-panel">
-        <div class="specimen"><div class="image-overlay">
-          <img src="assets/guided-shared.png" alt="The same Huh7 cell image, from the checking group." width="704" height="520">
-          <img id="guided-val-labels" class="label-layer" alt="" width="704" height="520" hidden>
-        </div><p class="readout"><span>Checking group</span><span class="readout-muted" id="guided-val-readout">validation split</span></p></div>
-        <figcaption class="caption"><strong>Images used to check its progress</strong><span>Researchers call this the validation split.</span></figcaption>
-      </figure>
-    </div>
-    <p class="same-note"><span class="dot" aria-hidden="true"></span><span>These are the same source image. It appears in both groups, each time with a different version of its cell labels.</span></p>
-    <div class="explanation">
-      <div><h4>Why it matters</h4><p>Think of checking a student with a question they already practised. Familiar examples can make the result look better than it would on new ones.</p></div>
-      <div><h4>What needs attention</h4><p>Keep each source image in one group for this evaluation protocol, and record how the groups were chosen. Preserve the original data so the change can be checked.</p></div>
-    </div>
-    <p class="boundary">This overlap is called <strong>data leakage</strong>. It affects validation scores; the separate final test group had no overlapping filenames with either group. The dataset authors annotated some images twice and kept both versions (<a href="https://github.com/sartorius-research/LIVECell/issues/14" target="_blank" rel="noopener">issue #14</a>); here the two versions ended up in different groups. This project has not measured the effect on a model&rsquo;s results.</p>
-    <details class="details">
-      <summary>View the evidence behind this example</summary>
-      <div class="content">
-        <p id="guided-shared-evidence">Loading the audit record&hellip;</p>
-        <p id="guided-shared-boundary"></p>
-        <p><a href="downloads/audit-findings.json" download>Download the 157 audit findings</a> · <a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">Read the original upstream report</a></p>
+    <section class="card c4 kpis-card reveal" aria-label="Key indicators">
+      <div class="kpis">
+        <div class="tile hero">
+          <div class="top">Images audited<span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></span></div>
+          <p class="kpi-val num"><span id="intro-coverage" data-count="5239">5,239</span></p>
+          <p class="chip-line"><span class="chip" id="kpi-coverage-chip">100% matched</span> <span class="muted">to a local file</span></p>
+        </div>
+        <div class="tile">
+          <div class="top">Reused photos<span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></span></div>
+          <p class="kpi-val num"><span id="intro-overlap" data-count="30">30</span></p>
+          <p class="chip-line"><span class="chip down" id="kpi-overlap-chip">5.3% of val</span> <span class="muted">train ∩ val</span></p>
+        </div>
+        <div class="tile">
+          <div class="top">Sparse-label images<span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span></div>
+          <p class="kpi-val num"><span id="intro-sparse" data-count="9">9</span></p>
+          <p class="chip-line"><span class="chip down" id="kpi-sparse-chip">≤ 10 labels</span> <span class="muted">issue #21</span></p>
+        </div>
+        <div class="tile">
+          <div class="top">Alternate versions<span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span></div>
+          <p class="kpi-val num"><span id="kpi-alternate" data-count="118">118</span></p>
+          <p class="chip-line"><span class="chip neutral">kept</span> <span class="muted">issue #14</span></p>
+        </div>
       </div>
-    </details>
-  </article>
+    </section>
 
-  <article id="guided-sparse-panel" aria-labelledby="guided-sparse-title" hidden>
-    <div class="finding-head">
-      <span class="tag">Needs label review</span>
-      <h3 id="guided-sparse-title">Many cells are visible, but the file labels just one</h3>
-      <p>The photo and its labels should tell the same story. Here, most visible cells have no supplied label.</p>
+    <section class="card c4 reveal" aria-labelledby="ov-chart-title">
+      <div class="card-h tight"><h2 id="ov-chart-title">Reported cases found</h2><span class="chip neutral" id="ov-chart-meta">top 10</span></div>
+      <p class="muted card-sub" id="ov-chart-sub">The nine upstream-reported sparse images, placed in each method’s first 10 of 3,067.</p>
+      <div class="inset chart" id="ov-chart"></div>
+    </section>
+
+    <div class="c4 stack">
+      <section class="card reveal" aria-labelledby="ov-leak-title">
+        <div class="card-h"><h2 id="ov-leak-title">Validation reuse</h2><span class="chip down" id="ov-leak-chip">5.3%</span></div>
+        <div class="bar" id="ov-leak-bar" role="img" aria-label="30 of 569 validation photos also appear in training"><i data-pct="5.3"></i></div>
+        <div class="split"><span class="muted"><b class="num" id="ov-leak-n">30</b> validation photos also in training, of</span><b class="num" id="ov-leak-d">569</b></div>
+        <p class="muted card-note" id="ov-leak-note">The held-back test split shares 0 filenames with the other two; only validation scores are affected.</p>
+      </section>
+      <section class="card reveal" aria-labelledby="ov-rec-title">
+        <div class="card-h"><h2 id="ov-rec-title">Reported cases recovered</h2><span class="chip up" id="ov-rec-chip">9 / 9</span></div>
+        <div class="bar" id="ov-rec-bar" role="img" aria-label="9 of 9 reported sparse-label images recovered"><i data-pct="100"></i></div>
+        <div class="split"><span class="muted"><b class="num" id="ov-rec-n">9</b> recovered by the audit rule, of</span><b class="num" id="ov-rec-d">9</b></div>
+        <p class="muted card-note" id="ov-rec-note">Reported upstream in issue #21; each one is present in this snapshot with ≤ 10 supplied labels.</p>
+      </section>
     </div>
-    <div class="annotation-layout">
-      <div>
-        <figure>
-          <div class="specimen"><div class="image-overlay">
-            <img src="assets/guided-sparse.png" alt="A microscope image of an A172 culture with many visible cells. The supplied label outlines only one small cell near the top left." width="704" height="520">
-            <svg id="sparse-overlay" viewBox="0 0 704 520" role="img" aria-label="The supplied cell label is outlined in yellow. A ring and pointer are viewing aids that help locate it.">
+
+    <section class="card c8 reveal" aria-labelledby="ov-table-title">
+      <div class="card-h"><h2 id="ov-table-title">Flagged images</h2><a class="btn btn-small btn-secondary" href="#try-it">Open image review</a></div>
+      <div class="table-wrap plain">
+        <table id="ov-flagged"><caption class="sr-only">Images flagged by the audit, with their cell line, split, supplied label count and finding.</caption></table>
+      </div>
+    </section>
+
+    <section class="card c5 reveal" aria-labelledby="ov-example-title">
+      <div class="card-h"><h2 id="ov-example-title">A real example</h2><span class="chip label-chip"><span class="legend-swatch" aria-hidden="true"></span>supplied label</span></div>
+      <figure class="first-example">
+        <div class="specimen" id="intro-specimen">
+          <div class="image-overlay">
+            <img src="assets/guided-sparse.png" alt="A real LIVECell microscope image with many visible cells. Only one cell has a supplied label, outlined in yellow." width="704" height="520">
+            <svg id="intro-overlay" viewBox="0 0 704 520" role="img" aria-label="The one supplied cell label, with a ring and pointer to help locate it.">
               <title>The one supplied cell label</title>
+              <polygon class="mark" points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="2.4"/>
+              <circle class="locator-ring" cx="198" cy="33" r="28" fill="none" stroke="#0f172a" stroke-opacity=".55" stroke-width="3" stroke-dasharray="7 5"/>
+              <path class="locator-line" d="M226 33H275" stroke="#0f172a" stroke-width="2"/>
+              <g class="locator-callout"><rect x="275" y="10" width="236" height="44" rx="6" fill="#0f172a"/><text x="289" y="40" fill="#ffed00" font-size="24">Only labelled cell</text></g>
             </svg>
-          </div></div>
-          <figcaption>The yellow outline is the actual supplied cell label. The ring, line and tag are viewing aids added for this page; nothing here is a cell boundary detected by this project.</figcaption>
-        </figure>
-        <div class="image-controls">
-          <label class="check-label"><input id="show-sparse-label" class="switch" type="checkbox" role="switch" checked aria-controls="sparse-overlay" aria-describedby="sparse-overlay-status">Show the existing cell label</label>
-          <p id="sparse-overlay-status" class="control-status" role="status" aria-live="polite">Showing the one labelled cell.</p>
+          </div>
+          <p class="readout"><span id="intro-readout-file">A172_Phase_A7_1_01d04h00m_3.tif</span><span class="readout-muted"><span class="legend-swatch" aria-hidden="true"></span><span id="intro-readout-count">1 supplied label</span> · 704 × 520 px</span></p>
+        </div>
+        <figcaption>Many cells, just one label. The yellow outline is the supplied label; the ring and pointer help you find it.</figcaption>
+      </figure>
+    </section>
+
+    <section id="work" class="card c7 reveal" aria-labelledby="work-title">
+      <div class="card-h"><h2 id="work-title">What I built</h2></div>
+      <ul class="work-list">
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span><strong>A repeatable data pipeline</strong><span>Streams the three COCO label files into DuckDB and a pandas feature table, with automated tests.</span></span></li>
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7"/></svg></span><span><strong>An honest method comparison</strong><span>Machine learning did not beat a simple label count. The tests favour counting by design, and the results say so.</span></span></li>
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><span><strong>A report you can verify</strong><span>Every number here is copied from one hashed release run and checked again before publishing.</span></span></li>
+      </ul>
+      <p class="skills" aria-label="Skills used"><span>Python</span><span>pandas</span><span>DuckDB</span><span>scikit-learn</span><span>pytest</span></p>
+      <p class="muted">Both findings were first reported on GitHub (<a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">#26</a>, <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">#21</a>). My tool reproduces them from the raw files and tracks them with evidence.</p>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================== IMAGES -->
+<div id="try-it" class="project-panel" data-tab-panel="try-it">
+  <div class="page-head">
+    <div>
+      <h1 class="reveal" id="browse-title">Image review</h1>
+      <p class="sub reveal">Pick an image and show or hide its cell labels. Flagged images come first, then comparison images.</p>
+    </div>
+  </div>
+  <div class="grid">
+    <section id="browse" class="card c12 try-review reveal" aria-labelledby="browse-title">
+      <div class="try-controls" role="group" aria-label="Try reviewing an image">
+        <div class="control">
+          <label for="try-example">Choose an image</label>
+          <select id="try-example"></select>
+        </div>
+        <button id="try-next" class="btn btn-primary" type="button">Next image <span class="arrow" aria-hidden="true">→</span></button>
+        <label class="check-label"><input id="browse-overlay" class="switch" type="checkbox" role="switch" checked> Show cell labels</label>
+      </div>
+      <p id="try-progress" class="count" role="status" aria-live="polite"></p>
+      <article id="detail" class="detail" aria-live="polite" aria-labelledby="detail-title">
+        <h3 id="detail-title">Select an example</h3>
+        <p>Choose an example from the list above to see its image, evidence and recommended review action.</p>
+      </article>
+
+      <details id="browse-filters" class="details">
+        <summary>Search and filter all examples</summary>
+        <div class="content">
+          <p class="preview" id="preview-status">Verified dataset snapshot · 17 October 2026</p>
+          <p id="browse-intro">Loading the illustrated example selection&hellip;</p>
+          <div class="controls" role="group" aria-label="Filter and order the illustrated examples">
+            <div class="control">
+              <label for="browse-search">Search by filename</label>
+              <input id="browse-search" type="search" placeholder="e.g. A172_Phase" autocomplete="off">
+            </div>
+            <div class="control">
+              <label for="browse-finding">Finding type</label>
+              <select id="browse-finding"><option value="">All findings</option></select>
+            </div>
+            <div class="control">
+              <label for="browse-cell-line">Cell line</label>
+              <select id="browse-cell-line"><option value="">All cell lines</option></select>
+            </div>
+            <div class="control">
+              <label for="browse-split">Split</label>
+              <select id="browse-split">
+                <option value="">All splits</option>
+                <option value="train">train (learning)</option>
+                <option value="val">val (checking)</option>
+                <option value="test">test (held back)</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="browse-method">Order by method</label>
+              <select id="browse-method"></select>
+            </div>
+            <div class="control">
+              <label for="browse-budget">Review budget</label>
+              <select id="browse-budget"></select>
+            </div>
+          </div>
+          <p id="browse-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
+          <div class="browse-layout">
+            <div class="browse-list" role="group" aria-label="Illustrated examples, as a list of buttons" id="browse-list"></div>
+            <div class="browse-pager">
+              <button id="browse-prev" class="btn btn-small btn-secondary" type="button">Previous</button>
+              <span id="browse-page" class="page-label">Page 1 of 1</span>
+              <button id="browse-next" class="btn btn-small btn-secondary" type="button">Next</button>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="case-studies" class="card c12 reveal" aria-labelledby="examples-title">
+      <div class="card-h"><h2 id="examples-title">Two examples in detail</h2></div>
+      <p class="muted card-sub">Each one shows what was found, why it matters, what is uncertain, and what a person should do next.</p>
+      <div class="segmented" role="group" aria-label="Choose a finding to explore">
+        <button id="guided-shared-button" type="button" aria-pressed="true" aria-controls="guided-shared-panel">Same image in two groups<span id="guided-shared-selected" class="sr-only">, viewing</span></button>
+        <button id="guided-sparse-button" type="button" aria-pressed="false" aria-controls="guided-sparse-panel">Very few labelled cells<span id="guided-sparse-selected" class="sr-only" hidden>, viewing</span></button>
+      </div>
+      <p id="guided-status" class="sr-only" role="status" aria-live="polite"></p>
+
+      <article id="guided-shared-panel" aria-labelledby="guided-shared-title">
+        <div class="finding-head">
+          <span class="chip down">Confirmed overlap</span>
+          <h3 id="guided-shared-title">30 image filenames appear in both the learning and the checking groups</h3>
+          <p>A fair check should use images the model has not already learned from.</p>
+        </div>
+        <div class="photo-pair">
+          <figure class="photo-panel">
+            <div class="specimen"><div class="image-overlay">
+              <img src="assets/guided-shared.png" alt="A Huh7 cell image from the learning group." width="704" height="520">
+              <img id="guided-train-labels" class="label-layer" alt="" width="704" height="520" hidden>
+            </div><p class="readout"><span>Learning group</span><span class="readout-muted" id="guided-train-readout">training split</span></p></div>
+            <figcaption class="caption"><strong>Images the model learns from</strong><span>Researchers call this the training split.</span></figcaption>
+          </figure>
+          <figure class="photo-panel">
+            <div class="specimen"><div class="image-overlay">
+              <img src="assets/guided-shared.png" alt="The same Huh7 cell image, from the checking group." width="704" height="520">
+              <img id="guided-val-labels" class="label-layer" alt="" width="704" height="520" hidden>
+            </div><p class="readout"><span>Checking group</span><span class="readout-muted" id="guided-val-readout">validation split</span></p></div>
+            <figcaption class="caption"><strong>Images used to check its progress</strong><span>Researchers call this the validation split.</span></figcaption>
+          </figure>
+        </div>
+        <p class="same-note">These are the same source image. It appears in both groups, each time with a different version of its cell labels.</p>
+        <div class="explanation">
+          <div class="inset"><h4>Why it matters</h4><p>Think of checking a student with a question they already practised. Familiar examples can make the result look better than it would on new ones.</p></div>
+          <div class="inset"><h4>What needs attention</h4><p>Keep each source image in one group for this evaluation protocol, and record how the groups were chosen. Preserve the original data so the change can be checked.</p></div>
+        </div>
+        <p class="boundary">This overlap is called <strong>data leakage</strong>. It affects validation scores; the separate final test group had no overlapping filenames with either group. The dataset authors annotated some images twice and kept both versions (<a href="https://github.com/sartorius-research/LIVECell/issues/14" target="_blank" rel="noopener">issue #14</a>); here the two versions ended up in different groups. This project has not measured the effect on a model&rsquo;s results.</p>
+        <details class="details">
+          <summary>View the evidence behind this example</summary>
+          <div class="content">
+            <p id="guided-shared-evidence">Loading the audit record&hellip;</p>
+            <p id="guided-shared-boundary"></p>
+            <p><a href="downloads/audit-findings.json" download>Download the 157 audit findings</a> · <a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">Read the original upstream report</a></p>
+          </div>
+        </details>
+      </article>
+
+      <article id="guided-sparse-panel" aria-labelledby="guided-sparse-title" hidden>
+        <div class="finding-head">
+          <span class="chip down">Needs label review</span>
+          <h3 id="guided-sparse-title">Many cells are visible, but the file labels just one</h3>
+          <p>The photo and its labels should tell the same story. Here, most visible cells have no supplied label.</p>
+        </div>
+        <div class="annotation-layout">
+          <div>
+            <figure>
+              <div class="specimen"><div class="image-overlay">
+                <img src="assets/guided-sparse.png" alt="A microscope image of an A172 culture with many visible cells. The supplied label outlines only one small cell near the top left." width="704" height="520">
+                <svg id="sparse-overlay" viewBox="0 0 704 520" role="img" aria-label="The supplied cell label is outlined in yellow. A ring and pointer are viewing aids that help locate it.">
+                  <title>The one supplied cell label</title>
+                </svg>
+              </div></div>
+              <figcaption>The yellow outline is the actual supplied cell label. The ring, line and tag are viewing aids added for this page; nothing here is a cell boundary detected by this project.</figcaption>
+            </figure>
+            <div class="image-controls">
+              <label class="check-label"><input id="show-sparse-label" class="switch" type="checkbox" role="switch" checked aria-controls="sparse-overlay" aria-describedby="sparse-overlay-status">Show the existing cell label</label>
+              <p id="sparse-overlay-status" class="control-status" role="status" aria-live="polite">Showing the one labelled cell.</p>
+            </div>
+          </div>
+          <aside class="meaning inset" aria-label="What this finding means">
+            <div class="callout-number num" id="sparse-count-callout">1 labelled cell</div>
+            <p id="sparse-meaning">In this image, the label file gives the model only one cell example.</p>
+            <h4>Why it matters</h4>
+            <p>Incomplete labels can give a model unreliable examples of what is and is not a cell.</p>
+            <h4>What needs attention</h4>
+            <p id="sparse-action">Review the labels before using this image.</p>
+          </aside>
+        </div>
+        <p class="boundary">Nine previously reported images have ten or fewer labelled cells. Each needs review; a low count alone does not prove an error.</p>
+        <details class="details">
+          <summary>View the evidence behind this example</summary>
+          <div class="content">
+            <p id="guided-sparse-evidence">Loading the audit record&hellip;</p>
+            <p id="guided-sparse-boundary"></p>
+            <p><a href="downloads/known-cases.json" download>Download the known-case regression record</a> · <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">Read the original report and author response</a></p>
+          </div>
+        </details>
+      </article>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================= METHODS -->
+<div id="results" class="project-panel" data-tab-panel="results">
+  <div class="page-head">
+    <div>
+      <h1 class="reveal" id="compare-title">Does machine learning help?</h1>
+      <p class="sub reveal">Four ordering methods compared at the same review budget. Both tests are defined by label count, so they favour the simple counting rule by design.</p>
+    </div>
+  </div>
+  <div class="grid">
+    <section class="card c12 kpis-card reveal" aria-label="Method indicators">
+      <div class="kpis four" id="methods-kpis"></div>
+    </section>
+
+    <section class="card c5 reveal" aria-labelledby="bars-title">
+      <div class="card-h"><h2 id="bars-title">Reported cases inside the budget</h2></div>
+      <div class="budget-row">
+        <span class="control-label" id="budget-label">Review budget</span>
+        <div class="segmented" role="group" aria-labelledby="budget-label" id="compare-budget-group"></div>
+      </div>
+      <div class="inset method-bars" id="compare-bars"></div>
+      <p class="count" id="compare-budget-note"></p>
+    </section>
+
+    <section class="card c7 reveal" aria-labelledby="auc-title">
+      <div class="card-h"><h2 id="auc-title">Simulated label loss</h2><span class="chip neutral">simulation</span></div>
+      <p class="muted card-sub">ROC AUC when labels are removed on purpose; 0.5 is chance. Mean over seeds 7, 42 and 101.</p>
+      <div class="inset method-bars" id="compare-auc"></div>
+    </section>
+
+    <section id="compare" class="card c12 reveal" aria-labelledby="compare-known-title">
+      <p class="headline" id="compare-headline">Loading the measured comparison&hellip;</p>
+      <h3 class="spacer-top" id="compare-known-title">Known-case regression: the nine upstream-reported sparse-label images</h3>
+      <p id="compare-known-intro" class="muted"></p>
+      <div class="table-wrap">
+        <table id="compare-known-table"><caption>How many of the nine reported cases each method placed inside the budget. Denominator is nine, not every mislabelled image in the dataset.</caption></table>
+      </div>
+      <h3 class="spacer-top">Simulated annotation loss: what each method does when labels are removed on purpose</h3>
+      <p id="compare-synthetic-intro" class="muted"></p>
+      <div class="table-wrap">
+        <table id="compare-synthetic-table"><caption>Precision@K and ROC AUC measured on a deliberate structured removal scenario. These are simulation numbers, not real-world error precision.</caption></table>
+      </div>
+      <h3 class="spacer-top">Where each reported image ranked</h3>
+      <div class="table-wrap">
+        <table id="compare-cases-table"><caption>Rank within the 3,067-row review pool at the default seed. Lower is a higher review priority.</caption></table>
+      </div>
+      <h3 class="spacer-top">The two pools, named explicitly</h3>
+      <div class="table-wrap">
+        <table id="compare-pools-table"></table>
+      </div>
+    </section>
+
+    <section class="card c6 reveal" aria-labelledby="won-title">
+      <div class="card-h"><h2 id="won-title">What won</h2><span class="chip up">count rule</span></div>
+      <p id="compare-won"></p>
+    </section>
+    <section class="card c6 reveal" aria-labelledby="lost-title">
+      <div class="card-h"><h2 id="lost-title">What lost</h2><span class="chip down">Isolation Forest</span></div>
+      <p id="compare-lost"></p>
+    </section>
+    <section class="card c12 reveal" aria-labelledby="limits-title">
+      <div class="card-h"><h2 id="limits-title">How to read these numbers</h2></div>
+      <p class="boundary" id="compare-limits"></p>
+      <ul id="compare-notes" class="notes"></ul>
+      <p class="links"><a href="downloads/evaluation-summary.json" download>Evaluation summary</a> · <a href="downloads/known-cases.json" download>Known-case record</a> · <a href="downloads/model-card.json" download>Model card</a></p>
+    </section>
+  </div>
+</div>
+
+<!-- ================================================================ DATA -->
+<div id="data" class="project-panel" data-tab-panel="data">
+  <div class="page-head">
+    <div>
+      <h1 class="reveal" id="data-title">Data and sources</h1>
+      <p class="sub reveal">Every review-pool candidate, the evidence files, and how this dashboard was built.</p>
+    </div>
+  </div>
+  <div class="grid">
+    <section class="card c12 kpis-card reveal" aria-label="Data indicators">
+      <div class="kpis four" id="data-kpis"></div>
+    </section>
+
+    <section id="rankings" class="card c12 reveal" aria-labelledby="rankings-title">
+      <div class="card-h"><h2 id="rankings-title">Full rankings</h2></div>
+      <p class="muted card-sub" id="rankings-intro">Loading the complete ranking table&hellip;</p>
+      <div class="controls" role="group" aria-label="Filter and order the full ranking table">
+        <div class="control">
+          <label for="rankings-search">Search by filename</label>
+          <input id="rankings-search" type="search" placeholder="e.g. BV2_Phase" autocomplete="off">
+        </div>
+        <div class="control">
+          <label for="rankings-cell-line">Cell line</label>
+          <select id="rankings-cell-line"><option value="">All cell lines</option></select>
+        </div>
+        <div class="control">
+          <label for="rankings-split">Split</label>
+          <select id="rankings-split">
+            <option value="">All splits</option>
+            <option value="train">train (learning)</option>
+            <option value="val">val (checking)</option>
+            <option value="test">test (held back)</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="rankings-order">Order by</label>
+          <select id="rankings-order"></select>
+        </div>
+        <div class="control check-control">
+          <input id="rankings-known" type="checkbox">
+          <label for="rankings-known">Only the nine reported cases</label>
         </div>
       </div>
-      <aside class="meaning" aria-label="What this finding means">
-        <div class="callout-number" id="sparse-count-callout">1 labelled cell</div>
-        <p id="sparse-meaning">In this image, the label file gives the model only one cell example.</p>
-        <hr>
-        <h4>Why it matters</h4>
-        <p>Incomplete labels can give a model unreliable examples of what is and is not a cell.</p>
-        <hr>
-        <h4>What needs attention</h4>
-        <p id="sparse-action">Review the labels before using this image.</p>
-      </aside>
-    </div>
-    <p class="boundary">Nine previously reported images have ten or fewer labelled cells. Each needs review; a low count alone does not prove an error.</p>
-    <details class="details">
-      <summary>View the evidence behind this example</summary>
-      <div class="content">
-        <p id="guided-sparse-evidence">Loading the audit record&hellip;</p>
-        <p id="guided-sparse-boundary"></p>
-        <p><a href="downloads/known-cases.json" download>Download the known-case regression record</a> · <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">Read the original report and author response</a></p>
-      </div>
-    </details>
-  </article>
-</section></div>
-</details>
-</div>
-<div id="results" class="project-panel" data-tab-panel="results">
-<section id="compare" class="section" aria-labelledby="compare-title">
-  <h2 id="compare-title">Does machine learning help? An honest comparison</h2>
-  <p class="section-intro">Four ordering methods are compared at the same review budget. The simple low-count check is the default because it is transparent and, on these measurements, it performed best. Both measurements are defined by label count, though, so they favour it by design.</p>
-  <p class="headline" id="compare-headline">Loading the measured comparison&hellip;</p>
-
-  <div class="controls" role="group" aria-label="Choose the review budget for the comparison">
-    <span class="control-label" id="budget-label">Review budget</span>
-    <div class="budget-group" role="group" aria-labelledby="budget-label" id="compare-budget-group"></div>
-  </div>
-  <p class="count" id="compare-budget-note"></p>
-
-  <h3 class="spacer-top">Known-case regression: the nine upstream-reported sparse-label images</h3>
-  <p id="compare-known-intro"></p>
-  <div class="table-wrap">
-    <table id="compare-known-table"><caption>How many of the nine reported cases each method placed inside the budget. Denominator is nine, not every mislabelled image in the dataset.</caption></table>
-  </div>
-
-  <h3 class="spacer-top">Simulated annotation loss: what each method does when labels are removed on purpose</h3>
-  <p id="compare-synthetic-intro"></p>
-  <div class="table-wrap">
-    <table id="compare-synthetic-table"><caption>Precision@K and ROC AUC measured on a deliberate structured removal scenario. These are simulation numbers, not real-world error precision.</caption></table>
-  </div>
-
-  <h3 class="spacer-top">Where each reported image ranked</h3>
-  <div class="table-wrap">
-    <table id="compare-cases-table"><caption>Rank within the 3,067-row review pool at the default seed. Lower is a higher review priority.</caption></table>
-  </div>
-
-  <h3 class="spacer-top">The two pools, named explicitly</h3>
-  <div class="table-wrap">
-    <table id="compare-pools-table"></table>
-  </div>
-
-  <h3 class="spacer-top">What won and what lost</h3>
-  <div class="explanation">
-    <div>
-      <h4>What won</h4>
-      <p id="compare-won"></p>
-    </div>
-    <div>
-      <h4>What lost</h4>
-      <p id="compare-lost"></p>
-    </div>
-  </div>
-  <p class="boundary" id="compare-limits"></p>
-  <details class="details">
-    <summary>How to read these numbers, and what they do not say</summary>
-    <div class="content">
-      <ul id="compare-notes"></ul>
-      <p><a href="downloads/evaluation-summary.json" download>Download the evaluation summary</a> · <a href="downloads/known-cases.json" download>Download the known-case record</a> · <a href="downloads/model-card.json" download>Download the model card</a></p>
-    </div>
-  </details>
-</section>
-<details class="details">
-  <summary>Explore the full rankings</summary>
-  <div class="content"><section id="rankings" class="section" aria-labelledby="rankings-title">
-  <h2 id="rankings-title">Full rankings: every review-pool candidate</h2>
-  <p class="section-intro" id="rankings-intro">Loading the complete ranking table&hellip;</p>
-
-  <div class="controls" role="group" aria-label="Filter and order the full ranking table">
-    <div class="control">
-      <label for="rankings-search">Search by filename</label>
-      <input id="rankings-search" type="search" placeholder="e.g. BV2_Phase" autocomplete="off">
-    </div>
-    <div class="control">
-      <label for="rankings-cell-line">Cell line</label>
-      <select id="rankings-cell-line"><option value="">All cell lines</option></select>
-    </div>
-    <div class="control">
-      <label for="rankings-split">Split</label>
-      <select id="rankings-split">
-        <option value="">All splits</option>
-        <option value="train">train (learning)</option>
-        <option value="val">val (checking)</option>
-        <option value="test">test (held back)</option>
-      </select>
-    </div>
-    <div class="control">
-      <label for="rankings-order">Order by</label>
-      <select id="rankings-order"></select>
-    </div>
-    <div class="control check-control">
-      <input id="rankings-known" type="checkbox">
-      <label for="rankings-known">Only the nine upstream-reported cases</label>
-    </div>
-  </div>
-  <p id="rankings-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
-
-  <div class="table-wrap">
-    <table id="rankings-table">
-      <caption id="rankings-caption">Full ranking table over the review pool.</caption>
-    </table>
-  </div>
-  <div class="browse-pager">
-    <button id="rankings-prev" class="button small" type="button">Previous</button>
-    <span id="rankings-page" class="page-label">Page 1 of 1</span>
-    <button id="rankings-next" class="button small" type="button">Next</button>
-  </div>
-
-</section></div>
-</details>
-<section id="downloads" class="section" aria-label="Download the evidence">
-  <h3 class="spacer-top">Download the evidence</h3>
-  <ul class="downloads">
-    <li><a href="downloads/ranking-pool.csv" download>ranking-pool.csv</a> — all 3,067 pool rows with every method&rsquo;s rank and priority (unit notes in the file header).</li>
-    <li><a href="downloads/ranking-summary.json" download>ranking-summary.json</a> — ranking stage counts, protocol and source hashes.</li>
-    <li><a href="downloads/model-card.json" download>model-card.json</a> — the frozen model configuration, feature selection and limitations.</li>
-    <li><a href="downloads/evaluation-summary.json" download>evaluation-summary.json</a> — the measured comparison on both pools.</li>
-    <li><a href="downloads/known-cases.json" download>known-cases.json</a> — the nine-case regression record with per-case ranks.</li>
-    <li><a href="downloads/review-sample.json" download>review-sample.json</a> — the frozen 100-record review sample, with blank judgment fields.</li>
-    <li><a href="downloads/audit-findings.json" download>audit-findings.json</a> — all 157 audit findings with their evidence.</li>
-    <li><a href="downloads/RANKING-README.txt">RANKING-README.txt</a> — units and reading notes for the downloads.</li>
-    <li><a href="THIRD_PARTY_NOTICES.txt">THIRD_PARTY_NOTICES.txt</a> — image, annotation and software attribution.</li>
-  </ul>
-
-</section>
-<details class="details">
-<summary>Technical details and sources</summary>
-<div class="content">
-<section id="technical" class="section" aria-labelledby="technical-title">
-  <h2 id="technical-title">Technical details</h2>
-  <p class="section-intro">Sources, checks and limitations for readers who want more detail.</p>
-
-  <div class="source-summary" aria-labelledby="sources-title">
-    <h3 id="sources-title">Sources and checks</h3>
-    <p>The report, rankings and image previews use the same recorded dataset snapshot.</p>
-    <dl class="source-facts">
-      <div><dt>Annotation files</dt><dd id="source-file-count">3</dd></div>
-      <div><dt>Image previews</dt><dd id="source-preview-count">39</dd></div>
-      <div><dt>Snapshot</dt><dd>17 October 2026</dd></div>
-    </dl>
-  </div>
-  <details id="source-register" class="details source-register">
-    <summary>View file list and full checksums</summary>
-    <div class="content">
-      <p>File sizes and SHA-256 checksums identify the exact source files used.</p>
-      <div class="source-register-scroll" tabindex="0" role="region" aria-label="Full source file list and checksums">
+      <p id="rankings-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
       <div class="table-wrap">
-        <table id="provenance-table"><caption>Every verified file behind this site, with its size and SHA-256.</caption></table>
+        <table id="rankings-table">
+          <caption id="rankings-caption">Full ranking table over the review pool.</caption>
+        </table>
       </div>
-      <h3 class="spacer-top">Source annotation files</h3>
-      <div class="table-wrap">
-        <table id="source-table"><caption>The three COCO files, as recorded by the audit and matched by the ranking provenance.</caption></table>
+      <div class="browse-pager">
+        <button id="rankings-prev" class="btn btn-small btn-secondary" type="button">Previous</button>
+        <span id="rankings-page" class="page-label">Page 1 of 1</span>
+        <button id="rankings-next" class="btn btn-small btn-secondary" type="button">Next</button>
       </div>
-      <p id="hash-chain"></p>
-      </div>
-    </div>
-  </details>
+    </section>
 
-  <details class="details">
-    <summary>Review status, sampling and limitations</summary>
-    <div class="content">
-      <p id="review-status"></p>
-      <div class="table-wrap">
-        <table id="limitations-table"><caption>Published limitations of the ranking and evaluation stages.</caption></table>
+    <section id="downloads" class="card c5 reveal" aria-labelledby="downloads-title">
+      <div class="card-h"><h2 id="downloads-title">Download the evidence</h2></div>
+      <ul class="downloads">
+        <li><a href="downloads/ranking-pool.csv" download>ranking-pool.csv</a><span>all 3,067 pool rows with every method&rsquo;s rank and priority (unit notes in the file header)</span></li>
+        <li><a href="downloads/ranking-summary.json" download>ranking-summary.json</a><span>ranking stage counts, protocol and source hashes</span></li>
+        <li><a href="downloads/model-card.json" download>model-card.json</a><span>the frozen model configuration, feature selection and limitations</span></li>
+        <li><a href="downloads/evaluation-summary.json" download>evaluation-summary.json</a><span>the measured comparison on both pools</span></li>
+        <li><a href="downloads/known-cases.json" download>known-cases.json</a><span>the nine-case regression record with per-case ranks</span></li>
+        <li><a href="downloads/review-sample.json" download>review-sample.json</a><span>the frozen 100-record review sample, with blank judgment fields</span></li>
+        <li><a href="downloads/audit-findings.json" download>audit-findings.json</a><span>all 157 audit findings with their evidence</span></li>
+        <li><a href="downloads/RANKING-README.txt">RANKING-README.txt</a><span>units and reading notes for the downloads</span></li>
+        <li><a href="THIRD_PARTY_NOTICES.txt">THIRD_PARTY_NOTICES.txt</a><span>image, annotation, font and software attribution</span></li>
+      </ul>
+    </section>
+
+    <section id="technical" class="card c7 reveal" aria-labelledby="technical-title">
+      <div class="card-h"><h2 id="technical-title">Technical details</h2></div>
+      <div class="source-summary" aria-labelledby="sources-title">
+        <h3 id="sources-title" class="sr-only">Sources and checks</h3>
+        <dl class="source-facts">
+          <div class="inset"><dt>Annotation files</dt><dd id="source-file-count" class="num">3</dd></div>
+          <div class="inset"><dt>Image previews</dt><dd id="source-preview-count" class="num">39</dd></div>
+          <div class="inset"><dt>Snapshot</dt><dd>17 Oct 2026</dd></div>
+        </dl>
+        <p class="muted">The report, rankings and image previews use the same recorded dataset snapshot.</p>
       </div>
-      <h3 class="spacer-top">The four published review criteria</h3>
-      <ol id="review-criteria"></ol>
-    </div>
-  </details>
-
-  <details class="details">
-    <summary>Model and method configuration</summary>
-    <div class="content">
-      <p id="model-config"></p>
-      <div class="table-wrap">
-        <table id="partition-table"><caption>Fit / hold-out split per cell line. The hold-out is a practical leakage proxy, not proof of biological independence.</caption></table>
-      </div>
-    </div>
-  </details>
-
-  <details class="details">
-    <summary>Plain-language glossary</summary>
-    <div class="content">
-      <dl id="glossary"></dl>
-    </div>
-  </details>
-
-  <details class="details">
-    <summary>What this website contains, and what it deliberately does not</summary>
-    <div class="content">
-      <ul id="bundle-notes"></ul>
-    </div>
-  </details>
-</section>
-</div>
-</details>
+      <details id="source-register" class="details source-register">
+        <summary>File list and full checksums</summary>
+        <div class="content">
+          <div class="source-register-scroll" tabindex="0" role="region" aria-label="Full source file list and checksums">
+            <div class="table-wrap">
+              <table id="provenance-table"><caption>Every verified file behind this site, with its size and SHA-256.</caption></table>
+            </div>
+            <h3 class="spacer-top">Source annotation files</h3>
+            <div class="table-wrap">
+              <table id="source-table"><caption>The three COCO files, as recorded by the audit and matched by the ranking provenance.</caption></table>
+            </div>
+            <p id="hash-chain"></p>
+          </div>
+        </div>
+      </details>
+      <details class="details">
+        <summary>Review status, sampling and limitations</summary>
+        <div class="content">
+          <p id="review-status"></p>
+          <div class="table-wrap">
+            <table id="limitations-table"><caption>Published limitations of the ranking and evaluation stages.</caption></table>
+          </div>
+          <h3 class="spacer-top">The four published review criteria</h3>
+          <ol id="review-criteria"></ol>
+        </div>
+      </details>
+      <details class="details">
+        <summary>Model and method configuration</summary>
+        <div class="content">
+          <p id="model-config"></p>
+          <div class="table-wrap">
+            <table id="partition-table"><caption>Fit / hold-out split per cell line. The hold-out is a practical leakage proxy, not proof of biological independence.</caption></table>
+          </div>
+        </div>
+      </details>
+      <details class="details">
+        <summary>Plain-language glossary</summary>
+        <div class="content">
+          <dl id="glossary"></dl>
+        </div>
+      </details>
+      <details class="details">
+        <summary>What this website contains, and what it deliberately does not</summary>
+        <div class="content">
+          <ul id="bundle-notes"></ul>
+        </div>
+      </details>
+    </section>
+  </div>
 </div>
 </main>
+</div>
 
-<footer class="recruiter-footer">
+<footer class="site-footer">
   <div class="footer-line">
-    <span>Independent project by Saber Sojudi</span>
+    <span>Independent project by <a href="https://sabersojudi.com/">Saber Sojudi</a></span>
     <span id="footer-snapshot">Snapshot: 17 October 2026</span>
   </div>
   <p class="review-boundary">The tool flags examples for human review. Its effect on AI accuracy has not been measured.</p>

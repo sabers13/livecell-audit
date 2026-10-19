@@ -1427,10 +1427,10 @@ def main(argv=None):
         "            Sjögren, Sartorius)\n"
         "  issue #14, alternate annotation versions: explained by Christoffer\n"
         "            Edlund (Sartorius)\n\n"
-        "Typeface: Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono,\n"
-        "copyright The Atkinson Hyperlegible Next and Mono Project Authors, licensed\n"
-        "under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt); the latin\n"
-        "subsets are included unmodified.\n\n"
+        "Typeface: Inter, copyright 2016 The Inter Project Authors\n"
+        "(https://github.com/rsms/inter), licensed under the SIL Open Font License\n"
+        "1.1 (assets/fonts/OFL-inter.txt); the latin variable subsets (as packaged\n"
+        "by Fontsource) are included unmodified.\n\n"
         "Intended use: independent, noncommercial portfolio and education work.\n"
         "This project is not affiliated with, endorsed by, or connected to Sartorius.\n",
     )

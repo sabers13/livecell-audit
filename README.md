@@ -71,7 +71,7 @@ LIVECELL_DATA_ROOT=data/raw PYTHONPATH=src .venv/bin/python -m pytest tests/test
 python3 -m http.server --directory web/review 8321
 ```
 
-Measured in the reference release run (`20261018T220218Z-0e359b9bf088`, one capped job per stage, process peak RSS): audit 44 s / 199 MB, warehouse 16 s / 323 MB, features 98 s / 275 MB (5,239 TIFF reads dominate), ranking 28 s / 340 MB, evaluation 12 s / 350 MB, preview render 22 s / 60 MB. The test suite is **266 passed** in ~79 s including the real-data integration check. Details: [`docs/12_release.md`](docs/12_release.md).
+Measured in the reference release run (`20261018T231214Z-0e359b9bf088`, one capped job per stage, process peak RSS): audit 44 s / 199 MB, warehouse 14 s / 326 MB, features 99 s / 275 MB (5,239 TIFF reads dominate), ranking 29 s / 340 MB, evaluation 13 s / 350 MB, preview render 22 s / 60 MB. The test suite is **266 passed** in ~80 s including the real-data integration check. Details: [`docs/12_release.md`](docs/12_release.md).
 
 ---
 
@@ -101,7 +101,7 @@ Release packages and run records stay out of git (the receipt inside each run di
 
 ## Review website
 
-`web/review/` is a static projection of one completed release run: no backend, no framework, no network call. It has three tabs: an overview of the findings, a "Try it" image browser with 39 illustrated examples and switchable supplied labels (dense images show every supplied outline), and the method comparison with the full 3,067-row ranking table and evidence downloads. Every number is copied from the run's verified outputs, and `tools/check_review_site.py` re-derives them. See [`docs/11_review_interface.md`](docs/11_review_interface.md) and [`DESIGN.md`](DESIGN.md).
+`web/review/` is a static projection of one completed release run: no backend, no framework, no network call. It is a small dashboard with four sections: an overview of the findings as KPI tiles and charts, an image review with 39 illustrated examples and switchable supplied labels (dense images show every supplied outline), the method comparison, and the full 3,067-row ranking table with evidence downloads. Every number is copied from the run's verified outputs, and `tools/check_review_site.py` re-derives them. See [`docs/11_review_interface.md`](docs/11_review_interface.md) and [`DESIGN.md`](DESIGN.md).
 
 ---
 

@@ -69,6 +69,8 @@
       link.tabIndex = selected ? 0 : -1;
     });
     placeTabIndicator();
+    /* a section link (or the page load) starts at the top, not at the panel edge */
+    if (scrollToTarget && (!target || target === activePanel)) { window.scrollTo({ top: 0, behavior: 'instant' }); }
     if (shownPanelId !== null && shownPanelId !== activeId) {
       $(activeId).classList.add('is-entering');
     }
@@ -105,8 +107,113 @@
       tabLinks[next].focus();
     });
   });
+  /* The rail mirrors the selected section; its links switch tabs the same way. */
+  var railLinks = Array.prototype.slice.call(document.querySelectorAll('[data-rail]'));
+  railLinks.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) { return; }
+      event.preventDefault();
+      selectTab(link);
+    });
+  });
+  tabShownHooks.push(function (panelId) {
+    railLinks.forEach(function (link) {
+      if (link.dataset.rail === panelId) { link.setAttribute('aria-current', 'page'); }
+      else { link.removeAttribute('aria-current'); }
+    });
+  });
+
+  /* Cards enter one after another each time a section is shown (CSS restarts
+     the animation when a hidden panel is displayed). */
+  tabPanels.forEach(function (panel) {
+    Array.prototype.forEach.call(panel.querySelectorAll('.reveal'), function (node, position) {
+      node.style.setProperty('--i', String(position));
+    });
+  });
+
+  /* Big figures count up and bars fill the first time their section is shown;
+     the final value is always the one in the markup or the data file. */
+  var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function formatCount(node, value) {
+    var digits = Number(node.dataset.decimals || 0);
+    return (node.dataset.prefix || '') + value.toLocaleString('en-US', {
+      minimumFractionDigits: digits, maximumFractionDigits: digits
+    }) + (node.dataset.suffix || '');
+  }
+  function countUp(node) {
+    var target = Number(node.dataset.count);
+    if (!isFinite(target)) { return; }
+    if (motionQuery.matches) { node.textContent = formatCount(node, target); return; }
+    var start = window.performance.now();
+    var duration = 900;
+    (function frame(now) {
+      var t = Math.min(1, (now - start) / duration);
+      var eased = 1 - Math.pow(1 - t, 3);
+      node.textContent = formatCount(node, t < 1 ? target * eased : target);
+      if (t < 1) { window.requestAnimationFrame(frame); }
+    })(start);
+  }
+  var animatedPanels = {};
+  tabShownHooks.push(function (panelId) {
+    if (animatedPanels[panelId]) { return; }
+    animatedPanels[panelId] = true;
+    var panel = $(panelId);
+    Array.prototype.forEach.call(panel.querySelectorAll('[data-count]'), countUp);
+    window.requestAnimationFrame(function () {
+      Array.prototype.forEach.call(panel.querySelectorAll('[data-pct]'), function (bar) {
+        bar.style.width = Math.max(0, Math.min(100, Number(bar.dataset.pct) || 0)) + '%';
+      });
+    });
+  });
+
+  /* Appearance: follows the OS until the reader picks one; the switch wipes in
+     as a circle from the pressed button. */
+  var root = document.documentElement;
+  var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function currentTheme() { return root.dataset.theme || (darkQuery.matches ? 'dark' : 'light'); }
+  var themeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-theme-set]'));
+  function syncThemeButtons() {
+    themeButtons.forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.themeSet === currentTheme()));
+    });
+  }
+  syncThemeButtons();
+  if (darkQuery.addEventListener) { darkQuery.addEventListener('change', syncThemeButtons); }
+  themeButtons.forEach(function (button) {
+    button.addEventListener('click', function (event) {
+      var next = button.dataset.themeSet;
+      if (next === currentTheme()) { return; }
+      var apply = function () {
+        root.dataset.theme = next;
+        try { window.localStorage.setItem('livecell-theme', next); } catch (_error) { /* private mode */ }
+        syncThemeButtons();
+      };
+      if (!document.startViewTransition || motionQuery.matches) { apply(); return; }
+      var rect = button.getBoundingClientRect();
+      var x = event.clientX || rect.left + rect.width / 2;
+      var y = event.clientY || rect.top + rect.height / 2;
+      var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+      document.startViewTransition(apply).ready.then(function () {
+        root.animate(
+          { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)'] },
+          { duration: 600, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' });
+      });
+    });
+  });
+
   syncTabs(false);
   window.addEventListener('hashchange', function () { syncTabs(true); });
+  /* The browser's own jump to a section's fragment would hide the top bar and
+     outline the whole panel; a section opens at the top of the page instead. */
+  window.addEventListener('load', function () {
+    var targetId;
+    try { targetId = decodeURIComponent(window.location.hash.slice(1)); }
+    catch (_error) { targetId = ''; }
+    var target = targetId ? $(targetId) : null;
+    if (target && !target.hasAttribute('data-tab-panel')) { return; }
+    if (target && document.activeElement === target) { target.blur(); }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
 
   if (!SITE || !RANK) {
     if (errorBox) {
@@ -130,6 +237,7 @@
     setText('browse-page', 'Data unavailable');
     setText('rankings-page', 'Data unavailable');
     setText('detail-title', 'Image details unavailable');
+    tabShownHooks.forEach(function (hook) { hook(shownPanelId); });
     var unavailableDetail = $('detail').querySelector('p');
     if (unavailableDetail) {
       unavailableDetail.textContent = 'Reload the complete website to explore the images. ' +
@@ -535,7 +643,7 @@
     var start = (browserState.page - 1) * PER_PAGE;
     var slice = rows.slice(start, start + PER_PAGE);
     slice.forEach(function (example) {
-      var card = el('button', 'card');
+      var card = el('button', 'example-card');
       card.type = 'button';
       card.setAttribute('aria-pressed', String(example.id === browserState.selected));
       card.addEventListener('click', function () {
@@ -935,7 +1043,7 @@
   function renderBudgetButtons() {
     clear(budgetGroup);
     BUDGETS.forEach(function (budget) {
-      var button = el('button', 'button small', 'Top ' + budget);
+      var button = el('button', null, 'Top ' + budget);
       button.type = 'button';
       button.setAttribute('aria-pressed', String(budget === compareBudget));
       button.addEventListener('click', function () {
@@ -949,7 +1057,40 @@
     });
   }
 
+  /* A horizontal bar per method: the solid part is the measured value, the
+     hatched track is what is left up to the maximum. */
+  function methodBars(target, rows, caption) {
+    clear(target);
+    var list = el('ul', 'hbars');
+    list.setAttribute('aria-label', caption);
+    rows.forEach(function (row) {
+      var item = el('li', 'hbar' + (row.method === 'low_count' ? ' is-default' : ''));
+      item.appendChild(el('span', 'hbar-label', METHOD_LABELS[row.method]));
+      var track = el('span', 'hbar-track');
+      var fill = el('i');
+      fill.style.width = Math.max(0, Math.min(100, row.share * 100)) + '%';
+      track.appendChild(fill);
+      if (typeof row.marker === 'number') {
+        var marker = el('span', 'hbar-marker');
+        marker.style.left = (row.marker * 100) + '%';
+        marker.setAttribute('aria-hidden', 'true');
+        track.appendChild(marker);
+      }
+      item.appendChild(track);
+      item.appendChild(el('span', 'hbar-value num', row.text));
+      list.appendChild(item);
+    });
+    target.appendChild(list);
+  }
+  function renderMethodBars() {
+    methodBars($('compare-bars'), METHOD_ORDER.map(function (method) {
+      var range = severityRange(method, compareBudget);
+      return { method: method, share: (range.max || 0) / known.total, text: rangeText(range) + ' / ' + n(known.total) };
+    }), 'Reported cases inside the top ' + compareBudget + ', range over seeds 7, 42 and 101');
+  }
+
   function renderCompare() {
+    renderMethodBars();
     setText('compare-budget-note', 'Showing the top ' + compareBudget + ' of ' + n(known.pool_size) +
       ' review-pool candidates. A recovered case must exist in the preserved provenance, be that exact ' +
       'annotation version, and rank inside the budget.');
@@ -1226,8 +1367,7 @@
     table.appendChild(body);
 
     setText('rankings-count', n(rows.length) + ' of ' + n(RANK.rows.length) + ' review-pool rows match · ' +
-      'ordered by ' + METHOD_LABELS[rankState.order] + ' · highlighted rows are illustrated in the example ' +
-      'browser above.');
+      'ordered by ' + METHOD_LABELS[rankState.order] + ' · highlighted rows have an image in Image review.');
     setText('rankings-page', 'Page ' + rankState.page + ' of ' + pages);
     $('rankings-prev').disabled = rankState.page <= 1;
     $('rankings-next').disabled = rankState.page >= pages;
@@ -1235,7 +1375,7 @@
 
   setText('rankings-intro', 'Every one of the ' + n(RANK.rows.length) + ' review-pool candidates, with its ' +
     'rank in all four methods. Search by filename, filter by cell line and split, and order by any method. ' +
-    'The full table is also downloadable below. Rows that are not illustrated above simply have no image ' +
+    'The full table is also downloadable below. Rows without an image in Image review simply have no ' +
     'preview in this bundle; their numbers are complete.');
 
   $('rankings-search').addEventListener('input', function (event) {
@@ -1455,6 +1595,261 @@
 
   setText('footer-note', 'Site built from ' + n(provenance.files.length) + ' verified files ' +
     '(each listed with its SHA-256 in Technical details). ' + provenance.chain.join(' '));
+
+  /* ---------------------------------------------------------- dashboard */
+  /* KPI tiles and charts. Each figure is derived from the same data file as the
+     tables, so a tile and its table can never disagree. */
+  function setCount(id, value, decimals) {
+    var node = $(id);
+    if (!node || typeof value !== 'number' || !isFinite(value)) { return; }
+    node.dataset.count = String(value);
+    if (decimals) { node.dataset.decimals = String(decimals); }
+    node.textContent = formatCount(node, value);
+  }
+  function setChip(id, text, tone) {
+    var node = $(id);
+    if (!node) { return; }
+    node.textContent = text;
+    if (tone) { node.className = 'chip ' + tone; }
+  }
+  function setBar(id, numerator, denominator, label) {
+    var bar = $(id);
+    if (!bar || !denominator) { return; }
+    bar.querySelector('i').dataset.pct = String((numerator / denominator) * 100);
+    bar.setAttribute('aria-label', label);
+  }
+  var splitByName = {};
+  audit.splits.forEach(function (split) { splitByName[split.split] = split; });
+  var valFiles = splitByName.val ? splitByName.val.distinct_filenames : null;
+
+  setCount('ov-labels', c.annotations);
+  setText('ov-labels-note', 'in ' + n(c.image_records) + ' image records');
+  setChip('ov-files-chip', (c.missing_image_filenames ? '' : '\u2713 ') + n(c.missing_image_filenames) + ' missing images',
+    c.missing_image_filenames ? 'down' : 'up');
+  var splitTiles = $('ov-splits');
+  clear(splitTiles);
+  [['train', 'Learning'], ['val', 'Checking'], ['test', 'Held back']].forEach(function (pair) {
+    var split = splitByName[pair[0]];
+    if (!split) { return; }
+    var tile = el('div', 'split-tile');
+    tile.setAttribute('role', 'listitem');
+    tile.appendChild(el('span', 'split-name', pair[1] + ' \u00b7 ' + pair[0]));
+    tile.appendChild(el('b', 'num', n(split.image_records)));
+    tile.appendChild(el('span', 'split-share num', pct(split.annotations / c.annotations, 0) + ' of labels'));
+    splitTiles.appendChild(tile);
+  });
+
+  setCount('intro-coverage', c.distinct_filenames);
+  setChip('kpi-coverage-chip', pct(c.local_image_files / c.distinct_filenames, 0) + ' matched');
+  setCount('intro-overlap', audit.overlap.train_val);
+  if (valFiles) { setChip('kpi-overlap-chip', pct(audit.overlap.train_val / valFiles, 1) + ' of val'); }
+  setCount('intro-sparse', audit.known_sparse_cases.total);
+  setChip('kpi-sparse-chip', '\u2264 ' + n(c.low_count_threshold) + ' labels');
+  setCount('kpi-alternate', audit.findings.by_type.alternate_annotation_version.count);
+
+  if (valFiles) {
+    setChip('ov-leak-chip', pct(audit.overlap.train_val / valFiles, 1), 'down');
+    setText('ov-leak-n', n(audit.overlap.train_val));
+    setText('ov-leak-d', n(valFiles));
+    setBar('ov-leak-bar', audit.overlap.train_val, valFiles,
+      n(audit.overlap.train_val) + ' of ' + n(valFiles) + ' validation photos also appear in training');
+  }
+  setText('ov-leak-note', 'The held-back test split shares ' + n(audit.overlap.train_test + audit.overlap.val_test) +
+    ' filenames with the other two; only validation scores are affected.');
+  setText('ov-rec-note', 'Reported upstream in issue #21; each one is present in this snapshot with ' +
+    '\u2264 ' + n(c.low_count_threshold) + ' supplied labels.');
+  setChip('ov-rec-chip', n(audit.known_sparse_cases.recovered) + ' / ' + n(audit.known_sparse_cases.total),
+    audit.known_sparse_cases.recovered === audit.known_sparse_cases.total ? 'up' : 'down');
+  setText('ov-rec-n', n(audit.known_sparse_cases.recovered));
+  setText('ov-rec-d', n(audit.known_sparse_cases.total));
+  setBar('ov-rec-bar', audit.known_sparse_cases.recovered, audit.known_sparse_cases.total,
+    n(audit.known_sparse_cases.recovered) + ' of ' + n(audit.known_sparse_cases.total) +
+    ' reported sparse-label images recovered');
+
+  /* Column chart: reported cases inside the first BUDGETS[0] at the default seed. */
+  (function () {
+    var budget = BUDGETS[0];
+    setText('ov-chart-meta', 'top ' + budget);
+    setText('ov-chart-sub', 'The ' + n(known.total) + ' upstream-reported sparse images, placed in each method\u2019s ' +
+      'first ' + budget + ' of ' + n(known.pool_size) + ' (seed ' + DEFAULT_SEED + ').');
+    var short = { low_count: 'Count', robust: 'Robust', isolation_forest: 'ML', random: 'Random' };
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 260 176');
+    svg.setAttribute('role', 'img');
+    var described = [];
+    var defs = document.createElementNS(ns, 'defs');
+    defs.innerHTML = '<pattern id="ov-hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">' +
+      '<rect width="6" height="6" class="hatch-bg"/><line x1="0" y1="0" x2="0" y2="6" class="hatch-line"/></pattern>';
+    svg.appendChild(defs);
+    var top = 22, bottom = 148, height = bottom - top;
+    [0, Math.round(known.total / 2), known.total].forEach(function (tick) {
+      var y = bottom - (tick / known.total) * height;
+      var line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', '22'); line.setAttribute('x2', '258');
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('class', 'chart-grid');
+      svg.appendChild(line);
+      var label = document.createElementNS(ns, 'text');
+      label.setAttribute('x', '0'); label.setAttribute('y', y + 4);
+      label.setAttribute('class', 'chart-axis');
+      label.textContent = String(tick);
+      svg.appendChild(label);
+    });
+    METHOD_ORDER.forEach(function (method, position) {
+      var value = severityAtSeed(method, DEFAULT_SEED, budget) || 0;
+      described.push(METHOD_LABELS[method] + ' ' + value + ' of ' + known.total);
+      var x = 38 + position * 56, w = 34;
+      var track = document.createElementNS(ns, 'rect');
+      track.setAttribute('x', x); track.setAttribute('y', top);
+      track.setAttribute('width', w); track.setAttribute('height', height);
+      track.setAttribute('rx', '8'); track.setAttribute('fill', 'url(#ov-hatch)');
+      svg.appendChild(track);
+      var barHeight = (value / known.total) * height;
+      if (barHeight > 0) {
+        var bar = document.createElementNS(ns, 'rect');
+        bar.setAttribute('x', x); bar.setAttribute('y', bottom - barHeight);
+        bar.setAttribute('width', w); bar.setAttribute('height', barHeight);
+        bar.setAttribute('rx', '8');
+        bar.setAttribute('class', 'chart-bar' + (method === 'low_count' ? ' is-best' : ''));
+        bar.style.setProperty('--h', String(barHeight));
+        svg.appendChild(bar);
+      }
+      var valueLabel = document.createElementNS(ns, 'text');
+      valueLabel.setAttribute('x', x + w / 2); valueLabel.setAttribute('y', Math.min(bottom - barHeight, bottom) - 6);
+      valueLabel.setAttribute('text-anchor', 'middle'); valueLabel.setAttribute('class', 'chart-value');
+      valueLabel.textContent = String(value);
+      if (barHeight >= height - 2) { valueLabel.setAttribute('y', top + 16); valueLabel.setAttribute('class', 'chart-value on-bar'); }
+      svg.appendChild(valueLabel);
+      var name = document.createElementNS(ns, 'text');
+      name.setAttribute('x', x + w / 2); name.setAttribute('y', '168');
+      name.setAttribute('text-anchor', 'middle'); name.setAttribute('class', 'chart-axis');
+      name.textContent = short[method];
+      svg.appendChild(name);
+    });
+    svg.setAttribute('aria-label', 'Reported cases inside the top ' + budget + ': ' + described.join(', ') + '.');
+    var chart = $('ov-chart');
+    clear(chart);
+    chart.appendChild(svg);
+  })();
+
+  /* Flagged images: the audit's findings among the illustrated examples. */
+  (function () {
+    var table = $('ov-flagged');
+    var caption = table.querySelector('caption');
+    clear(table);
+    table.appendChild(caption);
+    var flagged = EXAMPLES.filter(isFlagged).sort(function (a, b) {
+      if (a.is_known_case !== b.is_known_case) { return a.is_known_case ? -1 : 1; }
+      if (a.n_annotations !== b.n_annotations) { return a.n_annotations - b.n_annotations; }
+      return a.file_name < b.file_name ? -1 : 1;
+    });
+    var head = el('thead');
+    var headRow = el('tr');
+    ['Image', 'Cell line', 'Split', 'Labels', 'Finding', ''].forEach(function (label, position) {
+      var th = el('th', position === 3 ? 'num' : null, label);
+      th.scope = 'col';
+      if (!label) { th.appendChild(el('span', 'sr-only', 'Open')); }
+      headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+    table.appendChild(head);
+    var body = el('tbody');
+    flagged.slice(0, 6).forEach(function (example) {
+      var row = el('tr');
+      row.appendChild(el('td', 'id', example.file_name));
+      row.appendChild(el('td', null, example.cell_line));
+      row.appendChild(el('td', null, example.split));
+      row.appendChild(el('td', 'num amt', n(example.n_annotations)));
+      var finding = el('td');
+      finding.appendChild(el('span', 'status ' + (example.finding_type === 'alternate_annotation_version' ? 'neutral' : 'warn'),
+        example.finding_label));
+      row.appendChild(finding);
+      var open = el('td', 'open');
+      var button = el('button', 'btn btn-small btn-secondary', 'View');
+      button.type = 'button';
+      button.setAttribute('aria-label', 'View ' + example.file_name + ' in the image review');
+      button.addEventListener('click', function () { openExample(example.id); });
+      open.appendChild(button);
+      row.appendChild(open);
+      body.appendChild(row);
+    });
+    table.appendChild(body);
+    var foot = el('tfoot');
+    var footRow = el('tr');
+    var footCell = el('td', 'muted', 'Showing ' + n(Math.min(6, flagged.length)) + ' of ' + n(flagged.length) +
+      ' flagged illustrated images · ' + n(audit.findings.total) + ' audit findings in total');
+    footCell.colSpan = 6;
+    footRow.appendChild(footCell);
+    foot.appendChild(footRow);
+    table.appendChild(foot);
+  })();
+  function openExample(id) {
+    browserState.query = ''; browserState.finding = ''; browserState.cellLine = ''; browserState.split = '';
+    $('browse-search').value = ''; findingSelect.value = ''; cellLineSelect.value = ''; $('browse-split').value = '';
+    var rows = filtered();
+    var position = rows.findIndex(function (row) { return row.id === id; });
+    if (position < 0) { return; }
+    browserState.selected = id;
+    browserState.page = Math.floor(position / PER_PAGE) + 1;
+    renderBrowse();
+    selectTab($('tab-try-it'));
+  }
+
+  function kpiTiles(target, tiles) {
+    clear(target);
+    tiles.forEach(function (tile, position) {
+      var node = el('div', 'tile' + (position === 0 ? ' hero' : ''));
+      var top = el('div', 'top', tile.label);
+      node.appendChild(top);
+      var value = el('p', 'kpi-val num');
+      var figure = el('span', null, tile.text);
+      if (typeof tile.count === 'number') {
+        figure.dataset.count = String(tile.count);
+        if (tile.decimals) { figure.dataset.decimals = String(tile.decimals); }
+        if (tile.suffix) { figure.dataset.suffix = tile.suffix; }
+      }
+      value.appendChild(figure);
+      node.appendChild(value);
+      var line = el('p', 'chip-line');
+      line.appendChild(el('span', 'chip' + (tile.tone ? ' ' + tile.tone : ''), tile.chip));
+      line.appendChild(document.createTextNode(' '));
+      line.appendChild(el('span', 'muted', tile.note));
+      node.appendChild(line);
+      target.appendChild(node);
+    });
+  }
+  var lowTop = severityRange('low_count', BUDGETS[0]);
+  var forestTop = severityRange('isolation_forest', BUDGETS[0]);
+  var lowAuc = synthetic.seed_summary.low_count.synthetic_roc_auc.mean;
+  var forestAuc = synthetic.seed_summary.isolation_forest.synthetic_roc_auc.mean;
+  var randomAuc = synthetic.seed_summary.random.synthetic_roc_auc.mean;
+  kpiTiles($('methods-kpis'), [
+    { label: 'Count rule · reported cases', text: rangeText(lowTop) + ' / ' + n(known.total),
+      chip: 'top ' + BUDGETS[0], note: 'every seed' },
+    { label: 'Isolation Forest (ML) · reported cases', text: rangeText(forestTop) + ' / ' + n(known.total),
+      chip: '\u2193 ' + rangeText({ min: lowTop.min - forestTop.max, max: lowTop.max - forestTop.min }) + ' vs count', tone: 'down',
+      note: 'top ' + BUDGETS[0] },
+    { label: 'Count rule · simulated AUC', text: dec(lowAuc, 3), count: lowAuc, decimals: 3,
+      chip: 'simulation', tone: 'neutral', note: 'mean of 3 seeds' },
+    { label: 'Isolation Forest · simulated AUC', text: dec(forestAuc, 3), count: forestAuc, decimals: 3,
+      chip: '\u2193 ' + dec(lowAuc - forestAuc, 3), tone: 'down', note: 'random ' + dec(randomAuc, 3) }
+  ]);
+  methodBars($('compare-auc'), METHOD_ORDER.map(function (method) {
+    var auc = synthetic.seed_summary[method].synthetic_roc_auc.mean;
+    return { method: method, share: auc, marker: 0.5, text: dec(auc, 3) };
+  }), 'Simulated ROC AUC per method, mean over seeds; the marker shows chance at 0.5');
+
+  kpiTiles($('data-kpis'), [
+    { label: 'Review pool', text: n(SITE.methods.pools.review.size), count: SITE.methods.pools.review.size,
+      chip: 'every non-fit image', note: 'ranked by 4 methods' },
+    { label: 'Audit findings', text: n(audit.findings.total), count: audit.findings.total,
+      chip: n(Object.keys(audit.findings.by_type).length) + ' types', tone: 'neutral', note: 'with evidence' },
+    { label: 'Frozen review sample', text: n(SITE.methods.humanReview.records), count: SITE.methods.humanReview.records,
+      chip: 'awaiting review', tone: 'neutral', note: 'judgments blank' },
+    { label: 'Verified files', text: n(SITE.provenance.files.length), count: SITE.provenance.files.length,
+      chip: 'SHA-256', tone: 'up', note: 'one release run' }
+  ]);
 
   /* -------------------------------------------------------------- start */
   renderBrowse();

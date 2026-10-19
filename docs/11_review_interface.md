@@ -1,26 +1,33 @@
 # 11. Review website (static review interface)
 
 The review website lives at `web/review/`. It is a static projection of one
-completed release run (currently `20261018T220218Z-0e359b9bf088`, see
+completed release run (currently `20261018T231214Z-0e359b9bf088`, see
 `docs/12_release.md`): no backend, no build step, no framework, no network call,
 and no dataset on the machine that renders it. Its design rules are in
 `DESIGN.md`.
 
-Three tabs:
+A dashboard with four sections, chosen in the top pill bar or the left icon rail
+(a bottom bar on phones):
 
-- **Overview** — purpose, the two findings with their upstream origin, a real
-  sparse-label image with its supplied label already drawn, and what was built.
-- **Try it** — a real image is already selected: an image selector, a
+- **Overview** — KPI tiles (labels checked, images audited, reused photos,
+  sparse-label images, alternate versions), a chart of how many of the nine
+  reported cases each method places in its first 10, progress bars for
+  validation reuse and reported-case recovery, the flagged images (each opens in
+  the image review), a real sparse-label image and what was built.
+- **Images** — a real image is already selected: an image selector, a
   next-image button and a label toggle, with the finding and next action beside
-  the image. Search and filters, detailed counts and the two worked examples are
-  optional disclosures.
-- **Results** — the method comparison (known-case regression and simulated
-  annotation loss, with their limits), the full 3,067-row ranking table,
-  evidence downloads and technical details (file hashes, model configuration,
-  review status, glossary).
+  the image. Search and filters, detailed counts and the two worked examples
+  follow.
+- **Methods** — KPI tiles and bar charts for the known-case regression and the
+  simulated annotation loss, then the full comparison tables with their limits.
+- **Data** — the full 3,067-row ranking table, evidence downloads and technical
+  details (file hashes, model configuration, review status, glossary).
 
-Direct links select the right tab and open parent disclosures. Tabs support
-arrow keys, Home/End and browser back/forward.
+Every tile, chart and bar is computed in the page from the same generated data
+file as the tables next to it, so a figure and its table cannot disagree.
+
+Direct links select the right section and open parent disclosures. The section
+tabs support arrow keys, Home/End and browser back/forward.
 
 ```bash
 python3 -m http.server --directory web/review 8321   # or open index.html via file://

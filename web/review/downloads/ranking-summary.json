@@ -48,14 +48,14 @@
   "provenance": {
     "annotation_reproduction_max_abs_diff": 2.9103830456733704e-10,
     "annotation_reproduction_max_abs_diff_sql": 0.0,
-    "feature_manifest_sha256": "797af41b21a98a3defe4b750da9df268dc9693948bdbc557d65962cc5a911221",
+    "feature_manifest_sha256": "bb3c676cefca78cf8e145b1e68d5074f61745355989496109aec15034baa4109",
     "feature_schema_version": "1",
     "source_sha256": {
       "test": "9eb5805ca031cebcd70bab4a4aa0c89d98646c206d333803a8d5b10ea7fe9960",
       "train": "6788902479bc0ffd2838fb7160a778078f464ea6034ed76bb5a0e40263cb9e78",
       "val": "eb72a68f5065d9ade1805b496eecdcd14ca275e5f1bc6aae7e07279bddadfdc7"
     },
-    "warehouse_manifest_sha256": "771584b24d3e935d140dae2217269c25d9166e377feff4c08cd9d8492d977881"
+    "warehouse_manifest_sha256": "d53e986df4389e55adec7b42c51baf0daf0a567cfcaf30996a375d411d2fa85f"
   },
   "schema_version": "1",
   "score_semantics": "unusualness priority in [0, 1] (fit-only percentile); not an error probability; raw scores preserved in candidates.jsonl",

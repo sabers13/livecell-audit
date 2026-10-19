@@ -21,10 +21,10 @@ Upstream reports this site reproduces (sartorius-research/LIVECell):
   issue #14, alternate annotation versions: explained by Christoffer
             Edlund (Sartorius)
 
-Typeface: Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono,
-copyright The Atkinson Hyperlegible Next and Mono Project Authors, licensed
-under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt); the latin
-subsets are included unmodified.
+Typeface: Inter, copyright 2016 The Inter Project Authors
+(https://github.com/rsms/inter), licensed under the SIL Open Font License
+1.1 (assets/fonts/OFL-inter.txt); the latin variable subsets (as packaged
+by Fontsource) are included unmodified.
 
 Intended use: independent, noncommercial portfolio and education work.
 This project is not affiliated with, endorsed by, or connected to Sartorius.

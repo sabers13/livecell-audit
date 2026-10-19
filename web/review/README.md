@@ -1,7 +1,7 @@
 # LIVECell review website
 
 A static, offline review website built from one completed release run of the
-audit, ranking and evaluation (currently `20261018T220218Z-0e359b9bf088`). Open
+audit, ranking and evaluation (currently `20261018T231214Z-0e359b9bf088`). Open
 `index.html` directly (`file://`) or serve the directory:
 
 ```bash
