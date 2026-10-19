@@ -71,6 +71,7 @@
       <div class="project-actions reveal">
         <a class="btn project-source" href="https://github.com/sabers13/livecell-audit" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1-.4-2-1-2 3 0 6-2 6-6 0-1-.4-2-1-3 0-1 0-2-.2-3-2 0-3 1-4 2a13 13 0 0 0-6 0C8 5 7 4 5 4c-.2 1-.2 2 0 3-1 1-1 2-1 3 0 4 3 6 6 6-.6 0-1 1-1 2v4"/></svg>View on GitHub</a>
         <a class="btn project-contact" href="https://sabersojudi.com/#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M8 7v14M16 7v14"/></svg>Hire Me</a>
+      <a class="btn btn-primary reveal" href="#try-it">Review images <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
     <section class="hero-example reveal" aria-labelledby="ov-example-title">
@@ -91,7 +92,6 @@
         </div>
         <figcaption>Many cells, just one supplied label. The yellow outline marks it; the ring and pointer help you find it.</figcaption>
       </figure>
-      <a class="btn btn-primary reveal" href="#try-it">Review images <span class="arrow" aria-hidden="true">→</span></a>
     </section>
   </div>
 
@@ -160,7 +160,116 @@
       </div>
     </section>
 
-    <section id="case-studies" class="card c7 reveal" aria-labelledby="examples-title">
+    <section id="overview-examples" class="card c6 overview-examples reveal" aria-labelledby="overview-examples-title">
+      <div class="card-h"><h2 id="overview-examples-title">Two examples in detail</h2></div>
+      <p class="muted card-sub">Two checks, with evidence and a next step for each.</p>
+      <div class="example-summaries">
+        <article class="example-summary inset">
+          <div class="specimen"><div class="image-overlay">
+            <img src="assets/guided-shared.png" alt="The same Huh7 microscope photo appears in two data groups." width="704" height="520">
+            <img class="label-layer" src="previews/guided_train_795492.labels.png" alt="" width="704" height="520">
+          </div></div>
+          <div><h3>Same image in two groups</h3><p>30 photos appear in both training and validation. Familiar examples can make evaluation less reliable.</p></div>
+        </article>
+        <article class="example-summary inset">
+          <div class="specimen"><div class="image-overlay">
+            <img src="assets/guided-sparse.png" alt="Many visible cells, with only one supplied cell label." width="704" height="520">
+            <svg viewBox="0 0 704 520" aria-hidden="true"><polygon points="205.72,26.6 200.22,22.93 192.88,23.84 189.21,28.43 187.38,34.85 192.88,41.27 197.47,43.1 202.05,43.1 203.89,43.1 207.56,38.52 207.56,33.02" fill="#ffed00" fill-opacity=".22" stroke="#ffed00" stroke-width="3"/></svg>
+          </div></div>
+          <div><h3>Very few labelled cells</h3><p>9 reported images have ten or fewer labels. They need review before being used as training examples.</p></div>
+        </article>
+      </div>
+      <a class="btn btn-small btn-secondary" href="#case-studies">Explore both examples <span aria-hidden="true">→</span></a>
+    </section>
+
+    <section id="work" class="card c6 reveal" aria-labelledby="work-title">
+      <div class="card-h"><h2 id="work-title">What I built</h2></div>
+      <ul class="work-list">
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span><strong>A repeatable data pipeline</strong><span>Streams the three COCO label files into DuckDB and a pandas feature table, with automated tests.</span></span></li>
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7"/></svg></span><span><strong>An honest method comparison</strong><span>Machine learning did not beat a simple label count. The tests favour counting by design, and the results say so.</span></span></li>
+        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><span><strong>A report you can verify</strong><span>Every number here is copied from one hashed release run and checked again before publishing.</span></span></li>
+      </ul>
+      <p class="skills" aria-label="Skills used"><span>Python</span><span>pandas</span><span>DuckDB</span><span>scikit-learn</span><span>pytest</span></p>
+      <p class="muted">Both findings were first reported on GitHub (<a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">#26</a>, <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">#21</a>). My tool reproduces them from the raw files and tracks them with evidence.</p>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================== IMAGES -->
+<div id="try-it" class="project-panel" data-tab-panel="try-it">
+  <div class="page-head">
+    <div>
+      <h1 class="reveal" id="browse-title">Image review</h1>
+      <p class="sub reveal">Pick an image and show or hide its cell labels. Flagged images come first, then comparison images.</p>
+    </div>
+  </div>
+  <div class="grid">
+    <section id="browse" class="card c12 try-review reveal" aria-labelledby="browse-title">
+      <div class="try-controls" role="group" aria-label="Try reviewing an image">
+        <div class="control">
+          <label for="try-example">Choose an image</label>
+          <select id="try-example"></select>
+        </div>
+        <button id="try-next" class="btn btn-primary" type="button">Next image <span class="arrow" aria-hidden="true">→</span></button>
+        <label class="check-label"><input id="browse-overlay" class="switch" type="checkbox" role="switch" checked> Show cell labels</label>
+      </div>
+      <p id="try-progress" class="count" role="status" aria-live="polite"></p>
+      <article id="detail" class="detail" aria-live="polite" aria-labelledby="detail-title">
+        <h3 id="detail-title">Select an example</h3>
+        <p>Choose an example from the list above to see its image, evidence and recommended review action.</p>
+      </article>
+
+      <details id="browse-filters" class="details">
+        <summary>Search and filter all examples</summary>
+        <div class="content">
+          <p class="preview" id="preview-status">Verified dataset snapshot · 17 October 2026</p>
+          <p id="browse-intro">Loading the illustrated example selection&hellip;</p>
+          <div class="controls" role="group" aria-label="Filter and order the illustrated examples">
+            <div class="control">
+              <label for="browse-search">Search by filename</label>
+              <input id="browse-search" type="search" placeholder="e.g. A172_Phase" autocomplete="off">
+            </div>
+            <div class="control">
+              <label for="browse-finding">Finding type</label>
+              <select id="browse-finding"><option value="">All findings</option></select>
+            </div>
+            <div class="control">
+              <label for="browse-cell-line">Cell line</label>
+              <select id="browse-cell-line"><option value="">All cell lines</option></select>
+            </div>
+            <div class="control">
+              <label for="browse-split">Split</label>
+              <select id="browse-split">
+                <option value="">All splits</option>
+                <option value="train">train (learning)</option>
+                <option value="val">val (checking)</option>
+                <option value="test">test (held back)</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="browse-method">Order by method</label>
+              <select id="browse-method"></select>
+            </div>
+            <div class="control">
+              <label for="browse-budget">Review budget</label>
+              <select id="browse-budget"></select>
+            </div>
+          </div>
+          <p id="browse-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
+          <div class="browse-layout">
+            <div class="browse-list" role="group" aria-label="Illustrated examples, as a list of buttons" id="browse-list"></div>
+            <div class="browse-pager">
+              <button id="browse-prev" class="btn btn-small btn-secondary" type="button">Previous</button>
+              <span id="browse-page" class="page-label">Page 1 of 1</span>
+              <button id="browse-next" class="btn btn-small btn-secondary" type="button">Next</button>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+
+    <section id="case-studies" class="card c12 reveal" aria-labelledby="examples-title">
       <div class="card-h"><h2 id="examples-title">Two examples in detail</h2></div>
       <p class="muted card-sub">Each one shows what was found, why it matters, what is uncertain, and what a person should do next.</p>
       <div class="segmented" role="group" aria-label="Choose a finding to explore">
@@ -249,94 +358,6 @@
         </details>
       </article>
     </section>
-
-    <section id="work" class="card c5 reveal" aria-labelledby="work-title">
-      <div class="card-h"><h2 id="work-title">What I built</h2></div>
-      <ul class="work-list">
-        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span><strong>A repeatable data pipeline</strong><span>Streams the three COCO label files into DuckDB and a pandas feature table, with automated tests.</span></span></li>
-        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7"/></svg></span><span><strong>An honest method comparison</strong><span>Machine learning did not beat a simple label count. The tests favour counting by design, and the results say so.</span></span></li>
-        <li class="inset"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><span><strong>A report you can verify</strong><span>Every number here is copied from one hashed release run and checked again before publishing.</span></span></li>
-      </ul>
-      <p class="skills" aria-label="Skills used"><span>Python</span><span>pandas</span><span>DuckDB</span><span>scikit-learn</span><span>pytest</span></p>
-      <p class="muted">Both findings were first reported on GitHub (<a href="https://github.com/sartorius-research/LIVECell/issues/26" target="_blank" rel="noopener">#26</a>, <a href="https://github.com/sartorius-research/LIVECell/issues/21" target="_blank" rel="noopener">#21</a>). My tool reproduces them from the raw files and tracks them with evidence.</p>
-    </section>
-  </div>
-</div>
-
-<!-- ============================================================== IMAGES -->
-<div id="try-it" class="project-panel" data-tab-panel="try-it">
-  <div class="page-head">
-    <div>
-      <h1 class="reveal" id="browse-title">Image review</h1>
-      <p class="sub reveal">Pick an image and show or hide its cell labels. Flagged images come first, then comparison images.</p>
-    </div>
-  </div>
-  <div class="grid">
-    <section id="browse" class="card c12 try-review reveal" aria-labelledby="browse-title">
-      <div class="try-controls" role="group" aria-label="Try reviewing an image">
-        <div class="control">
-          <label for="try-example">Choose an image</label>
-          <select id="try-example"></select>
-        </div>
-        <button id="try-next" class="btn btn-primary" type="button">Next image <span class="arrow" aria-hidden="true">→</span></button>
-        <label class="check-label"><input id="browse-overlay" class="switch" type="checkbox" role="switch" checked> Show cell labels</label>
-      </div>
-      <p id="try-progress" class="count" role="status" aria-live="polite"></p>
-      <article id="detail" class="detail" aria-live="polite" aria-labelledby="detail-title">
-        <h3 id="detail-title">Select an example</h3>
-        <p>Choose an example from the list above to see its image, evidence and recommended review action.</p>
-      </article>
-
-      <details id="browse-filters" class="details">
-        <summary>Search and filter all examples</summary>
-        <div class="content">
-          <p class="preview" id="preview-status">Verified dataset snapshot · 17 October 2026</p>
-          <p id="browse-intro">Loading the illustrated example selection&hellip;</p>
-          <div class="controls" role="group" aria-label="Filter and order the illustrated examples">
-            <div class="control">
-              <label for="browse-search">Search by filename</label>
-              <input id="browse-search" type="search" placeholder="e.g. A172_Phase" autocomplete="off">
-            </div>
-            <div class="control">
-              <label for="browse-finding">Finding type</label>
-              <select id="browse-finding"><option value="">All findings</option></select>
-            </div>
-            <div class="control">
-              <label for="browse-cell-line">Cell line</label>
-              <select id="browse-cell-line"><option value="">All cell lines</option></select>
-            </div>
-            <div class="control">
-              <label for="browse-split">Split</label>
-              <select id="browse-split">
-                <option value="">All splits</option>
-                <option value="train">train (learning)</option>
-                <option value="val">val (checking)</option>
-                <option value="test">test (held back)</option>
-              </select>
-            </div>
-            <div class="control">
-              <label for="browse-method">Order by method</label>
-              <select id="browse-method"></select>
-            </div>
-            <div class="control">
-              <label for="browse-budget">Review budget</label>
-              <select id="browse-budget"></select>
-            </div>
-          </div>
-          <p id="browse-count" class="count" role="status" aria-live="polite">Loading&hellip;</p>
-          <div class="browse-layout">
-            <div class="browse-list" role="group" aria-label="Illustrated examples, as a list of buttons" id="browse-list"></div>
-            <div class="browse-pager">
-              <button id="browse-prev" class="btn btn-small btn-secondary" type="button">Previous</button>
-              <span id="browse-page" class="page-label">Page 1 of 1</span>
-              <button id="browse-next" class="btn btn-small btn-secondary" type="button">Next</button>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
-
-
   </div>
 </div>
 

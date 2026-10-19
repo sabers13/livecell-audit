@@ -387,7 +387,7 @@ tfoot td { padding: 12px 12px 0; }
 
 /* --- overview content --------------------------------------------------- */
 .first-example figcaption { margin-top: 12px; font-size: var(--fs-small); color: var(--ink-muted); }
-.overview-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); align-items: center; gap: 32px; }
+.overview-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); align-items: start; gap: 32px; }
 .overview-intro .gradient-text { white-space: nowrap; }
 .hero-example { min-width: 0; width: 100%; }
 .hero-example .card-h { margin-bottom: 10px; gap: 8px; }
@@ -395,8 +395,13 @@ tfoot td { padding: 12px 12px 0; }
 .hero-example .chip { font-size: 11px; }
 .hero-example .readout { padding: 8px 10px; font-size: 11px; }
 .hero-example figcaption { font-size: 12px; line-height: 1.5; margin-top: 8px; }
-.hero-example > .btn { margin-top: 12px; }
-#work { align-self: start; }
+.overview-examples { display: flex; flex-direction: column; }
+.example-summaries { display: grid; gap: 12px; margin: 4px 0 18px; }
+.example-summary { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 14px; padding: 12px; }
+.example-summary .specimen { border-radius: 10px; }
+.example-summary h3 { font-size: 14.5px; line-height: 1.4; }
+.example-summary p { margin-top: 5px; font-size: var(--fs-small); color: var(--ink-2); }
+.overview-examples > .btn { align-self: flex-start; margin-top: auto; }
 .work-list { list-style: none; padding: 0; display: grid; gap: 10px; }
 .work-list li { display: flex; gap: 12px; align-items: flex-start; max-width: none; }
 .work-list li > span:last-child { min-width: 0; }
@@ -643,6 +648,7 @@ dl.kv dd .unit { display: block; font-weight: 400; color: var(--ink-muted); font
   .page-head { flex-direction: column; align-items: flex-start; }
   .overview-intro { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .hero-example { max-width: 300px; }
+  .example-summary { grid-template-columns: 80px minmax(0, 1fr); gap: 10px; }
   #guided-shared-panel, #guided-sparse-panel { scroll-margin-top: 142px; }
   .kpis, .kpis.four { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px; gap: 8px; }
   .tile { min-height: 120px; padding: 12px; }
