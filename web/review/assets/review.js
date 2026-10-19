@@ -166,11 +166,10 @@
     });
   });
 
-  /* Appearance: follows the OS until the reader picks one; the switch wipes in
-     as a circle from the pressed button. */
+  /* Each page opening starts light; a reader can switch for this visit.
+     The switch wipes in as a circle from the pressed button. */
   var root = document.documentElement;
-  var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  function currentTheme() { return root.dataset.theme || (darkQuery.matches ? 'dark' : 'light'); }
+  function currentTheme() { return root.dataset.theme || 'light'; }
   var themeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-theme-set]'));
   function syncThemeButtons() {
     themeButtons.forEach(function (button) {
@@ -178,14 +177,12 @@
     });
   }
   syncThemeButtons();
-  if (darkQuery.addEventListener) { darkQuery.addEventListener('change', syncThemeButtons); }
   themeButtons.forEach(function (button) {
     button.addEventListener('click', function (event) {
       var next = button.dataset.themeSet;
       if (next === currentTheme()) { return; }
       var apply = function () {
         root.dataset.theme = next;
-        try { window.localStorage.setItem('livecell-theme', next); } catch (_error) { /* private mode */ }
         syncThemeButtons();
       };
       if (!document.startViewTransition || motionQuery.matches) { apply(); return; }

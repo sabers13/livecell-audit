@@ -139,6 +139,7 @@ DOC_REDACTIONS = (
 #: hand-written shell of the review website (HTML + CSS + JS).
 SITE_SHELL_FILES = (
     "index.html",
+    os.path.join("assets", "sartorius-logo.svg"),
     os.path.join("assets", "review.css"),
     os.path.join("assets", "review.js"),
     os.path.join("assets", "fonts", "inter-latin-wght-normal.woff2"),

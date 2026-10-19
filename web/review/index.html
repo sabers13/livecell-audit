@@ -1,21 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Saber Sojudi built a Python pipeline to check LIVECell images and labels, flag reused images and present clear evidence for scientific review.">
 <title>LIVECell Audit — a data science project by Saber Sojudi</title>
-<script>
-  /* apply a saved appearance before first paint; without one the page follows the OS */
-  try { var savedTheme = localStorage.getItem('livecell-theme'); if (savedTheme === 'light' || savedTheme === 'dark') { document.documentElement.dataset.theme = savedTheme; } } catch (e) {}
-</script>
 <link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the dashboard</a>
-<div class="shell">
 <header class="topbar">
-  <a href="#overview" class="pill logo" aria-label="LIVECell Audit, overview"><span class="mark" aria-hidden="true">LC</span><span class="wordmark"><span class="highlight">LIVECell</span> Audit</span></a>
+  <div class="topbar-inner">
+  <a href="https://sabersojudi.com/" class="portfolio-brand">Saber Sojudi</a>
   <nav id="project-tabs" class="pill nav project-tabs" aria-label="Dashboard sections">
     <a id="tab-overview" href="#overview" data-tab="overview">Overview</a>
     <a id="tab-try-it" href="#try-it" data-tab="try-it">Images</a>
@@ -28,14 +24,18 @@
       <a class="icon-btn dot" href="#downloads" aria-label="Download the evidence" title="Downloads"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></a>
       <a class="icon-btn" href="#technical" aria-label="Technical details and sources" title="Sources"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/></svg></a>
     </div>
-    <a class="pill profile" href="https://sabersojudi.com/" aria-label="Saber Sojudi, portfolio website">
-      <span class="avatar" aria-hidden="true">SS</span>
-      <span class="who"><b>Saber Sojudi</b><small>sabersojudi.com</small></span>
-      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    <a href="#overview" class="pill logo" aria-label="Sartorius LIVECell Audit, overview" title="Independent project using Sartorius’ public LIVECell dataset">
+      <img class="company-logo" src="assets/sartorius-logo.svg" alt="Sartorius" width="96" height="20">
+      <span class="wordmark"><span class="highlight">LIVECell</span> Audit</span>
     </a>
+    <a class="portfolio-back" href="https://sabersojudi.com/" title="Back to main page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 5-7 7 7 7M5 12h14"/></svg><span>Back</span>
+    </a>
+  </div>
   </div>
 </header>
 
+<div class="shell">
 <div class="body">
 <aside class="rail" aria-label="Quick navigation">
   <div class="group" role="group" aria-label="Appearance">
@@ -61,6 +61,19 @@
     <div>
       <h1 class="reveal" id="page-title">Checking the data used to <span class="gradient-text">train AI</span></h1>
       <p class="sub reveal">I built a Python tool that checks the images and cell labels in Sartorius’ public LIVECell dataset, then gives scientists a clear list of examples to review.</p>
+      <ul class="project-skills reveal" aria-label="Skills demonstrated in this project">
+        <li title="Python command-line tools for the complete audit and release pipeline"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 5 6 7-6 7M13 19h7"/></svg>Python</li>
+        <li title="pandas feature tables and cell-line summaries"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 10v10"/></svg>pandas</li>
+        <li title="Isolation Forest ranking compared with statistical and low-count baselines"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="18" cy="19" r="2"/><path d="m7 11 9-5M7 13l9 5"/></svg>scikit-learn</li>
+        <li title="Repeatable stages from raw annotation files to a verified report"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="8" width="6" height="8" rx="1"/><rect x="16" y="8" width="6" height="8" rx="1"/><path d="M8 12h8m-3-3 3 3-3 3"/></svg>Data pipelines</li>
+        <li title="DuckDB and typed Parquet tables with explicit record keys and joins"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0"/></svg>Data modeling</li>
+        <li title="Structured image and annotation features prepared for analysis"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/></svg>Data preprocessing</li>
+        <li title="Checks for missing files, reused images, alternate records and sparse labels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg>Data quality</li>
+      </ul>
+      <div class="project-actions reveal">
+        <a class="btn project-source" href="https://github.com/sabers13/livecell-audit" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1-.4-2-1-2 3 0 6-2 6-6 0-1-.4-2-1-3 0-1 0-2-.2-3-2 0-3 1-4 2a13 13 0 0 0-6 0C8 5 7 4 5 4c-.2 1-.2 2 0 3-1 1-1 2-1 3 0 4 3 6 6 6-.6 0-1 1-1 2v4"/></svg>View on GitHub</a>
+        <a class="btn project-contact" href="https://sabersojudi.com/#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M8 7v14M16 7v14"/></svg>Hire Me</a>
+      </div>
     </div>
     <a class="btn btn-primary reveal" href="#try-it">Review images <span class="arrow" aria-hidden="true">→</span></a>
   </div>

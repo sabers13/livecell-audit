@@ -17,11 +17,11 @@ The overview is a dashboard to read, not one to operate: KPI tiles, one chart an
 
 ## Visual direction
 
-The layout follows the pill-dashboard pattern (page → shell → card → inset surface stack, a floating pill top bar, a split icon rail, one gradient hero tile per section, hatched remainders on bars and charts, blur-in card entrance, count-up figures and a circular appearance wipe). Its colours are taken from the portfolio site, sabersojudi.com, with a touch of the Sartorius brand yellow. Tokens live in `web/review/assets/review.css` (`:root`, a `[data-theme="dark"]` set and the same set under `prefers-color-scheme: dark`).
+The outer page follows the portfolio project template in `sabers13/sabers13.github.io/hicp-eurostat.html`: a fixed, full-width translucent white header, blue Saber Sojudi home link, gray navigation with a blue selection underline, Back link, and a pale gray background without an enclosing rounded shell. The company pill retains the LIVECell Audit tag and the dataset wordmark. The interior retains the dashboard cards, split icon rail, gradient hero tile, hatched bars, blur-in entrance and count-up figures. Tokens live in `web/review/assets/review.css` (`:root` and an explicit `[data-theme="dark"]` set). Every page opening starts in light mode, including on a dark OS or after a previous dark selection; appearance buttons switch only the current visit.
 
 | Role | Token | Light | Dark | Notes |
 | --- | --- | --- | --- | --- |
-| Page / shell / card / inset | `--bg-page` … `--bg-inset` | `#E5E7EB` / `#F3F4F6` / `#FFFFFF` / `#F3F4F6` | `#030712` / `#0B0F19` / `#111827` / `#1A2232` | Tailwind gray, as on the portfolio; depth comes from tone, not shadows |
+| Page / shell / card / inset | `--bg-page` … `--bg-inset` | `#F9FAFB` / `#F9FAFB` / `#FFFFFF` / `#F3F4F6` | `#030712` / `#0B0F19` / `#111827` / `#1A2232` | Portfolio project background; depth comes from tone, not shadows |
 | Content | `--ink` / `--ink-2` / `--ink-muted` | `#111827` / `#374151` / `#6B7280` | `#F9FAFB` / `#D1D5DB` / `#9CA3AF` | muted is 4.8:1 on white |
 | Accent | `--accent` | `#2563EB` (portfolio blue-600) | same | one hero tile per section, the label switch, the default method's bar, the notification dot |
 | Hero gradient | `--accent-gradient` | blue-600 → blue-700 → violet-700 | same | white text is 5.2:1 or more on every stop; the soft highlight sits behind the tile icon, not text; the violet end echoes the portfolio's purple gradient text |
@@ -30,7 +30,7 @@ The layout follows the pill-dashboard pattern (page → shell → card → inset
 | Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | Sartorius yellow; 15.6:1 on the stage |
 | Specimen stage | `--stage` | `#0B111C` | `#05080F` | readout text `#CBD5E1` |
 
-- **One colour, one meaning.** Yellow marks supplied cell labels; the wordmark's highlighter underline and the dot on the logo mark are their legend. Blue is the one accent; primary buttons and the selected nav pill are ink (white in dark mode), never blue or yellow.
+- **One colour, one meaning.** Yellow marks supplied cell labels and the LIVECell tag's highlighter underline. Blue is the portfolio accent and header navigation underline; primary buttons and the selected rail icon are ink (white in dark mode).
 - **Typeface.** Inter (variable, latin subset, self-hosted under the SIL OFL), as on the portfolio, with `cv11`/`ss01` and tabular figures for every number; filenames, ids and hashes use the system monospace. Title 40 px/600/-0.03em, KPI 34 px/600/-0.02em, card title 18 px/600, body 15 px.
 - **Signature: the specimen stage.** Every microscopy image sits on a dark stage with a mono readout strip (filename, label count, pixel size), as imaging software shows a specimen. Yellow outlines on it are the only yellow on the page apart from the legend.
 - **Motion.** Cards enter blur → sharp with a 60 ms stagger each time a section is shown; big figures count up and bars fill the first time; the nav pill slides; the appearance switch wipes in as a circle from the pressed button. The first time the overview is shown, the hero image comes into focus, its label appears and the locator ring closes onto the only labelled cell. The chrome never animates on a section change. All of it is off under `prefers-reduced-motion` (figures show their final value at once).
@@ -38,6 +38,7 @@ The layout follows the pill-dashboard pattern (page → shell → card → inset
 
 ## Interaction and content rules
 
+- The overview introduction uses portfolio-style icon badges for Python, pandas, scikit-learn, data pipelines, data modeling, data preprocessing and data quality. Each badge names a skill the project implements. Do not add cloud or lab-team collaboration claims without project evidence. The introduction links to `https://github.com/sabers13/livecell-audit` and the portfolio's `#contact` section through “View on GitHub” and “Hire Me”.
 - No audience selector or required onboarding. The understandable version is the default for everyone.
 - Show the problem, its consequence and a real example together. Introduce plain wording before technical terms, and define terms where used.
 - Navigation is four accessible tabs with arrow-key and Home/End support, mirrored by the icon rail; the selection is kept in the URL and browser history.
