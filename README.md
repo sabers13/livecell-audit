@@ -2,7 +2,7 @@
 
 # LIVECell Audit
 
-**A reproducible data-quality audit of Sartorius' public LIVECell cell-image dataset, with a review dashboard that explains the results in plain language.**
+**A reproducible data-quality audit of the public LIVECell cell-image dataset, with a review dashboard that explains the results in plain language.**
 
 [**▶ Open the live dashboard**](https://sabersojudi.com/livecell-audit/) · [Findings](docs/02_upstream_bugs_and_findings.md) · [Method and model card](docs/09_model_card.md) · [Release process](docs/12_release.md)
 
@@ -22,7 +22,7 @@
 
 To teach an AI model to recognise cells, scientists outline the cells in microscope images by hand. If those outlines are missing, duplicated or in the wrong group, the model learns from bad examples and its scores look better than they really are.
 
-LIVECell is Sartorius' public dataset of 5,239 phase-contrast images and over 1.6 million hand-drawn cell outlines (Edlund et al., *Nature Methods* 2021). This project checks those labels before they are used, ranks the images most worth a second look, and shows each result next to the image it comes from.
+LIVECell is a public dataset of 5,239 phase-contrast images and over 1.6 million hand-drawn cell outlines (Edlund et al., *Nature Methods* 2021). This project checks those labels before they are used, ranks the images most worth a second look, and shows each result next to the image it comes from.
 
 ## What the audit found
 

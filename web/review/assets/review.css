@@ -1,6 +1,6 @@
 /* LIVECell review website — a pill dashboard in the colours of sabersojudi.com.
    Tokens and rules follow DESIGN.md. Blue (--accent, the portfolio's blue-600)
-   marks exactly one hero tile per section and small interface state; Sartorius
+   marks exactly one hero tile per section and small interface state; label
    yellow (--label) is reserved for supplied cell labels and their legend. */
 
 @font-face {
@@ -54,7 +54,7 @@
   --success-soft: #dcfce7;
   --danger: #b91c1c;
   --danger-soft: #fee2e2;
-  /* Sartorius yellow: supplied cell labels only */
+  /* label yellow: supplied cell labels only */
   --label: #ffed00;
   /* the microscope stage stays dark in both themes */
   --stage: #0b111c;
@@ -186,9 +186,6 @@ main { min-width: 0; }
 /* --- pills -------------------------------------------------------------- */
 .pill { background: var(--bg-card); border-radius: var(--r-pill); height: var(--topbar-h); display: flex; align-items: center; }
 .logo { padding: 8px 16px; gap: 14px; width: max-content; height: 42px; font-weight: 600; font-size: 13px; color: var(--ink); text-decoration: none; border: 1px solid var(--hairline); }
-.company-logo { display: block; width: 96px; height: auto; flex: none; }
-/* Keep the company logo on its approved white background in either appearance. */
-:root[data-theme="dark"] .logo { background: #fff; color: #111827; }
 .wordmark { white-space: nowrap; }
 .wordmark .highlight { box-shadow: inset 0 -0.3em 0 color-mix(in srgb, var(--label) 85%, transparent); }
 
@@ -623,7 +620,6 @@ dl.kv dd .unit { display: block; font-weight: 400; color: var(--ink-muted); font
   .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .c4, .c5, .c6, .c7, .c8, .c12, .stack { grid-column: span 6; }
   .topbar-inner { grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; padding: 16px 24px; }
-  .logo .wordmark { display: none; }
   .nav { justify-self: center; max-width: 100%; min-width: 0; }
   .topbar .nav a { padding: 8px 10px; font-size: 15px; }
   .actions { display: none; }
@@ -638,7 +634,6 @@ dl.kv dd .unit { display: block; font-weight: 400; color: var(--ink-muted); font
   .portfolio-brand { font-size: 18px; }
   .topbar-right { gap: 8px; align-items: center; }
   .logo { padding: 8px 10px; height: 36px; }
-  .company-logo { width: 80px; }
   .portfolio-back { padding: 8px; }
   .portfolio-back span { display: none; }
   .topbar .nav { grid-row: 2; grid-column: 1 / -1; width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }

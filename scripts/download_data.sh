@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Download the LIVECell dataset (≈2.1 GB) from the public Sartorius S3 bucket.
+# Download the LIVECell dataset (≈2.1 GB) from its public S3 bucket.
 # Resumable (curl -C -). Safe to re-run. License: CC BY-NC 4.0.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

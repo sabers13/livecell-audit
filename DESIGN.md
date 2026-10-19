@@ -5,7 +5,7 @@ These rules govern the review website in `web/review/` (described in
 
 ## Audience and purpose
 
-The first reader is a recruiter without a microscopy or machine-learning background; a technical reviewer must also be able to inspect the evidence.
+The first reader is a non-specialist without a microscopy or machine-learning background; a technical reviewer must also be able to inspect the evidence.
 
 Information priority:
 
@@ -17,7 +17,7 @@ The overview combines the introduction and a complete, uncropped microscope prev
 
 ## Visual direction
 
-The outer page follows the portfolio project template in `sabers13/sabers13.github.io/hicp-eurostat.html`: a fixed, full-width translucent white header, blue Saber Sojudi home link, gray navigation with a blue selection underline, Back link, and a pale gray background without an enclosing rounded shell. The company pill retains the LIVECell Audit tag and the dataset wordmark. The interior retains the dashboard cards, split icon rail, gradient hero tile, hatched bars, blur-in entrance and count-up figures. Tokens live in `web/review/assets/review.css` (`:root` and an explicit `[data-theme="dark"]` set). Every page opening starts in light mode, including on a dark OS or after a previous dark selection; appearance buttons switch only the current visit.
+The outer page follows the portfolio project template in `sabers13/sabers13.github.io/hicp-eurostat.html`: a fixed, full-width translucent white header, blue Saber Sojudi home link, gray navigation with a blue selection underline, Back link, and a pale gray background without an enclosing rounded shell. The project pill shows the LIVECell Audit wordmark. The interior retains the dashboard cards, split icon rail, gradient hero tile, hatched bars, blur-in entrance and count-up figures. Tokens live in `web/review/assets/review.css` (`:root` and an explicit `[data-theme="dark"]` set). Every page opening starts in light mode, including on a dark OS or after a previous dark selection; appearance buttons switch only the current visit.
 
 | Role | Token | Light | Dark | Notes |
 | --- | --- | --- | --- | --- |
@@ -27,7 +27,7 @@ The outer page follows the portfolio project template in `sabers13/sabers13.gith
 | Hero gradient | `--accent-gradient` | blue-600 → blue-700 → violet-700 | same | white text is 5.2:1 or more on every stop; the soft highlight sits behind the tile icon, not text; the violet end echoes the portfolio's purple gradient text |
 | Soft chips | `--accent-soft` / `--on-accent-soft` | `#DBEAFE` / `#1E40AF` | translucent blue / `#BFDBFE` | the portfolio's blue-100 / blue-800 chip |
 | Status chips | `--success*`, `--danger*` | green-700 on green-100, red-700 on red-100 | light text on translucent tint | always with text, never colour alone |
-| Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | Sartorius yellow; 15.6:1 on the stage |
+| Cell label (signal) | `--label` | `#FFED00` | `#FFED00` | label yellow; 15.6:1 on the stage |
 | Specimen stage | `--stage` | `#0B111C` | `#05080F` | readout text `#CBD5E1` |
 
 - **One colour, one meaning.** Yellow marks supplied cell labels and the LIVECell tag's highlighter underline. Blue is the portfolio accent and header navigation underline; primary buttons and the selected rail icon are ink (white in dark mode).

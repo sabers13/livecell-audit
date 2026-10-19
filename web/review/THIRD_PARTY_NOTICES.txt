@@ -21,10 +21,6 @@ Upstream reports this site reproduces (sartorius-research/LIVECell):
   issue #14, alternate annotation versions: explained by Christoffer
             Edlund (Sartorius)
 
-Sartorius logo: Sartorius AG; used unmodified to identify the dataset company.
-Source: https://commons.wikimedia.org/wiki/File:Sartorius-Logo-2020.svg
-The company name and logo remain trademarks of their respective owner.
-
 Typeface: Inter, copyright 2016 The Inter Project Authors
 (https://github.com/rsms/inter), licensed under the SIL Open Font License
 1.1 (assets/fonts/OFL-inter.txt); the latin variable subsets (as packaged

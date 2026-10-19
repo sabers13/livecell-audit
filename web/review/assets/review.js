@@ -361,7 +361,7 @@
     'The annotation record id is ' + SITE.guided.sparse_annotation.annotation_id + ' and its polygon area is ' +
       dec(SITE.guided.sparse_annotation.area, 2) + ' pixels^2; that single polygon is what the overlay draws.',
     'The upstream reporter (' + SITE.methods.knownCase.upstream_reporter + ', issue #21) listed ' +
-      n(audit.known_sparse_cases.total) + ' images using a threshold of ten segments, and a Sartorius ' +
+      n(audit.known_sparse_cases.total) + ' images using a threshold of ten segments, and a dataset ' +
       'maintainer replied that they had slipped through quality control. All ' +
       n(audit.known_sparse_cases.recovered) + ' are recovered in this snapshot by the same rule ' +
       '\u201cat most ' + n(c.low_count_threshold) + ' annotations\u201d, so they are regression examples, ' +
