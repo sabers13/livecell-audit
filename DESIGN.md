@@ -38,7 +38,7 @@ The outer page follows the portfolio project template in `sabers13/sabers13.gith
 
 ## Interaction and content rules
 
-- The overview introduction uses portfolio-style icon badges for Python, pandas, scikit-learn, data pipelines, data modeling, data preprocessing and data quality. Each badge names a skill the project implements. Do not add cloud or lab-team collaboration claims without project evidence. The introduction links to `https://github.com/sabers13/livecell-audit` and the portfolio's `#contact` section through “View on GitHub” and “Hire Me”.
+- The overview introduction uses portfolio-style icon badges for Python, pandas, scikit-learn, data pipelines and data quality. Each badge names a skill the project implements. Do not add cloud or lab-team collaboration claims without project evidence. The introduction links to `https://github.com/sabers13/livecell-audit` and the portfolio's `#contact` section through “View on GitHub” and “Hire Me”.
 - No audience selector or required onboarding. The understandable version is the default for everyone.
 - Show the problem, its consequence and a real example together. Introduce plain wording before technical terms, and define terms where used.
 - Navigation is four accessible tabs with arrow-key and Home/End support, mirrored by the icon rail; the selection is kept in the URL and browser history.
