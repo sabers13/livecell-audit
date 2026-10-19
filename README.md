@@ -2,6 +2,10 @@
 
 > **A repeatable data-quality audit of Sartorius' public LIVECell cell-image dataset, with a plain-language review website.**
 
+**[▶ Live dashboard: sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)**
+
+[![The LIVECell Audit dashboard: KPI tiles for 1,662,447 checked labels, 5,239 audited images, 30 reused photos, 9 sparse-label images and 118 alternate versions, with a chart of reported cases found per method](docs/images/overview.png)](https://sabersojudi.com/livecell-audit/)
+
 Researchers mark cells in microscope images so an AI model can learn to recognise them. This project checks those images and their labels before they are used in an experiment, and explains what it found in plain language.
 
 **What is implemented:** a streaming audit of the COCO annotation files, a DuckDB/Parquet warehouse, a documented pandas feature table, a fit-only Isolation Forest review ranking compared with simple baselines at the same review budget, a static review website, and one release entrypoint (`tools/run_release.sh`) that runs the whole chain into an immutable run directory and packages a portable, path-clean ZIP. The simple low-count rule beat the Isolation Forest, on two tests that are defined by label count and so favour it by design. No cell-segmentation model is trained and no effect on its accuracy is measured. Expert scientific review of the flagged images and any upstream contribution remain future work.
@@ -103,6 +107,17 @@ Release packages and run records stay out of git (the receipt inside each run di
 
 `web/review/` is a static projection of one completed release run: no backend, no framework, no network call. It is a small dashboard with four sections: an overview of the findings as KPI tiles and charts, an image review with 39 illustrated examples and switchable supplied labels (dense images show every supplied outline), the method comparison, and the full 3,067-row ranking table with evidence downloads. Every number is copied from the run's verified outputs, and `tools/check_review_site.py` re-derives them. See [`docs/11_review_interface.md`](docs/11_review_interface.md) and [`DESIGN.md`](DESIGN.md).
 
+It is hosted at **[sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)**.
+
+| Image review | Method comparison |
+|---|---|
+| [![A flagged A172 image with only one supplied cell label, outlined in yellow, next to what the audit found and what happens next](docs/images/images.png)](https://sabersojudi.com/livecell-audit/#try-it) | [![KPI tiles and bar charts: the count rule recovers 9 of 9 reported cases versus 2–3 for the Isolation Forest; simulated AUC 0.964 versus 0.858](docs/images/methods.png)](https://sabersojudi.com/livecell-audit/#results) |
+| **Pick an image and toggle its supplied labels.** Flagged images come first, then comparison images. | **Does machine learning help?** Four ordering methods at the same review budget. |
+
+[![Data tab: review pool 3,067, audit findings 157, frozen review sample 100, verified files 84, and the searchable full rankings table](docs/images/data.png)](https://sabersojudi.com/livecell-audit/#data)
+
+*Data and sources: every review-pool candidate with its rank in all four methods, filters, and the evidence downloads.*
+
 ---
 
 ## Repository layout
@@ -167,7 +182,7 @@ Image records are keyed by `(split, record_position)`; the original `id` is a fi
 - Image statistics are texture proxies, not cell counts; annotation area is not true confluence. The real dataset has no ambiguous ids or orphan annotations, so those paths are fixture-verified only.
 - No cell-segmentation model is trained and no effect on its accuracy is measured or claimed.
 - Layout and keyboard behaviour were checked in Chromium; a real recruiter comprehension check has not been performed.
-- No container, no cloud execution and no public deployment; `DEPLOY.md` in the release package gives generic hosting steps.
+- No container and no cloud execution. The review website is hosted as static files on GitHub Pages ([sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)); `DEPLOY.md` in the release package gives generic hosting steps.
 - Raw image pixels are content-hashed only where the run recorded a TIFF identity manifest (`--tiff-identity`, on by default); COCO hashes alone cannot detect changed pixel content.
 
 ## Credit & attribution
