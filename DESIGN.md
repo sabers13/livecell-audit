@@ -10,10 +10,10 @@ The first reader is a recruiter without a microscopy or machine-learning backgro
 Information priority:
 
 1. Explain what was built in one sentence, and show the headline findings as KPI tiles with their practical meaning and upstream origin.
-2. Show one real, already annotated example and a short "What I built" card without requiring a click.
+2. Show a compact real microscope example beside the introduction, then offer "Two examples in detail" and a short "What I built" card in the overview grid.
 3. Offer four sections: Overview, Images, Methods and Data.
 
-The overview is a dashboard to read, not one to operate: KPI tiles, one chart and two progress bars replace raw numbers in prose, and the first screen must explain the work even if the reader never clicks. Images opens a real image immediately, with an image selector, a next-image button and a supplied-label toggle; search, filters and detailed counts are optional disclosures. Methods holds the comparison as tiles, bars and tables; Data holds the full rankings, downloads and optional provenance.
+The overview combines the introduction and a complete, uncropped microscope preview capped at 300 px wide; the preview stacks below the text on phones. KPI tiles, one chart and two progress bars replace raw numbers in prose. The two guided case studies occupy the former example's grid position, beside "What I built", with selectors and evidence disclosures preserved. Images opens the image browser immediately, with an image selector, a next-image button and a supplied-label toggle; search, filters and detailed counts are optional disclosures. Methods holds the comparison as tiles, bars and tables; Data holds the full rankings, downloads and optional provenance.
 
 ## Visual direction
 
