@@ -1,192 +1,180 @@
-# LIVECell Audit 🔬
+<div align="center">
 
-> **A repeatable data-quality audit of Sartorius' public LIVECell cell-image dataset, with a plain-language review website.**
+# LIVECell Audit
 
-**[▶ Live dashboard: sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)**
+**A reproducible data-quality audit of Sartorius' public LIVECell cell-image dataset, with a review dashboard that explains the results in plain language.**
+
+[**▶ Open the live dashboard**](https://sabersojudi.com/livecell-audit/) · [Findings](docs/02_upstream_bugs_and_findings.md) · [Method and model card](docs/09_model_card.md) · [Release process](docs/12_release.md)
+
+![Python 3.12](https://img.shields.io/badge/Python-3.12-2563EB?logo=python&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-features-2563EB)
+![DuckDB](https://img.shields.io/badge/DuckDB-%2B%20Parquet-2563EB)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Isolation%20Forest-2563EB)
+![tests](https://img.shields.io/badge/tests-266%20passed-16a34a)
 
 [![The LIVECell Audit dashboard: KPI tiles for 1,662,447 checked labels, 5,239 audited images, 30 reused photos, 9 sparse-label images and 118 alternate versions, with a chart of reported cases found per method](docs/images/overview.png)](https://sabersojudi.com/livecell-audit/)
 
-Researchers mark cells in microscope images so an AI model can learn to recognise them. This project checks those images and their labels before they are used in an experiment, and explains what it found in plain language.
-
-**What is implemented:** a streaming audit of the COCO annotation files, a DuckDB/Parquet warehouse, a documented pandas feature table, a fit-only Isolation Forest review ranking compared with simple baselines at the same review budget, a static review website, and one release entrypoint (`tools/run_release.sh`) that runs the whole chain into an immutable run directory and packages a portable, path-clean ZIP. The simple low-count rule beat the Isolation Forest, on two tests that are defined by label count and so favour it by design. No cell-segmentation model is trained and no effect on its accuracy is measured. Expert scientific review of the flagged images and any upstream contribution remain future work.
+</div>
 
 ---
 
-## What the audit found (reproduced from the raw files)
+## Why this exists
 
-| Group | Image records | Distinct photos | Extra records | Cell markings |
+To teach an AI model to recognise cells, scientists outline the cells in microscope images by hand. If those outlines are missing, duplicated or in the wrong group, the model learns from bad examples and its scores look better than they really are.
+
+LIVECell is Sartorius' public dataset of 5,239 phase-contrast images and over 1.6 million hand-drawn cell outlines (Edlund et al., *Nature Methods* 2021). This project checks those labels before they are used, ranks the images most worth a second look, and shows each result next to the image it comes from.
+
+## What the audit found
+
+All numbers are reproduced from the raw COCO annotation files. The dashboard re-derives every one of them from the same verified run.
+
+| | Result | What it means |
+|---|---:|---|
+| 🔬 **Cell labels checked** | **1,662,447** | across 5,387 image records; 0 images missing |
+| 🖼️ **Images audited** | **5,239** | every distinct file matched to a local copy |
+| 🔁 **Reused photos** | **30** | the same photo is in both the training and the validation group (5.3% of validation), which inflates validation scores |
+| ⚠️ **Sparse-label images** | **9** | 10 or fewer labels on images full of cells; all 9 are recovered as review candidates |
+| 📑 **Alternate label versions** | **118** | the same photo recorded more than once within a group; the authors kept these on purpose, so they need a policy, not a deletion |
+
+The reused photos and the sparse labels were first reported by the community on GitHub ([#26](https://github.com/sartorius-research/LIVECell/issues/26), [#21](https://github.com/sartorius-research/LIVECell/issues/21)). The authors explained the alternate versions in [#14](https://github.com/sartorius-research/LIVECell/issues/14). This project does not claim to have discovered them. It reproduces them from the raw files, tracks them with evidence, and turns them into a check that can be run again. Details: [`docs/02_upstream_bugs_and_findings.md`](docs/02_upstream_bugs_and_findings.md).
+
+| Split | Image records | Distinct photos | Extra records | Cell labels |
 |---|---:|---:|---:|---:|
 | Training | 3,253 | 3,188 | 65 | 1,018,576 |
 | Validation | 570 | 569 | 1 | 181,610 |
 | Test | 1,564 | 1,512 | 52 | 462,261 |
 
-- **5,239** distinct image files, all present locally; **1,662,447** cell markings in total.
-- **30 images** appear in both the learning (train) and checking (validation) groups, a form of data leakage that affects validation scores. In all 30, the two groups carry different annotation versions of the photo (the authors' dual annotations, issue #14). The test group shares no filenames with either.
-- **118 extra within-split records**: the same photo with more than one record. The dataset authors kept alternate annotation versions (issue #14), so these are flagged as needing an explicit policy, not as corrupt records.
-- **9 previously reported sparse-label images** have 10 or fewer markings; the low-count rule recovers all 9 as review candidates. They were reported upstream with the same ten-or-fewer threshold, so this is a regression check, not a discovery.
+## Does machine learning help?
 
-Both issues were first reported on GitHub (#26 and #21); this project reproduces them from the raw files and tracks them with evidence. See [`docs/02_upstream_bugs_and_findings.md`](docs/02_upstream_bugs_and_findings.md).
+I compared four ways of ordering 3,067 images for human review, all with the same review budget (the top 10, 25 or 50 images):
 
----
+| Method | Reported cases in the top 10 | Simulated label loss (ROC AUC) |
+|---|---:|---:|
+| **Low label count** (simple rule) | **9 / 9** | **0.964** |
+| Robust statistical baseline | 3 / 9 | 0.800 |
+| Isolation Forest (ML) | 2–3 / 9 | 0.858 |
+| Seeded random reference | 0 / 9 | 0.502 |
 
-## Quickstart
+**The simple rule won.** Both tests are defined by label count, so they favour counting by design and cannot show what a model adds beyond it. The Isolation Forest flags *unusual* images, which is not the same as images whose labels are wrong. I report this result as it is and keep the ML ranking as a second, independent opinion. Full results: [`docs/10_ranking_evaluation.md`](docs/10_ranking_evaluation.md).
 
-Requirements: Python 3.12 and the LIVECell data (`scripts/download_data.sh`, ~2.1 GB). The audit streams the ~909 MB of COCO JSON and never holds it in memory, but the full pipeline and the integration test need about 1 GB; run them on a machine or job with that headroom.
+## The dashboard
 
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
-```
-
-```bash
-# 1. Audit (data root holds annotations/livecell_coco_{train,val,test}.json and images/)
-PYTHONPATH=src .venv/bin/python -m livecell_audit audit \
-    --data-root data/raw --out-dir data/workbench/audit
-
-# 2. DuckDB + typed Parquet warehouse from the completed audit
-PYTHONPATH=src .venv/bin/python -m livecell_audit warehouse \
-    --audit-dir data/workbench/audit --out-dir data/workbench/warehouse --data-root data/raw
-
-# 3. pandas feature table + cell-line summaries
-PYTHONPATH=src .venv/bin/python -m livecell_audit features \
-    --warehouse-dir data/workbench/warehouse --data-root data/raw --out-dir data/workbench/features
-
-# 4. Fit-only baselines + Isolation Forest review rankings
-PYTHONPATH=src .venv/bin/python -m livecell_audit rank \
-    --features-dir data/workbench/features --warehouse-dir data/workbench/warehouse \
-    --out-dir data/workbench/ranking
-
-# 5. Known-case regression, synthetic annotation-loss experiment, frozen review sample
-PYTHONPATH=src .venv/bin/python -m livecell_audit evaluate \
-    --features-dir data/workbench/features --warehouse-dir data/workbench/warehouse \
-    --ranking-dir data/workbench/ranking --out-dir data/workbench/evaluation
-```
-
-The source data is only read, never modified. Every stage refuses an input directory without a valid `COMPLETED` marker, and ranking/evaluation record the exact feature/warehouse build they consumed.
-
-```bash
-# Tests: fixtures everywhere, plus the full-dataset check when the data root is set
-PYTHONPATH=src .venv/bin/python -m pytest tests/ -q
-LIVECELL_DATA_ROOT=data/raw PYTHONPATH=src .venv/bin/python -m pytest tests/test_integration.py -q
-```
-
-```bash
-# View the committed review website (no build step; file:// works too)
-python3 -m http.server --directory web/review 8321
-```
-
-Measured in the reference release run (`20261018T231214Z-0e359b9bf088`, one capped job per stage, process peak RSS): audit 44 s / 199 MB, warehouse 14 s / 326 MB, features 99 s / 275 MB (5,239 TIFF reads dominate), ranking 29 s / 340 MB, evaluation 13 s / 350 MB, preview render 22 s / 60 MB. The test suite is **266 passed** in ~80 s including the real-data integration check. Details: [`docs/12_release.md`](docs/12_release.md).
-
----
-
-## Release in one command
-
-`tools/run_release.sh` runs the whole chain: audit → warehouse → features → rank (seed 42, budgets 10/25/50) → evaluate → preview render → site build → site check → portable package. By default every stage runs through a memory-capped launcher (`run-job`); see the script's `--help`.
-
-```bash
-tools/run_release.sh --data-root data/raw --out-root data/runs        # chain + package
-tools/run_release.sh validate --data-root data/raw                    # preflight only, starts nothing
-tools/run_release.sh package --run data/runs/<RUN_ID>                 # re-package a finished run
-tools/run_release.sh verify-package --zip <release.zip>               # re-verify an archive
-tools/run_release.sh list --out-root data/runs                        # list runs and their state
-```
-
-What a run guarantees:
-
-- **Immutable run IDs.** A run lives in `<out-root>/<UTC timestamp>-<input-hash prefix>/`, where the prefix comes from the three COCO files' SHA-256 plus the image-set inventory (and, with `--tiff-identity`, every raw image's SHA-256). An existing run directory is never reused or overwritten, and a failed run is preserved for inspection.
-- **Per-stage records.** Each stage writes `records/stage-<stage>.json` with its exact command, configuration, seeds, input identity, cross-stage checks, per-file output hashes, an output tree hash, log hash, wall time and peak memory with its measurement method.
-- **Fail-fast cross-stage validation.** A stage refuses to start unless its inputs carry a valid `COMPLETED` marker and pass their identity checks (COCO source hashes, warehouse, feature and ranking manifest hashes).
-- **Completion last.** The pipeline `COMPLETED` marker and the release receipt are written only after `verify-chain` re-verifies every marker, manifest, cross-link and recorded output hash.
-- **A portable package.** `<run>/release/livecell-audit-release-<RUN_ID>.zip` carries the static site, ranking/evaluation tables, model card, methodology docs, `THIRD_PARTY_NOTICES.txt`, provenance and the release receipt. Raw TIFFs, COCO JSON, the DuckDB database, Parquet, model binaries and absolute/private paths are excluded by an automatic scan, and the archive is unzipped and every relative link re-resolved before it is accepted.
-
-Release packages and run records stay out of git (the receipt inside each run directory holds machine paths; the packaged copy is redacted). No container is built: Docker, podman and buildah are unavailable on the data server. The procedure, exclusions and what is and is not verified are in [`docs/12_release.md`](docs/12_release.md).
-
----
-
-## Review website
-
-`web/review/` is a static projection of one completed release run: no backend, no framework, no network call. It is a small dashboard with four sections: an overview of the findings as KPI tiles and charts, an image review with 39 illustrated examples and switchable supplied labels (dense images show every supplied outline), the method comparison, and the full 3,067-row ranking table with evidence downloads. Every number is copied from the run's verified outputs, and `tools/check_review_site.py` re-derives them. See [`docs/11_review_interface.md`](docs/11_review_interface.md) and [`DESIGN.md`](DESIGN.md).
-
-It is hosted at **[sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)**.
+A static website with no backend and no tracking, hosted at **[sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)**. It also opens straight from `file://`.
 
 | Image review | Method comparison |
 |---|---|
 | [![A flagged A172 image with only one supplied cell label, outlined in yellow, next to what the audit found and what happens next](docs/images/images.png)](https://sabersojudi.com/livecell-audit/#try-it) | [![KPI tiles and bar charts: the count rule recovers 9 of 9 reported cases versus 2–3 for the Isolation Forest; simulated AUC 0.964 versus 0.858](docs/images/methods.png)](https://sabersojudi.com/livecell-audit/#results) |
-| **Pick an image and toggle its supplied labels.** Flagged images come first, then comparison images. | **Does machine learning help?** Four ordering methods at the same review budget. |
+| 39 real microscope images. Show or hide the supplied labels; flagged images come first. | KPI tiles and charts for the four methods; switch the budget between Top 10, 25 and 50. |
 
 [![Data tab: review pool 3,067, audit findings 157, frozen review sample 100, verified files 84, and the searchable full rankings table](docs/images/data.png)](https://sabersojudi.com/livecell-audit/#data)
 
-*Data and sources: every review-pool candidate with its rank in all four methods, filters, and the evidence downloads.*
+**Data and sources:** all 3,067 candidates with their rank in every method, searchable and filterable, plus the evidence files to download.
 
----
+Every figure on the page is copied from the release run's verified outputs. `tools/check_review_site.py` re-derives them and checks every link (1,120 checks in the reference run). Design notes: [`DESIGN.md`](DESIGN.md) and [`docs/11_review_interface.md`](docs/11_review_interface.md).
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[COCO JSON + TIFFs<br/>read-only] --> B[1 · Audit<br/>streaming checks]
+    B --> C[2 · Warehouse<br/>DuckDB + Parquet]
+    C --> D[3 · Features<br/>pandas]
+    D --> E[4 · Rank<br/>baselines + Isolation Forest]
+    E --> F[5 · Evaluate<br/>known cases + simulation]
+    F --> G[Previews + review site]
+    G --> H[Verified release ZIP]
+```
+
+1. **Audit:** streams the ~909 MB of COCO JSON without loading it into memory. It checks files, dimensions, filenames, overlaps between groups, duplicate records and label counts, and writes 157 findings, each with its evidence and a recommended next step.
+2. **Warehouse:** loads the audit into DuckDB with typed Parquet exports and versioned SQL views, and reconciles every row count and join.
+3. **Features:** builds one documented feature row per image record from label statistics, acquisition metadata and image texture. Every feature has a source, formula, unit and missing-value rule in [`docs/09_data_contract.md`](docs/09_data_contract.md).
+4. **Rank:** a fit-only Isolation Forest (seed 42) alongside simple baselines, applied at review budgets of 10, 25 and 50.
+5. **Evaluate:** a regression check on the 9 reported cases, a synthetic label-removal experiment over 3 seeds, and a frozen 100-image sample for a scientist to judge.
+
+Every stage refuses input without a valid `COMPLETED` marker and matching hashes, so a partial or swapped output is never consumed. Outputs are deterministic: running again on the same input gives byte-identical files.
+
+## Quickstart
+
+Requirements: Python 3.12, about 1 GB of free memory, and the LIVECell data (~2.1 GB, see `scripts/download_data.sh`).
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+
+# view the dashboard locally (no build step)
+python3 -m http.server --directory web/review 8321
+```
+
+**Run the whole chain in one command** into a new, immutable run directory, finishing with a portable, verified ZIP:
+
+```bash
+tools/run_release.sh --data-root data/raw --out-root data/runs   # audit → … → site → package
+tools/run_release.sh validate --data-root data/raw               # preflight only
+tools/run_release.sh verify-package --zip <release.zip>          # re-verify an archive
+```
+
+<details>
+<summary><b>Run the stages one by one</b></summary>
+
+```bash
+export PYTHONPATH=src
+.venv/bin/python -m livecell_audit audit     --data-root data/raw --out-dir data/workbench/audit
+.venv/bin/python -m livecell_audit warehouse --audit-dir data/workbench/audit --out-dir data/workbench/warehouse --data-root data/raw
+.venv/bin/python -m livecell_audit features  --warehouse-dir data/workbench/warehouse --data-root data/raw --out-dir data/workbench/features
+.venv/bin/python -m livecell_audit rank      --features-dir data/workbench/features --warehouse-dir data/workbench/warehouse --out-dir data/workbench/ranking
+.venv/bin/python -m livecell_audit evaluate  --features-dir data/workbench/features --warehouse-dir data/workbench/warehouse \
+                                             --ranking-dir data/workbench/ranking --out-dir data/workbench/evaluation
+
+# tests: fixtures everywhere, plus the full-dataset check when the data is present
+.venv/bin/python -m pytest tests/ -q
+LIVECELL_DATA_ROOT=data/raw .venv/bin/python -m pytest tests/test_integration.py -q
+```
+
+</details>
+
+<details>
+<summary><b>What a release run guarantees</b></summary>
+
+- **Immutable run IDs:** `<UTC timestamp>-<input hash>`, derived from the COCO files' SHA-256 and the image inventory. An existing run directory is never reused, and a failed run is kept for inspection.
+- **Per-stage records:** the exact command, configuration, seeds, input identity, output hashes, wall time and peak memory for each stage.
+- **Completion last:** the run is marked complete only after `verify-chain` re-checks every marker, manifest and output hash (92 chain checks in the reference run).
+- **A clean package:** the ZIP contains the site, tables, model card, docs, provenance and receipt. Raw images, the database, model binaries and absolute or private paths are excluded by an automatic scan, and every link is re-resolved after unzipping.
+
+Reference run `20261018T231214Z-0e359b9bf088`, with each stage under a memory cap:
+
+| Stage | audit | warehouse | features | ranking | evaluation | previews |
+|---|---:|---:|---:|---:|---:|---:|
+| Time | 44 s | 14 s | 99 s | 29 s | 13 s | 22 s |
+| Peak memory | 199 MB | 326 MB | 275 MB | 340 MB | 350 MB | 60 MB |
+
+See [`docs/12_release.md`](docs/12_release.md).
+
+</details>
 
 ## Repository layout
 
 ```text
-src/livecell_audit/   # audit.py + coco_stream.py (streaming COCO reader), filenames.py,
-                      # warehouse.py (DuckDB/Parquet), features.py (pandas),
-                      # ranking.py (baselines + Isolation Forest),
-                      # evaluate.py (known cases, synthetic loss, review sample),
-                      # completion.py (staged promotion / completion marker), cli.py
-tests/                # fixture tests for every stage, the release tooling and the
-                      # preview render, plus the full-dataset integration check
-scripts/              # download_data.sh (how the data was obtained)
-tools/                # run_release.sh (one entrypoint), release_tools.py (stage records,
-                      # cross-stage validation, packaging), build_review_site.py,
-                      # make_previews.py (bounded server-side previews),
-                      # check_review_site.py (static traceability/link checks)
-web/review/           # the review website, built from the reference release run
-docs/                 # findings (02), data contract and model card (09),
-                      # ranking evaluation (10), review website (11), release (12),
-                      # upstream issue snapshots (upstream/)
-data/, releases/      # gitignored: raw data, local outputs, release runs and packages
+src/livecell_audit/   audit + streaming COCO reader, warehouse (DuckDB), features (pandas),
+                      ranking (baselines + Isolation Forest), evaluation, CLI
+tests/                fixture tests for every stage and the release tooling, plus a full-data check
+tools/                run_release.sh, release_tools.py, build_review_site.py,
+                      make_previews.py, check_review_site.py
+web/review/           the dashboard, built from the reference release run
+docs/                 findings, data contract, model card, evaluation, interface, release,
+                      upstream issue snapshots, README screenshots
+data/, releases/      gitignored: raw data, runs and packages
 ```
-
----
-
-## Output definitions
-
-`python3 -m livecell_audit audit --data-root … --out-dir OUT` writes:
-
-- `report.json` — deterministic summary: per-split counts, filename overlap, low-count records, the nine known cases with observed counts, the derived validation policy, worked examples, and run metadata.
-- `findings.json` — 157 per-finding records (`cross_split_overlap`, `alternate_annotation_version`, `low_annotation_count`, plus missing/dimension/filename findings when present), each with status, evidence, and a recommended next step.
-- `tables/images.jsonl` — one normalized row per COCO image record: split, ids, parsed filename fields (cell line, well, field, timestamp, crop), dimensions, local-file reconciliation, annotation count, and a `dimensions_status` field.
-- `tables/annotations.jsonl` — one compact row per annotation (ids, area, bbox, polygon size); ~261 MB.
-- `manifests/sources.json` — SHA-256 checksums and sizes of the three source COCO files.
-- `manifests/val_membership.json` — derived validation membership: every validation record marked included/excluded with a reason. Policy: exclude validation records whose photo also appears in train (30 excluded, 540 included). Source files untouched, original ids and versions preserved, no polygon sets merged. This is an evaluation policy, not an official correction.
-- `run.json` — command, runtime seconds, peak-memory MB, and the measurement methods.
-- `COMPLETED` — run-completion marker (written last, atomically). An output directory is a *completed* run if and only if this marker is present, valid JSON, declares `status: "completed"`, and its source checksums and summary counts match the other outputs. Outputs are staged and promoted only on success; a failed or interrupted run removes the marker, so partial data is never consumed by a later stage.
-
-All JSON outputs use sorted keys and sorted records, so reruns over the same inputs are byte-identical (tested, excluding run metadata paths/timings and the marker's completion timestamp).
-
-`dimensions_status` separates five mutually exclusive states: `matching`, `mismatching`, `missing` (no local file), `unreadable` (file present but its size could not be read), and `not_checked` (`--no-check-dimensions`). Only `mismatching` records appear in `dimension_mismatches`.
-
-## Warehouse and feature outputs
-
-`python3 -m livecell_audit warehouse --audit-dir AUDIT --out-dir WH` consumes a *completed* audit run and writes:
-
-- `audit.duckdb` — DuckDB database, schema `lc`. Tables: `images`, `annotations`, `findings`, `finding_evidence`, `sources`, `runs`, `val_membership`. Versioned views: `v1_image_annotation_stats`, `v1_split_membership`, `v1_split_overlap`, `v1_annotation_versions`, `v1_alternate_versions`, `v1_cell_line_summary`, `v1_annotation_totals`, `v1_finding_lookup`, `v1_finding_context`, `v1_image_join_ambiguity`, `v1_orphan_annotations`.
-- `parquet/` — typed Parquet exports of the base tables and the main views (~34 MB for annotations vs ~249 MB JSONL).
-- `integrity.json` — deterministic reconciliation (expected/loaded/delta per table and split), join integrity (ambiguous ids, orphans, duplicate annotation keys), input-file hashes and export sizes.
-- `manifest.json`, `run.json`, `COMPLETED` — per-output size + SHA-256 (the marker records the manifest's hash, so a swapped database is rejected), run metadata, and the completion marker.
-
-Image records are keyed by `(split, record_position)`; the original `id` is a field, not a global key. Ambiguous `(split, image_id)` joins and orphan annotations are detected and reported, never guessed or multiplied.
-
-`python3 -m livecell_audit features --warehouse-dir WH --out-dir FEAT` verifies the warehouse, then writes one feature row per annotation-version image record (`features.parquet`/`.jsonl`: annotation aggregates, acquisition metadata, image dimensions, once-per-filename TIFF statistics, quality flags), cell-line summaries, feature distributions and a `feature_dictionary.json` with each feature's source, formula, unit and missing-value behaviour. The full contract is [`docs/09_data_contract.md`](docs/09_data_contract.md); the ranking configuration and its limitations are in [`docs/09_model_card.md`](docs/09_model_card.md) and the results in [`docs/10_ranking_evaluation.md`](docs/10_ranking_evaluation.md).
 
 ## Limitations
 
-- Filename identity is physical identity: matches are by filename, not pixels. Near-duplicates are out of scope.
-- A low count alone is not proof of an error, and recovering the nine known cases is a regression check. Both evaluation tests are defined by label count, so they cannot show what a model adds beyond counting; real-world precision is unmeasured until a scientist reviews the frozen sample.
-- The Isolation Forest mixes label statistics with image texture, so it flags unusual images rather than labels that disagree with their image; three of its 24 features are constant on LIVECell (every image is 704 × 520).
-- Image statistics are texture proxies, not cell counts; annotation area is not true confluence. The real dataset has no ambiguous ids or orphan annotations, so those paths are fixture-verified only.
-- No cell-segmentation model is trained and no effect on its accuracy is measured or claimed.
-- Layout and keyboard behaviour were checked in Chromium; a real recruiter comprehension check has not been performed.
-- No container and no cloud execution. The review website is hosted as static files on GitHub Pages ([sabersojudi.com/livecell-audit](https://sabersojudi.com/livecell-audit/)); `DEPLOY.md` in the release package gives generic hosting steps.
-- Raw image pixels are content-hashed only where the run recorded a TIFF identity manifest (`--tiff-identity`, on by default); COCO hashes alone cannot detect changed pixel content.
+- Duplicates are matched by filename, not by pixels; near-duplicate photos are out of scope.
+- A low label count is a reason for review, not proof of an error. How often a flag is a real labelling problem is unmeasured until a scientist reviews the frozen 100-image sample.
+- The Isolation Forest mixes label statistics with image texture. Three of its 24 features are constant on LIVECell, because every image is 704 × 520.
+- No cell-segmentation model is trained here, and no effect on segmentation accuracy is claimed.
+- The dashboard was tested in Chromium (desktop and phone width); no user study has been done.
 
-## Credit & attribution
+## Credit
 
-- LIVECell dataset and annotations: Sartorius Corporate Research (Edlund et al., *Nature Methods* 2021), CC BY-NC 4.0. Upstream repository: `sartorius-research/LIVECell`.
-- Overlap/duplication report (issue #26): community reporter `OasisArtisan`. Incomplete-annotation report (issue #21): `ivan-ea`, with a reply from Rickard Sjögren (Sartorius). Dual-annotation explanation (issue #14): Christoffer Edlund (Sartorius).
-- Audit code and website in this repository: **Saber Sojudi** (2026), for non-commercial research, portfolio, and educational purposes.
+- **Dataset:** LIVECell by Sartorius Corporate Research (Edlund et al., *Nature Methods* 2021), CC BY-NC 4.0, [`sartorius-research/LIVECell`](https://github.com/sartorius-research/LIVECell).
+- **Upstream reports:** reused photos (#26) by `OasisArtisan`; incomplete labels (#21) by `ivan-ea`, with a reply from Rickard Sjögren (Sartorius); the dual-annotation explanation (#14) by Christoffer Edlund (Sartorius).
+- **Audit code and dashboard:** [Saber Sojudi](https://sabersojudi.com) (2026), for non-commercial research, portfolio and educational use. This is an independent project, not affiliated with Sartorius.
